@@ -1,0 +1,52 @@
+package com.smartfarmer.dao;
+
+import com.smartfarmer.bean.LoginBean;
+import com.smartfarmer.bean.LoginBeanI;
+import com.smartfarmer.model.Farmer;
+
+import java.sql.ResultSet;
+
+public class LoginBeanDao implements LoginBeanI {
+    Controller controller = new Controller();
+    //Check if user details exists in database
+    public boolean checkUser(LoginBean login) throws Exception {
+        String username = login.getUsername();
+        String password = login.getPassword();
+
+        if (username == null || password == null){
+            return false;
+        }else{
+            String  query = "SELECT username, password FROM register WHERE username = '"+username+"' AND password = '"+password+"'";
+            return controller.readData(query).next();
+        }
+    }
+
+    @Override
+    public Farmer getFarmerDetails(LoginBean login) {
+
+        String query = "select * from register where username = '" + login.getUsername() + "'";
+        Farmer farmer = new Farmer();
+        try {
+            ResultSet resultSet = controller.readData(query);
+            while (resultSet.next()) {
+                farmer.setId(resultSet.getInt(1));
+                farmer.setFullName(resultSet.getString(2));
+                farmer.setUsername(resultSet.getString(3));
+                farmer.setPhoneNumber(resultSet.getString(4));
+                farmer.setEmailAddress(resultSet.getString(5));
+
+                farmer.setCounty(resultSet.getString(7));
+                farmer.setSubCounty(resultSet.getString(8));
+                farmer.setFarmName(resultSet.getString(9));
+                farmer.setFarmSize(resultSet.getDouble(10));
+                farmer.setAdditionalInfo(resultSet.getString(11));
+                return farmer;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return farmer;
+    }
+
+}
