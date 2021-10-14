@@ -2,34 +2,147 @@ var AppComponents = {
     htmlForm:{
         render: function(){
             let me = this;
-
-            var formToRender = '<h2>' + me.formTitle + '</h2>';
-
-            formToRender += '<form action="' + me.url + '" method="' + me.method + '">';
-
+            var formToRender = '<div class ="container"><h2>' + me.formTitle + '</h2>';
+            formToRender += '<form>';
             me.items.forEach(formItem=>{
-                formToRender += '<div class = "'+formItem.divClass+'"> ';
-                formToRender += '<label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.label + ':</label><br>'
-                    +'<input class="'+formItem.inputClass+'" type="' + formItem.type + '" id="' + formItem.id +'" name="' + formItem.name + '"><br></div>';
+                if (formItem.type === 'select'){
+                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.labelTitle + ':</label><br>'
+                        +'<select name="' + formItem.name + '" id="' + formItem.id + '"class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >'
+                    let selectOptions;
+                    if (formItem.select && formItem.select.data){
+                        selectOptions = formItem.select.data;
+
+                    }else if (formItem.select && formItem.select.url){
+
+                        var ajaxReq = new XMLHttpRequest();
+                        ajaxReq.onreadystatechange = function(){
+                            if (ajaxReq.readyState == XMLHttpRequest.DONE){
+                                if (ajaxReq.status == 200){
+                                    selectOptions = eval('(' + ajaxReq.responseText + ')');
+                                    selectOptions = selectOptions.list;
+                                }
+                            }
+                        }
+                        ajaxReq.open('get', formItem.select.url, false);
+                        ajaxReq.send();
+                    }
+
+                    selectOptions.forEach(option =>{
+                        formToRender += '<option value="' + option[formItem.select.optionMap.value]+ '">' + option[formItem.select.optionMap.display] + '</option>';
+                    })
+                    formToRender += '</select></div>';
+
+                }else if (formItem.type === 'radio'){
+                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.labelTitle + ':</label> &nbsp;&nbsp;&nbsp;'
+
+                    let labelOptions;
+                    if (formItem.options && formItem.options.data){
+                        labelOptions = formItem.options.data;
+
+                    }else if (formItem.options && formItem.options.options){
+
+                        var ajaxReq = new XMLHttpRequest();
+                        ajaxReq.onreadystatechange = function(){
+                            if (ajaxReq.readyState == XMLHttpRequest.DONE){
+                                if (ajaxReq.status == 200){
+                                    labelOptions = eval('(' + ajaxReq.responseText + ')');
+                                    labelOptions = labelOptions.list;
+                                }
+                            }
+                        }
+                        ajaxReq.open('get', formItem.select.url, false);
+                        ajaxReq.send();
+                    }
+
+                    labelOptions.forEach(option =>{
+                        formToRender += '<div class="form-check form-check-inline"> <input class="form-check-input" type="radio" name="'+formItem.name+'" id="'+formItem.id+'" value="' + option[formItem.options.optionMap.value]+ '">' +
+                                        '  <label class="form-check-label" for="'+formItem.id+'">'+option[formItem.options.optionMap.display]+'</label></div>';
+                       })
+                    formToRender += '</div>';
+                }
+                else{
+                    formToRender += '<div class = "'+formItem.divClass+'"> ';
+                    formToRender += '<label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.label + ':</label><br>'
+                        +'<input class="'+formItem.inputClass+'" type="' + formItem.type + '" id="' + formItem.id +'" name="' + formItem.name + '"><br></div>';
+                }
+
             });
 
-            if (Object.keys(me.selects).length !== 0 )
-            {
-                me.selects.forEach(select=> {
-                    formToRender +='<label  class = "'+select.labelClass+'" for="' + select.id +'">' + select.labelTitle + ':</label><br>'
-                        +'<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id = "'+select.id+'" name ="'+select.name+'">'
-                    select.values.forEach(value=> {
-                        formToRender += '<option value="' + value + '">' + value + '</option>'
-                    });
-                    formToRender += '</select>';
+            me.buttons.forEach(submitBtn=>{
+                formToRender += '<div class = "'+submitBtn.btnDiv+'"> ';
+
+                formToRender += '<button class ="'+submitBtn.btnClass+'" id="' + submitBtn.id + '"type="' + submitBtn.type + '">' + submitBtn.value + '</button></div></form>';
+            });
+
+            document.getElementById('componentRender').innerHTML = formToRender;
+
+            console.log(formToRender);
+
+            me.buttons.forEach(btn=>{
+                document.getElementById(btn.id).addEventListener("click",  event=>{
+                    event.preventDefault();
+
+                    me.url = btn.url;
+                    me.method = btn.method;
+                    me.showMsg = btn.showMsg;
+                    me.success = btn.success; // will execute if saving is success
+                    me.failure = btn.failure; //will execute if saving is failure
+
+                    AppComponents.htmlForm.submit.apply(me);
+
                 });
+            });
+        },
+        submit: function(){
+            /* this method submit a form through ajax */
+
+            //declaring this object to me, so that we can reference to it, even when we are not within this.
+            let me = this;
+
+            //data to be submitted will be populated in this variable
+            let submitData = '';
+
+            //flag to check if form is clean to be submitted
+            let submitForm = true;
+
+            //loop through the form to be submitted and collect the values while populating the submitForm variable
+            me.items.forEach(field=>{
+                let fieldVal = document.getElementById(field.id).value;
+
+                submitData += encodeURIComponent(field.name) + '=' + encodeURIComponent(fieldVal) + '&';
+
+            });
+
+            if (!submitForm){
+                document.getElementById(me.showMsg).innerHTML = 'Please Enter All Required Fields(*)';
+                return;
             }
-            formToRender += '<div class = "'+me.submitBtn.btnDiv+'"> ';
 
-            formToRender += '<input class ="'+me.submitBtn.btnClass+'" type="' + me.submitBtn.type + '" value="' + me.submitBtn.value + '"></div></form>';
+            //ajax component
+            var ajaxReq = new XMLHttpRequest();
+            ajaxReq.onreadystatechange = function(){
+                if (ajaxReq.readyState == XMLHttpRequest.DONE){
+                    if (ajaxReq.status == 200){
+                        let reqRes = eval('(' + ajaxReq.responseText + ')');
+                        console.log(me.success);
+                        console.log(me.failure);
 
+                        if (reqRes.loginError)
+                            document.getElementById(me.showMsg).innerHTML = reqRes.loginErrorMsg;
+                        else if (reqRes.redirectPage)
+                            location.href = reqRes.redirectPage;
+                        else if (reqRes.success)
+                            me.success();
+                        else if (reqRes.failure)
+                            me.failure();
+                    }
+                }
+            }
 
-        console.log(formToRender);
+            ajaxReq.open(me.method, me.url, false);
+            ajaxReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+            ajaxReq.send(submitData);
+
         }
     },
 
@@ -37,31 +150,28 @@ var AppComponents = {
         render: function(){
 
             let me = this;
-            let tableToRender = '<div class="card mb-4">'
-                +'<div class="card-header">'
+            let tableToRender = '<div class="card mb-4"> <div class="card-header">'
+                + '<h3>'+me.tableTitle+ '</h3> </div> <div class="card-body"> <div class="d-grid gap-2 d-md-block">'
 
-                + '<h3>'+me.tableTitle+ '</h3>'
-                +'</div>'
-                +'<div class="card-body">'
-                + '<div class="d-grid gap-2 d-md-block">'
-                    me.buttons.forEach(btn=>{
-                        tableToRender += '<button type="button" class="btn btn-dark position-relative" id="' + btn.id + '">' + btn.label + '</button><br/>';
-                    });
-            tableToRender += '</div> </div> <div class="card-footer"></div><table class="table table-success table-striped">';
+            me.buttons.forEach(btn=>{
+                tableToRender += '<button type="button" class="btn btn-dark" id="' + btn.id + '">' + btn.label + '</button> &nbsp;&nbsp;';
+            });
+
+            tableToRender +='</div> </div> <table class="table table-striped table-hover">';
 
             let tableColGroup = '<colgroup>';
             let tableHeaders = '<thead><tr>';
+            tableColGroup += '<col span="1" style="width: 3%">';
+            tableHeaders += '<th></th>';
 
             me.columns.forEach(col=>{
-                tableColGroup += '<col span="' + (col.span?col.span: 1) + '">';
                 tableHeaders += '<th>' + col.header + '</th>';
 
             });
+
             tableColGroup += '</colgroup>';
-            tableHeaders += '</tr></thead>';
-
+            tableHeaders += '<th>Actions</th></tr></thead>';
             tableToRender += tableColGroup + tableHeaders;
-
             tableToRender += '<tbody>';
 
             var ajaxReq = new XMLHttpRequest();
@@ -70,15 +180,13 @@ var AppComponents = {
                     if (ajaxReq.status == 200){
                         let reqRes = eval('(' + ajaxReq.responseText + ')');
                         reqRes.list.forEach(row=>{
-                            tableToRender += '<tr>';
+                            tableToRender += '<tr><td><input type="checkbox" name="name1" />&nbsp;</td>';
                             me.columns.forEach(col=>{
-                                tableToRender += '<td>' + row[col.dataIndex] + '</td>';
-
+                                tableToRender += '<td>' + row[col.dataIndex] + '</td>'
                             });
-
+                            tableToRender += '<td><a href="#">Edit</a></td>'
                         });
-
-                        tableToRender += '</tbody></div></div>'
+                        tableToRender += '</tbody></div>'
                         document.getElementById(me.renderTo).innerHTML = tableToRender;
                     }
                 }
@@ -86,7 +194,49 @@ var AppComponents = {
 
             ajaxReq.open(me.method, me.url, false);
             ajaxReq.send();
+            me.buttons.forEach(btn=>{
+                document.getElementById(btn.id).addEventListener("click", btn.handler);
+            });
+        }
 
+    },
+    htmlToNavBar: {
+
+        render: function(){
+            let me = this;
+
+            let topNavToolBar =
+                '    <div class="container-fluid">' +
+                '        <a class="navbar-brand" href="#">Farm Management System</a>' +
+                '            <ul class="nav">';
+            me.links.forEach(link=>{
+                    topNavToolBar += '<li class="nav-item">'
+                    topNavToolBar += '<a class="nav-link active" id="' + link.id + '" href="#">' + link.label + '</a>';
+                    topNavToolBar +='</li>';
+            });
+                 topNavToolBar+= '</ul> </div>';
+
+            document.getElementById(me.renderTo).innerHTML = topNavToolBar;
+
+            me.links.forEach(link=>{
+                document.getElementById(link.id).addEventListener("click", link.handler);
+            });
+
+        },
+       changeStyle: function(linkId){
+            let me = this;
+            console.log(me);
+            console.log(linkId);
+
+            me.links.forEach(link=>{
+                if (link.id === linkId){
+                    document.getElementById(linkId).classList.add("active");
+
+                }else{
+                    document.getElementById(linkId).classList.remove("active");
+
+                }
+            });
         }
     }
 

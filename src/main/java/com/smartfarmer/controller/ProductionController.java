@@ -1,11 +1,12 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.ProductionDao;
+import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Production;
 import com.smartfarmer.model.ResultWrapper;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,12 +25,10 @@ import java.util.List;
         }
 )
 public class ProductionController extends HttpServlet {
-    private ProductionDao productionDao;
 
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        productionDao = new ProductionDao();
-    }
+    @Inject
+    @Named("ProductionDao")
+    DaoI<Production> productionDao;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

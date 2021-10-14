@@ -1,13 +1,17 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.model.Farmer;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
-
+@Named(value ="FarmerDao")
 public class FarmerDao {
-    Controller controller = new Controller();
+    @Inject
+    Controller controller;
 
     public boolean add(Farmer farmer) throws ParseException, SQLException {
 

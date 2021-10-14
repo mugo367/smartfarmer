@@ -1,14 +1,14 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.ActivityDao;
+import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Activity;
 import com.smartfarmer.model.ResultWrapper;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,20 +22,13 @@ import java.util.List;
                 "/add-activity", "/edit-activity", "/delete-activity", "/view-activities"
         }
 )
-public class ActivityController extends HttpServlet {
-    private ActivityDao activityDao;
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        activityDao = new ActivityDao();
-    }
+public class ActivityController extends BaseController {
 
+    @Inject
+    @Named("ActivityDao")
+    DaoI<Activity> activityDao;
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try {
@@ -49,45 +42,47 @@ public class ActivityController extends HttpServlet {
                 case "/edit-activity":
                     editActivity(request, response);
                     break;
-                case "/view-activities":
-                    viewActivities(request, response);
-                    break;
-
             }
         } catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try {
+            if ("/view-activities".equals(action)) {
+                viewActivities(request, response);
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+
+    }
     //add activity
-    private void addActivity(HttpServletRequest request, HttpServletResponse response) {
-        Activity activity = new Activity(
+    private void addActivity(HttpServletRequest request, HttpServletResponse response) throws IOException {
+       Activity activity = new Activity(
                 request.getParameter("activityLabel"),
                 request.getParameter("activityName"),
                 request.getParameter("activityDescription"),
-                1
+               (Integer) request.getSession().getAttribute("uid")
         );
         try {
-            if(activityDao.add(activity)) {
-                response.sendRedirect("./viewActivities.jsp");
-            }else{
-
-                response.sendRedirect("./Activities.jsp");
-            }
-
-        } catch (ParseException | SQLException | IOException e) {
-            e.printStackTrace();
+            activityDao.add(activity);
+        } catch (ParseException | SQLException e) {
+            resultWrapper.setSuccess(false);
+            resultWrapper.setMessage(e.getMessage());
         }
+        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
     }
     //delete activity
     private void deleteActivity(HttpServletRequest request, HttpServletResponse response) {
         try {
-            if(activityDao.delete(request.getParameter("activityLabel"), Integer.parseInt(request.getParameter("uid")))){
-                response.sendRedirect("./viewEquipments.jsp");
-            }
+            activityDao.delete(request.getParameter("activityLabel"), Integer.parseInt(request.getParameter("uid")));
 
-            //check on else
-        } catch (ParseException | SQLException | IOException e) {
+        } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
     }

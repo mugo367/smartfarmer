@@ -1,13 +1,17 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.bean.LoginBean;
-import com.smartfarmer.bean.LoginBeanI;
 import com.smartfarmer.model.Farmer;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.ResultSet;
 
-public class LoginBeanDao implements LoginBeanI {
-    Controller controller = new Controller();
+@Named(value ="LoginBeanDao")
+public class LoginBeanDao implements LoginBeanDaoI {
+    @Inject Controller controller;
+
     //Check if user details exists in database
     public boolean checkUser(LoginBean login) throws Exception {
         String username = login.getUsername();

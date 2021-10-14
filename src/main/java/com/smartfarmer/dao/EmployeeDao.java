@@ -5,15 +5,20 @@ import com.smartfarmer.model.Employee;
 import com.smartfarmer.model.enumFiles.Designation;
 import com.smartfarmer.model.enumFiles.EmpType;
 import com.smartfarmer.model.enumFiles.Gender;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Named(value ="EmployeeDao")
 public class EmployeeDao implements DaoI<Employee> {
-    Controller controller = new Controller();
+    @Inject
+    Controller controller;
     @Override
     public boolean add(Employee employee) throws ParseException, SQLException {
 

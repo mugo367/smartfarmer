@@ -2,15 +2,19 @@ package com.smartfarmer.dao;
 
 import com.smartfarmer.model.Equipment;
 import com.smartfarmer.model.enumFiles.Condition;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
+@Named(value ="EquipmentDao")
 public class EquipmentDao implements DaoI<Equipment> {
-    Controller controller = new Controller();
+    @Inject
+    Controller controller;
     @Override
     public boolean add(Equipment equipment) throws ParseException, SQLException {
         String query = "INSERT INTO equipments (equipmentLabel, equipmentName, equipmentCondition, equipmentQuantity, uid) " +

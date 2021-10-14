@@ -1,4 +1,4 @@
-AppComponents.htmlTable.render.apply({
+var activitiesComp = {
     url: "./view-activities",
     method: "GET",
     tableTitle: 'Activities',
@@ -19,10 +19,7 @@ AppComponents.htmlTable.render.apply({
         id: 'addActivity',
         handler: function(){
             AppComponents.htmlForm.render.call({
-                url: "./add-activity",
-                method: "POST",
                 formTitle: 'Add New Activity',
-                renderId: "activityForm",
                 items: [{
                     label: "Activity Label",
                     name: "activityLabel",
@@ -49,13 +46,23 @@ AppComponents.htmlTable.render.apply({
                     labelClass: "form-label"
                 }],
                 selects: {},
-                submitBtn: {
+                buttons: [{
                     btnDiv: "d-grid gap-2 col-6 mx-auto",
                     type: 'submit',
+                    url: "./add-activity",
+                    method: "POST",
                     value: 'Save',
-                    btnClass: "btn btn-success"
-                }
+                    id: 'addActivity',
+                    btnClass: "btn btn-success",
+                    showMsg: 'showErrorMsg',
+                    success: function(){
+                        AppComponents.htmlTable.render.apply(activitiesComp);
+                    },
+                    failure: function(){
+                        AppComponents.htmlTable.render.apply(activitiesComp);
+                    }
+                }]
             });
         }
     }]
-});
+};

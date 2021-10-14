@@ -1,15 +1,15 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.EquipmentDao;
+import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Equipment;
 import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.Condition;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,20 +23,15 @@ import java.util.List;
                 "/add-equipment", "/delete-equipment", "/edit-equipment", "list-equipment", "view-equipments"
         }
 )
-public class EquipmentController extends HttpServlet {
-    private EquipmentDao equipmentDao;
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        equipmentDao = new EquipmentDao();
-    }
+
+public class EquipmentController extends BaseController {
+
+    @Inject
+    @Named("EquipmentDao")
+    DaoI<Equipment> equipmentDao;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try {
@@ -50,10 +45,20 @@ public class EquipmentController extends HttpServlet {
                 case "/edit-equipment":
                     editEquipment(request, response);
                     break;
-                case "/view-equipments":
-                    viewEquipments(request, response);
-                    break;
 
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try {
+            if ("/view-equipments".equals(action)) {
+                viewEquipments(request, response);
             }
         } catch (Exception ex) {
             throw new ServletException(ex);
@@ -67,52 +72,45 @@ public class EquipmentController extends HttpServlet {
                 request.getParameter("equipmentName"),
                 Condition.valueOf( request.getParameter("equipmentCondition")),
                 request.getParameter("equipmentQuantity"),
-                Integer.parseInt(request.getParameter("id"))
-
+                (Integer) request.getSession().getAttribute("uid")
         );
-
         try {
-            if(equipmentDao.add(equipment)){
-                response.sendRedirect("./viewEquipments.jsp");
-            }else{
-                response.sendRedirect("./Equipments.jsp");
-            }
+            equipmentDao.add(equipment);
         } catch (ParseException | SQLException e) {
-            e.printStackTrace();
+            resultWrapper.setSuccess(false);
+            resultWrapper.setMessage(e.getMessage());
         }
+        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
     }
     //to delete equipment
     private void deleteEquipment(HttpServletRequest request, HttpServletResponse response){
         try {
-            if(equipmentDao.delete(request.getParameter("equipmentLabel"), Integer.parseInt(request.getParameter("uid"))))
-                response.sendRedirect("./viewEquipments.jsp");
+            equipmentDao.delete(request.getParameter("equipmentLabel"), Integer.parseInt(request.getParameter("uid")));
 
             //check on else
 
-        } catch (ParseException | SQLException | IOException e) {
+        } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
     }
     //to edit equipment
-    private void editEquipment(HttpServletRequest request, HttpServletResponse response) {
+    private void editEquipment(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Equipment equipment = new Equipment(
                 request.getParameter("equipmentLabel"),
                 request.getParameter("equipmentName"),
                 Condition.valueOf( request.getParameter("equipmentCondition")),
                 request.getParameter("equipmentQuantity"),
-                Integer.parseInt(request.getParameter("uid"))
-
+                (Integer) request.getSession().getAttribute("uid")
         );
-
         try {
-            if(equipmentDao.update(equipment))
-                response.sendRedirect("./viewEquipments.jsp");
-
-            //check on else
-
-        } catch (ParseException | SQLException | IOException e) {
-            e.printStackTrace();
+            equipmentDao.update(equipment);
+        } catch (ParseException | SQLException e) {
+            resultWrapper.setSuccess(false);
+            resultWrapper.setMessage(e.getMessage());
         }
+        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
+
+
     }
     // to view equipments
     private void viewEquipments(HttpServletRequest request, HttpServletResponse response) {

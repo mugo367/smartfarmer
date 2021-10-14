@@ -2,17 +2,17 @@ package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.EmployeeDao;
+import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Employee;
 import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.Designation;
 import com.smartfarmer.model.enumFiles.EmpType;
 import com.smartfarmer.model.enumFiles.Gender;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,22 +27,14 @@ import java.util.List;
                 "/add-employee", "/delete-employee", "/edit-employee", "/view-employees"
         }
 )
-public class EmployeeController extends HttpServlet {
-        EmployeeDao employeeDao;
-        @Override
-        public void init(ServletConfig config) throws ServletException {
-               employeeDao = new EmployeeDao();
-        }
+public class EmployeeController extends BaseController {
+        @Inject
+        @Named("EmployeeDao")
+        DaoI<Employee> employeeDao;
 
         @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-                doGet(request, response);
-        }
-
-        @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
-
                 switch (action){
                         case "/add-employee":
                                 addEmployee(request, response);
@@ -53,15 +45,21 @@ public class EmployeeController extends HttpServlet {
                         case "/edit-employee":
                                 editEmployee(request, response);
                                 break;
-                        case "/view-employees":
-                                viewEmployees(request, response);
-                                break;
-                                
+                }
+        }
+
+        @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                String action = request.getServletPath();
+
+                if ("/view-employees".equals(action)) {
+                        viewEmployees(request, response);
                 }
         }
 
         //add employee details
         private void addEmployee(HttpServletRequest request, HttpServletResponse response) throws IOException {
+                response.setContentType("application/json");
                 try {
                         Employee employee = new Employee(
                                 request.getParameter("employeeNumber"),
@@ -74,23 +72,16 @@ public class EmployeeController extends HttpServlet {
                                 new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("employeeDateOfEmp")),
                                 Designation.valueOf(request.getParameter("employeeDesignation")),
                                 EmpType.valueOf(request.getParameter("employeeType")),
-                                Integer.parseInt(request.getParameter("uid"))
+                                (Integer) request.getSession().getAttribute("uid")
 
                         );
-
-
-                        System.out.println(employee.getEmployeeType());
-                        if(employeeDao.add(employee)){
-                                System.out.println("Employee was added Successfully");
-                                response.sendRedirect("./viewEmployees.jsp");
-                        }else{
-                                System.out.println("An error occurred during the process !!");
-                                response.sendRedirect("./Employees.jsp");
-                        }
-                } catch (ParseException | SQLException | IOException e) {
-                        e.printStackTrace();
-                        response.sendRedirect("./Employees.jsp");
+                        employeeDao.add(employee);
+                } catch (ParseException | SQLException e) {
+                        resultWrapper.setSuccess(false);
+                        resultWrapper.setMessage(e.getMessage());
                 }
+                response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
+
         }
 
         // delete employee details

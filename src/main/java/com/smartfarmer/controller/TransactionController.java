@@ -1,12 +1,13 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.TransactionDao;
+import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.Transaction;
 import com.smartfarmer.model.enumFiles.TransactionType;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,19 +26,14 @@ import java.util.List;
         }
 )
 public class TransactionController extends HttpServlet {
-        private TransactionDao transactionDao;
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        transactionDao= new TransactionDao();
-    }
+
+    @Inject
+    @Named("TransactionDao")
+    DaoI<Transaction> transactionDao;
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try {
@@ -51,10 +47,19 @@ public class TransactionController extends HttpServlet {
                 case "/edit-transaction":
                     editTransaction(request, response);
                     break;
-                case "/view-transactions":
-                    viewTransactions(request, response);
-                    break;
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try {
+            if ("/view-transactions".equals(action)) {
+                viewTransactions(request, response);
             }
         } catch (Exception ex) {
             throw new ServletException(ex);

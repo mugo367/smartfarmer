@@ -3,15 +3,19 @@ package com.smartfarmer.dao;
 
 import com.smartfarmer.model.Field;
 import com.smartfarmer.model.enumFiles.FieldStatus;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldDetailDao implements DaoI<Field> {
-    Controller controller = new Controller();
+
+public class FieldDetailDao implements FieldDetailDaoI {
+    @Inject
+    Controller controller;
     @Override
     public boolean add(Field field) throws ParseException, SQLException {
 

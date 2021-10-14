@@ -1,4 +1,4 @@
-AppComponents.htmlTable.render.apply({
+var employeeComp = {
     url: "./view-employees",
     method: "GET",
     tableTitle: 'Employees',
@@ -43,7 +43,8 @@ AppComponents.htmlTable.render.apply({
         {
             header: "Type",
             dataIndex: "employeeType",
-        }
+        },
+
 
     ],
     buttons: [{
@@ -51,8 +52,6 @@ AppComponents.htmlTable.render.apply({
         id: 'addActivity',
         handler: function (){
             AppComponents.htmlForm.render.call({
-                url: "./add-employee",
-                method: "POST",
                 formTitle: 'Add New Employee',
                 renderId: "employeeForm",
                 items: [{
@@ -71,7 +70,18 @@ AppComponents.htmlTable.render.apply({
                     divClass: "mb-3",
                     inputClass: "form-control",
                     labelClass: "form-label"
-                },{
+                }, {
+                        labelTitle: "Employee Gender",
+                        id: "employeeGender",
+                        name: "employeeGender",
+                        type: "radio",
+                        labelClass: "form-label",
+                        divClass: "mb-3",
+                        options:{
+                            data:[{id:'Male', gender:'Male'},{id:'Female', gender:'Female'}],
+                            optionMap: {value:'id', display:'gender'}
+                        }
+                    },{
                     label: "ID Number",
                     name: "idNumber",
                     id: "idNumber",
@@ -115,38 +125,61 @@ AppComponents.htmlTable.render.apply({
                         divClass: "mb-3",
                         inputClass: "form-control",
                         labelClass: "form-label"
-                    }],
-                selects : [
-                    {
-                        labelTitle: "Employee Gender",
-                        id: "employeeGender",
-                        name: "employeeGender",
-                        labelClass: "form-label",
-                        values: ["Male", "Female"]
                     },
                     {
                         labelTitle: "Employee Designation",
                         id: "employeeDesignation",
                         name: "employeeDesignation",
+                        type: "select",
                         labelClass: "form-label",
-                        values: ["Manager", "Farmhand", "Accountant", "Stockman"]
+                        divClass: "mb-3",
+                        select: {
+                            data:[{
+                                id:'Manager', designation:'Manager'},
+                                {id:'Farmhand', designation:'Farmhand'},
+                                {id:'Accountant', designation:'Accountant'},
+                                {id:'Stockman', designation:'Stockman'}
+                            ],
+                            optionMap:{value: 'id', display: 'designation'}
+                        }
                     },
                     {
                         labelTitle: "Employee Type",
                         id: "employeeType",
                         name: "employeeType",
+                        type: "select",
                         labelClass: "form-label",
-                        values: ["FullTime", "Casual", "Contract"]
-                    },
-
-                ],
-                submitBtn: {
-                    btnDiv:"d-grid gap-2 col-6 mx-auto",
+                        divClass: "mb-3",
+                        select: {
+                            data:[{
+                                id:'FullTime', type:'FullTime'},
+                                {id:'Casual', type:'Casual'},
+                                {id:'Contract', type:'Contract'}
+                            ],
+                            optionMap:{value: 'id', display: 'type'}
+                        }
+                    }],
+                buttons: [{
+                    btnDiv:"d-grid gap-2 d-md-flex justify-content-md-end",
                     type: 'submit',
                     value: 'Save',
-                    btnClass:"btn btn-success"
-                }
+                    btnClass:"btn btn-success btn-lg",
+                    id: 'addemployee',
+                    url: "./add-employee",
+                    method: "POST",
+                    showMsg: 'showErrorMsg',
+                    success: function(){
+                        AppComponents.htmlTable.render.apply(employeeComp);
+                    },
+                    failure: function(){
+                        AppComponents.htmlTable.render.apply(employeeComp);
+                    }
+                }]
             });
         }
-    }]
-});
+    },
+        {
+            label: 'Delete',
+            id: 'deleteActivity'
+        }]
+};

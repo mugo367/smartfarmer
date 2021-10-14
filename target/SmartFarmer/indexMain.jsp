@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.smartfarmer.model.Farmer" %><%--
   Created by IntelliJ IDEA.
   User: mugo367
   Date: 10/2/21
@@ -15,26 +15,21 @@
 
 </head>
 <body>
+    <nav id="comp-topnav" class="navbar navbar-dark bg-dark"></nav>
 
-<div id="componentRender" class="container"></div>
+    <div class="container-fluid px-4">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Farm Management System</li>
+        </ol>
+        <div id="componentRender" class="container-fluid"></div>
+    </div>
 
-
-<%--<div id="activityForm" class="container"></div>
-<div id="employeeForm" class="container"></div>
-
-
-<div id="fieldForm" class="container"></div>
-<div id="transactionForm" class="container"></div>
-<div id="productionForm" class="container"></div>--%>
 
 <script src="js/main.js"></script>
-
+<script src="js/app.js"></script>
+<script src="js/equipment.js"></script>
+<script src="js/activity.js"></script>
 <script src="js/employee.js"></script>
 
-
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>

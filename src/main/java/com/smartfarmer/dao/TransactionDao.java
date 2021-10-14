@@ -3,15 +3,21 @@ package com.smartfarmer.dao;
 import com.smartfarmer.model.Farmer;
 import com.smartfarmer.model.Transaction;
 import com.smartfarmer.model.enumFiles.TransactionType;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Named(value ="TransactionDao")
 public class TransactionDao implements DaoI<Transaction> {
-    Controller controller = new Controller();
+   @Inject
+   Controller controller;
+
     @Override
     public boolean add(Transaction transaction) throws ParseException, SQLException {
         String query = "INSERT INTO transactions (transactionDate, transactionType, transactionLabel, costPerUnit, units, transactionCost, transactionDetails, uid) VALUES (" +

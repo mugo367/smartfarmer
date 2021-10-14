@@ -1,18 +1,22 @@
 package com.smartfarmer.dao;
 
 
-import com.smartfarmer.model.Farmer;
 import com.smartfarmer.model.Production;
 import com.smartfarmer.model.enumFiles.Unit;
+import com.smartfarmer.util.Controller;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Named(value ="ProductionDao")
 public class ProductionDao implements DaoI<Production> {
-    Controller controller = new Controller();
+    @Inject
+    Controller controller;
     @Override
     public boolean add(Production production) throws ParseException, SQLException {
         int fieldId = new FieldDetailDao().getFieldId(production.getFieldName(), production.getUid());

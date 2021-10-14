@@ -1,10 +1,10 @@
 package com.smartfarmer.controller;
 
 import com.smartfarmer.bean.LoginBean;
-import com.smartfarmer.bean.LoginBeanI;
-import com.smartfarmer.dao.LoginBeanDao;
+import com.smartfarmer.dao.LoginBeanDaoI;
 import org.apache.commons.beanutils.BeanUtils;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +18,8 @@ import java.io.IOException;
         urlPatterns = "/login"
 )
 public class LoginController extends HttpServlet {
+    @Inject
+    LoginBeanDaoI loginBean;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -26,7 +28,7 @@ public class LoginController extends HttpServlet {
     }
     private void authenticate(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
-        LoginBeanI loginBean = new LoginBeanDao();
+
 
         try{
 
@@ -38,8 +40,12 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("uid", loginBean.getFarmerDetails(login).getId());
                 session.setAttribute("details", loginBean.getFarmerDetails(login));
 
+                System.out.println(loginBean.getFarmerDetails(login).getId());
 
-                response.sendRedirect("./home.jsp");
+                System.out.println(request.getSession().getAttribute("uid"));
+
+
+                response.sendRedirect("./indexMain.jsp");
             }
             else{
                 session.setAttribute("LOGIN_MSG", "Invalid Login Details");

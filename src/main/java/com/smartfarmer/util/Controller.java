@@ -1,7 +1,7 @@
-package com.smartfarmer.dao;
+package com.smartfarmer.util;
 
-import com.smartfarmer.util.DbUtil;
-
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,10 +9,12 @@ import java.sql.SQLException;
 
 public class Controller {
     private PreparedStatement statement;
-
+    @Resource(lookup = "java:jboss/datasources/farm_management_system")
+    private DataSource dataSource;
     //To initialize connection to the database
+
     public Connection getConnection() throws SQLException {
-       return DbUtil.getInstance().getDataSource().getConnection();
+       return dataSource.getConnection();
     }
     //To close the connection to the database
     @Override

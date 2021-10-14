@@ -1,16 +1,15 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.smartfarmer.dao.FieldDetailDao;
+import com.smartfarmer.dao.FieldDetailDaoI;
 import com.smartfarmer.model.Farmer;
 import com.smartfarmer.model.Field;
 import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.FieldStatus;
 
-import javax.servlet.ServletConfig;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,20 +23,12 @@ import java.util.List;
                 "/add-field", "/delete-field", "/edit-fieldDetails", "/view-fields"
         }
 )
-public class FieldDetailsController extends HttpServlet {
-    FieldDetailDao fieldDetailDao;
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        fieldDetailDao = new FieldDetailDao();
-    }
+public class FieldDetailsController extends BaseController {
+    @Inject
+    FieldDetailDaoI fieldDetailDao;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try{
@@ -51,22 +42,31 @@ public class FieldDetailsController extends HttpServlet {
                 case("/editFieldDetails"):
                     editFieldDetails(request, response);
                     break;
-                case("/view_fields"):
-                    viewFields(request, response);
-                    break;
+            }
+        }catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try{
+            if ("/view_fields".equals(action)) {
+                viewFields(request, response);
             }
         }catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
     // to add field details
-    private void addField(HttpServletRequest request, HttpServletResponse response) {
-        //int id = Integer.parseInt(request.getParameter("uid"));
+    private void addField(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int id = (Integer) request.getSession().getAttribute("uid");
         try {
             Farmer farmerDetails = (Farmer) request.getSession().getAttribute("details");
             Double totalFieldSize = farmerDetails.getFarmSize();
-            Double usedField = fieldDetailDao.getUsedFieldSize(1);
+            Double usedField = fieldDetailDao.getUsedFieldSize(id);
             Double remainingFieldSize = totalFieldSize - usedField;
 
 
@@ -76,20 +76,21 @@ public class FieldDetailsController extends HttpServlet {
                         request.getParameter("fieldName"),
                         Double.parseDouble(request.getParameter("fieldSize")),
                         FieldStatus.valueOf(request.getParameter("fieldStatus")),
-                        Integer.parseInt(request.getParameter("uid"))
+                        id
                 );
                 try {
-                    if(fieldDetailDao.add(field)){
-
-                    }
+                    fieldDetailDao.add(field);
                 } catch (ParseException | SQLException e) {
-                    e.printStackTrace();
+                    resultWrapper.setSuccess(false);
+                    resultWrapper.setMessage(e.getMessage());
                 }
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            resultWrapper.setSuccess(false);
+            resultWrapper.setMessage(e.getMessage());
         }
+        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
     }
     //to delete a field
