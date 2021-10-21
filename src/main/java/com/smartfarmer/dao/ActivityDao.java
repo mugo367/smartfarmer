@@ -5,6 +5,8 @@ import com.smartfarmer.util.Controller;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -18,26 +20,35 @@ public class ActivityDao implements DaoI<Activity> {
 
     @Override
     public  boolean add(Activity activity) throws ParseException, SQLException {
+        Connection conn = controller.getConnection();
+        String query = "INSERT INTO activity(activityLabel, activityName, activityDescription, uid) " +
+                "VALUES(?, ?, ?, ?)";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setString(1, activity.getActivityLabel());
+        preparedStatement.setString(2, activity.getActivityName());
+        preparedStatement.setString(3, activity.getActivityDescription());
+        preparedStatement.setInt(4, activity.getUid());
 
-        String query = "INSERT INTO activity(activityLabel, activityName, activityDescription, uid) VALUES('"+activity.getActivityLabel()+"','"+activity.getActivityName()+"'," +
-                " '"+activity.getActivityDescription()+"', "+activity.getUid()+")";
-        int result = controller.writeData(query);
-
-        return  (result==1);
+        return  preparedStatement.executeUpdate() == 1;
     }
 
     @Override
     public List<Activity> read(int id) throws SQLException, ParseException {
-        List<Activity> activityList = new ArrayList<Activity>();
+        Connection conn = controller.getConnection();
+        List<Activity> activityList = new ArrayList<>();
 
-        String query="SELECT * FROM activity where uid="+id+"";
+        String query="SELECT * FROM activity where uid =?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
 
-        ResultSet resultSet = controller.readData(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
             Activity activity = new Activity();
+            activity.setId(resultSet.getInt(1));
             activity.setActivityLabel(resultSet.getString(2));
             activity.setActivityName(resultSet.getString(3));
             activity.setActivityDescription(resultSet.getString(4));
+            activity.setUid(resultSet.getInt(5));
             activityList.add(activity);
         }
         return activityList;
@@ -45,15 +56,29 @@ public class ActivityDao implements DaoI<Activity> {
 
     @Override
     public boolean update(Activity activity) throws ParseException, SQLException {
-        String query = " UPDATE activity SET activityName = '"+activity.getActivityName()+"', activityDescription ='"+activity.getActivityDescription()+"' " +
-                "WHERE uid = "+activity.getUid()+" AND activityLabel = '"+activity.getActivityLabel()+"'";
-        return controller.writeData(query)==1;
+        Connection conn = controller.getConnection();
+
+        String query = " UPDATE activity SET activityName = ?, activityDescription = ? +" +
+                "WHERE uid = ? AND activityLabel = ? ";
+
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setString(1, activity.getActivityName());
+        preparedStatement.setString(2, activity.getActivityDescription());
+        preparedStatement.setInt(3, activity.getUid());
+        preparedStatement.setString(4, activity.getActivityLabel());
+
+        return preparedStatement.executeUpdate()==1;
     }
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        String query = "DELETE FROM activity WHERE activityLabel = '"+label+"' AND uid = "+id+"";
-        return controller.writeData(query) ==1;
+
+        Connection conn = controller.getConnection();
+        String query = "DELETE FROM activity WHERE activityLabel = ? AND uid = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setString(1, label);
+        preparedStatement.setInt(2, id);
+        return preparedStatement.executeUpdate() ==1;
     }
 
 }

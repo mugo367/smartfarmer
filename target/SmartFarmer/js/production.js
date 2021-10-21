@@ -3,6 +3,7 @@ var productionComp = {
     method: "GET",
     tableTitle: 'Productions',
     renderTo: 'componentRender',
+    id:'productionTable',
     columns: [{
         header: "Production Label",
         dataIndex: "productionLabel",
@@ -50,6 +51,17 @@ var productionComp = {
                 divClass: "mb-3",
                 inputClass: "form-control",
                 labelClass: "form-label"
+            },{
+                label: "Field Name",
+                name: "fieldName",
+                id: "fieldName",
+                type: "select",
+                labelClass: "form-label",
+                divClass: "mb-3",
+                select: {
+                    url: './view-fields',
+                    optionMap:{value: 'id', display: 'fieldName'}
+                }
             },
                 {
                     label: "Production Details",
@@ -69,23 +81,18 @@ var productionComp = {
                     inputClass: "form-control",
                     labelClass: "form-label"
                 },
-            ],
-            selects : [
                 {
-                    labelTitle: "Unit",
+                    label: "Unit",
                     id: "unit",
                     name: "unit",
                     labelClass: "form-label",
                     option:"Unit",
-                    values: ["Bags", "Kgs"]
-                },
-                {
-                    labelTitle: "Field",
-                    id: "fieldName",
-                    name: "fieldName",
-                    labelClass: "form-label",
-                    option:"Field",
-                    values: []
+                    type: "radio",
+                    divClass: "mb-3",
+                    options:{
+                        data:[{id:'Kgs', type:'Kgs'},{id:'Bags', type:'Bags'}],
+                        optionMap: {value:'id', display:'type'}
+                    }
                 },
             ],
             buttons: [{
@@ -106,5 +113,42 @@ var productionComp = {
             }]
             });
         }
-    }]
+    },
+        {
+            label: 'Delete',
+            id: 'deleteProduction',
+            handler: function(){
+                //Reference the Table.
+                let tableRef = document.getElementById(productionComp.id);
+                //Reference the CheckBoxes in Table.
+                let checkBoxes = tableRef.getElementsByTagName("INPUT");
+
+                let checkedProductions = [];
+                //Loop through the CheckBoxes.
+                for (let i = 0; i < checkBoxes.length; i++) {
+                    if (checkBoxes[i].checked) {
+                        let row = checkBoxes[i].parentNode.parentNode;
+                        checkedProductions.push(row.cells[1].innerHTML);
+                    }
+                }
+                console.log(checkedProductions)
+                //make ajax request to delete record
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState === XMLHttpRequest.DONE){
+                        if (xhr.status === 200){
+                            console.log(xhr.responseText);
+                        }
+                    }
+                }
+
+                console.log(JSON.stringify(checkedProductions))
+
+                xhr.open("DELETE", "./delete-production", false);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send("productionLabels="+JSON.stringify(checkedProductions));
+
+                AppComponents.htmlTable.render.apply(productionComp);
+            }
+        }]
 };

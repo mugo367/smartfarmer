@@ -1,10 +1,9 @@
 package com.smartfarmer.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Employee;
-import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.Designation;
 import com.smartfarmer.model.enumFiles.EmpType;
 import com.smartfarmer.model.enumFiles.Gender;
@@ -33,14 +32,20 @@ public class EmployeeController extends BaseController {
         DaoI<Employee> employeeDao;
 
         @Override
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                String action = request.getServletPath();
+
+                if ("/view-employees".equals(action)) {
+                        viewEmployees(request, response);
+                }
+        }
+
+        @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
                 switch (action){
                         case "/add-employee":
                                 addEmployee(request, response);
-                                break;
-                        case "/delete-employee":
-                                deleteEmployee(request, response);
                                 break;
                         case "/edit-employee":
                                 editEmployee(request, response);
@@ -49,11 +54,11 @@ public class EmployeeController extends BaseController {
         }
 
         @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
 
-                if ("/view-employees".equals(action)) {
-                        viewEmployees(request, response);
+                if ("/delete-employee".equals(action)) {
+                        deleteEmployee(request, response);
                 }
         }
 
@@ -69,7 +74,7 @@ public class EmployeeController extends BaseController {
                                 request.getParameter("employeeEmail"),
                                 request.getParameter("employeeContact"),
                                 request.getParameter("employeeEmergencyContact"),
-                                new SimpleDateFormat("dd-MM-yyyy").parse(request.getParameter("employeeDateOfEmp")),
+                                new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("employeeDateOfEmp")),
                                 Designation.valueOf(request.getParameter("employeeDesignation")),
                                 EmpType.valueOf(request.getParameter("employeeType")),
                                 (Integer) request.getSession().getAttribute("uid")
@@ -77,7 +82,9 @@ public class EmployeeController extends BaseController {
                         );
                         employeeDao.add(employee);
                 } catch (ParseException | SQLException e) {
+                        e.printStackTrace();
                         resultWrapper.setSuccess(false);
+
                         resultWrapper.setMessage(e.getMessage());
                 }
                 response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
@@ -87,12 +94,15 @@ public class EmployeeController extends BaseController {
         // delete employee details
         private void deleteEmployee(HttpServletRequest request, HttpServletResponse response) {
                 try {
-                        if(employeeDao.delete(request.getParameter("employeeNumber"), Integer.parseInt(request.getParameter("uid")))){
-                                response.sendRedirect("./viewEmployees.jsp");
-                        }
+                        int id = (Integer) request.getSession().getAttribute("uid");
+                        String employee = request.getParameter("employeeNumbers");
 
-                        //check on else
-                } catch (ParseException | SQLException | IOException e) {
+                        List<String> employeeNumbers = new Gson().fromJson( employee, List.class );
+
+                        for(String employeeNumber : employeeNumbers) {
+                                employeeDao.delete(employeeNumber, id);
+                        }
+                } catch (ParseException | SQLException e) {
                         e.printStackTrace();
                 }
         }
@@ -103,15 +113,16 @@ public class EmployeeController extends BaseController {
         }
         //view employees
         private void viewEmployees(HttpServletRequest request, HttpServletResponse response) throws IOException {
-                //int id = Integer.parseInt(request.getParameter("uid"));
+                int id = (Integer) request.getSession().getAttribute("uid");
                 List<Employee> employeeList;
                 try {
-                        employeeList = employeeDao.read(1);
-                        ObjectMapper mapper = new ObjectMapper();
-                        ResultWrapper wrapper = new ResultWrapper();
-                        wrapper.setList(employeeList);
+                        employeeList = employeeDao.read(id);
+
+                        jsonMapper.setDateFormat(df);
+
+                        resultWrapper.setList(employeeList);
                         response.setContentType("application/json");
-                        response.getWriter().print(mapper.writeValueAsString(wrapper));
+                        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
                 } catch (SQLException | ParseException | JsonProcessingException e) {
                         e.printStackTrace();

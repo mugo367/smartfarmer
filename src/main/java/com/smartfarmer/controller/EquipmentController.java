@@ -1,9 +1,8 @@
 package com.smartfarmer.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Equipment;
-import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.Condition;
 
 import javax.inject.Inject;
@@ -20,7 +19,7 @@ import java.util.List;
 @WebServlet(
         name="EquipmentController",
         urlPatterns = {
-                "/add-equipment", "/delete-equipment", "/edit-equipment", "list-equipment", "view-equipments"
+                "/add-equipment", "/delete-equipment", "/edit-equipment", "/view-equipments"
         }
 )
 
@@ -29,7 +28,18 @@ public class EquipmentController extends BaseController {
     @Inject
     @Named("EquipmentDao")
     DaoI<Equipment> equipmentDao;
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
 
+        try {
+            if ("/view-equipments".equals(action)) {
+                viewEquipments(request, response);
+            }
+        } catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -38,9 +48,6 @@ public class EquipmentController extends BaseController {
             switch (action) {
                 case "/add-equipment":
                     addEquipment(request, response);
-                    break;
-                case "/delete-equipment":
-                    deleteEquipment(request, response);
                     break;
                 case "/edit-equipment":
                     editEquipment(request, response);
@@ -53,12 +60,12 @@ public class EquipmentController extends BaseController {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         try {
-            if ("/view-equipments".equals(action)) {
-                viewEquipments(request, response);
+            if ("/delete-equipment".equals(action)) {
+                deleteEquipment(request, response);
             }
         } catch (Exception ex) {
             throw new ServletException(ex);
@@ -85,10 +92,14 @@ public class EquipmentController extends BaseController {
     //to delete equipment
     private void deleteEquipment(HttpServletRequest request, HttpServletResponse response){
         try {
-            equipmentDao.delete(request.getParameter("equipmentLabel"), Integer.parseInt(request.getParameter("uid")));
+            int id = (Integer) request.getSession().getAttribute("uid");
+            String equipment = request.getParameter("equipmentLabels");
 
-            //check on else
+            List<String> equipmentLabels = new Gson().fromJson( equipment, List.class );
 
+            for(String equipmentLabel : equipmentLabels) {
+                equipmentDao.delete(equipmentLabel, id);
+            }
         } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
@@ -114,16 +125,15 @@ public class EquipmentController extends BaseController {
     }
     // to view equipments
     private void viewEquipments(HttpServletRequest request, HttpServletResponse response) {
-        //int id = Integer.parseInt(request.getParameter("uid"));
+        int id = (Integer) request.getSession().getAttribute("uid");
             List<Equipment> equipmentList;
         try {
 
-            equipmentList = equipmentDao.read(1);
-            ObjectMapper mapper = new ObjectMapper();
-            ResultWrapper wrapper = new ResultWrapper();
-            wrapper.setList(equipmentList);
+            equipmentList = equipmentDao.read(id);
+
+            resultWrapper.setList(equipmentList);
             response.setContentType("application/json");
-            response.getWriter().print(mapper.writeValueAsString(wrapper));
+            response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
         } catch (SQLException | ParseException | IOException e) {
             e.printStackTrace();

@@ -1,20 +1,21 @@
 package com.smartfarmer.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.smartfarmer.dao.DaoI;
+import com.smartfarmer.dao.FieldDetailDaoI;
 import com.smartfarmer.model.Production;
-import com.smartfarmer.model.ResultWrapper;
+import com.smartfarmer.model.enumFiles.Unit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @WebServlet(
@@ -24,50 +25,82 @@ import java.util.List;
                 "/add-production","/edit-production","/delete-production","view-productions"
         }
 )
-public class ProductionController extends HttpServlet {
+public class ProductionController extends BaseController {
 
     @Inject
     @Named("ProductionDao")
     DaoI<Production> productionDao;
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
+    @Inject
+    FieldDetailDaoI fieldDetailDao;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        if ("/view-productions".equals(action)) {
+            viewProductions(request, response);
+        }
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
         switch (action){
             case "/add-production":
                 addProduction(request, response);
                 break;
-            case "/delete-production":
-                deleteProduction(request, response);
-                break;
             case "/edit-production":
                 editProduction(request, response);
-                break;
-            case "/view-productions":
-                viewProductions(request, response);
                 break;
 
         }
     }
-   // to add productions
-    private void addProduction(HttpServletRequest request, HttpServletResponse response) {
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try {
+            if ("/delete-production".equals(action)) {
+                deleteProduction(request, response);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+   // to add productions
+    private void addProduction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        int id = (Integer) request.getSession().getAttribute("uid");
+        try {
+            Production production = new Production(
+                    request.getParameter("productionLabel"),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("productionDate")),
+                    Integer.parseInt(request.getParameter("fieldName")),
+                    Double.parseDouble(request.getParameter("productionQuantity")),
+                    Unit.valueOf(request.getParameter("unit")),
+                    request.getParameter("productionDetails"),
+                    id
+            );
+            productionDao.add(production);
+        } catch (ParseException | SQLException e) {
+            resultWrapper.setSuccess(false);
+            resultWrapper.setMessage(e.getMessage());
+        }
+        response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
     }
 
     // to delete productions
     private void deleteProduction(HttpServletRequest request, HttpServletResponse response) {
         try {
-            if(productionDao.delete(request.getParameter("productionLabel"), Integer.parseInt(request.getParameter("uid")))){
+            int id = (Integer) request.getSession().getAttribute("uid");
+            String production = request.getParameter("productionLabels");
 
+            List<String> productionLabels = new Gson().fromJson( production, List.class );
+
+            for(String productionLabel : productionLabels) {
+                productionDao.delete(productionLabel, id);
             }
-
-            //check on else
         } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
@@ -78,15 +111,14 @@ public class ProductionController extends HttpServlet {
     }
     // to view productions
     private void viewProductions(HttpServletRequest request, HttpServletResponse response) {
-//int id = Integer.parseInt(request.getParameter("uid"));
+        int id = (Integer) request.getSession().getAttribute("uid");
         List<Production> productionList;
         try {
-            productionList = productionDao.read(1);
-            ObjectMapper mapper = new ObjectMapper();
-            ResultWrapper wrapper = new ResultWrapper();
-            wrapper.setList(productionList);
+            productionList = productionDao.read(id);
+            jsonMapper.setDateFormat(df);
+            resultWrapper.setList(productionList);
             response.setContentType("application/json");
-            response.getWriter().print(mapper.writeValueAsString(wrapper));
+            response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
         } catch (SQLException | ParseException | IOException e) {
             e.printStackTrace();

@@ -7,6 +7,8 @@ import com.smartfarmer.util.Controller;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -19,18 +21,33 @@ public class ProductionDao implements DaoI<Production> {
     Controller controller;
     @Override
     public boolean add(Production production) throws ParseException, SQLException {
-        int fieldId = new FieldDetailDao().getFieldId(production.getFieldName(), production.getUid());
-        String query = "INSERT INTO productions (productionLabel, productionDate, fieldId, productionQuantity, unit, productionDetails, uid)  values (" +
-                "'"+production.getProductionLabel()+"', '"+new java.sql.Date(production.getProductionDate().getTime())+"', "+fieldId+", '"+production.getProductionQuantity()+"', '"+production.getUnit()+"', '"+production.getProductionDetails()+"', "+production.getUid()+")";
+        Connection conn = controller.getConnection();
 
-        return controller.writeData(query) == 1;
+        String query = "INSERT INTO productions (productionLabel, productionDate, fieldId, productionQuantity, unit, productionDetails, uid)  " +
+                "values (?, ?,?, ?, ?,?,?)";
+
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+
+        preparedStatement.setString(1, production.getProductionLabel());
+        preparedStatement.setDate(2, new java.sql.Date(production.getProductionDate().getTime()));
+        preparedStatement.setInt(3, production.getFieldId());
+        preparedStatement.setDouble(4, production.getProductionQuantity());
+        preparedStatement.setString(5, production.getUnit().name());
+        preparedStatement.setString(6, production.getProductionDetails());
+        preparedStatement.setInt(7,production.getUid());
+
+        return  preparedStatement.executeUpdate() == 1;
     }
 
     @Override
     public List<Production> read(int id) throws SQLException, ParseException {
         List<Production> productionList = new ArrayList<>();
-        String query = "SELECT fieldName, productionLabel, productionDate, productionQuantity, unit, productionDetails FROM productions INNER JOIN field on productions.fieldId = field.id WHERE productions.uid = "+id+"";
-        ResultSet resultSet = controller.readData(query);
+        Connection conn = controller.getConnection();
+        String query = "SELECT fieldName, productionLabel, productionDate, productionQuantity, unit, productionDetails FROM productions INNER JOIN field on productions.fieldId = field.id WHERE productions.uid = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
             Production production = new Production();
             production.setFieldName(resultSet.getString(1));
@@ -46,15 +63,29 @@ public class ProductionDao implements DaoI<Production> {
 
     @Override
     public boolean update(Production production) throws ParseException, SQLException {
-        String query ="UPDATE productions SET productionQuantity = '"+production.getProductionQuantity()+"', unit ='"+production.getUnit()+"', productionDetails = '"+production.getProductionDetails()+"' " +
-                "WHERE uid = "+production.getUid()+" AND productionLabel = '"+production.getProductionLabel()+"'";
-        return controller.writeData(query)==1;
+        Connection conn = controller.getConnection();
+        String query ="UPDATE productions SET productionQuantity = ?, unit = ?, productionDetails = ? " +
+                "WHERE uid = ? AND productionLabel = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setDouble(1, production.getProductionQuantity());
+        preparedStatement.setString(2, production.getUnit().name());
+        preparedStatement.setString(3, production.getProductionDetails());
+        preparedStatement.setInt(4, production.getUid());
+        preparedStatement.setString(5, production.getProductionLabel());
+
+        return  preparedStatement.executeUpdate() == 1;
     }
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        String query = "DELETE FROM productions WHERE uid = "+id+" AND productionLabel = '"+label+"'";
-        return controller.writeData(query)==1;
+        Connection conn = controller.getConnection();
+        String query = "DELETE FROM productions WHERE uid =? AND productionLabel = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+
+        preparedStatement.setInt(1, id);
+        preparedStatement.setString(2, label);
+
+        return  preparedStatement.executeUpdate() == 1;
     }
 
 

@@ -12,6 +12,7 @@ com/smartfarmer/model/enumFiles/TransactionType.class
 com/smartfarmer/model/Activity.class
 com/smartfarmer/dao/LoginBeanDao.class
 com/smartfarmer/model/Equipment.class
+com/smartfarmer/model/LoginResponse.class
 com/smartfarmer/model/Production.class
 com/smartfarmer/controller/ActivityController.class
 com/smartfarmer/dao/FieldDetailDaoI.class

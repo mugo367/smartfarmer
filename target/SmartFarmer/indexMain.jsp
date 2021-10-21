@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
+    <title>Home | Smart Farmer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
 </head>
@@ -25,11 +25,14 @@
     </div>
 
 
-<script src="js/main.js"></script>
-<script src="js/app.js"></script>
-<script src="js/equipment.js"></script>
-<script src="js/activity.js"></script>
-<script src="js/employee.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/equipment.js"></script>
+    <script src="js/activity.js"></script>
+    <script src="js/employee.js"></script>
+    <script src="js/field.js"></script>
+    <script src="js/production.js"></script>
+    <script src="js/transaction.js"></script>
 
 </body>
 </html>

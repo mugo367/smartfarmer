@@ -3,6 +3,7 @@ var fieldComp = {
     method: "GET",
     tableTitle: 'Fields',
     renderTo: 'componentRender',
+    id:'fieldTable',
     columns: [{
         header: "Field Label",
         dataIndex: "fieldLabel",
@@ -50,16 +51,19 @@ var fieldComp = {
                 divClass: "mb-3",
                 inputClass: "form-control",
                 labelClass: "form-label"
-            }
-            ],
-            selects : [
+            },
                 {
                     labelTitle: "Field Status",
                     id: "fieldStatus",
                     name: "fieldStatus",
                     labelClass: "form-label",
                     option:"Field Status",
-                    values: ["Planted", "NotPlanted"]
+                    type: "radio",
+                    divClass: "mb-3",
+                    options:{
+                        data:[{id:'Planted', status:'Planted'},{id:'NotPlanted', status:'NotPlanted'}],
+                        optionMap: {value:'id', display:'status'}
+                    }
                 },
             ],
             buttons: [{
@@ -80,5 +84,42 @@ var fieldComp = {
             }]
         });
         }
-    }]
+    },
+        {
+            label: 'Delete',
+            id: 'deleteFields',
+            handler: function(){
+                //Reference the Table.
+                let tableRef = document.getElementById(fieldComp.id);
+                //Reference the CheckBoxes in Table.
+                let checkBoxes = tableRef.getElementsByTagName("INPUT");
+
+                let checkedFields = [];
+                //Loop through the CheckBoxes.
+                for (let i = 0; i < checkBoxes.length; i++) {
+                    if (checkBoxes[i].checked) {
+                        let row = checkBoxes[i].parentNode.parentNode;
+                        checkedFields.push(row.cells[1].innerHTML);
+                    }
+                }
+                //make ajax request to delete record
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState === XMLHttpRequest.DONE){
+                        if (xhr.status === 200){
+                            console.log(xhr.responseText);
+                        }
+                    }
+                }
+
+                console.log(JSON.stringify(checkedFields))
+
+                xhr.open("DELETE", "./delete-field", false);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send("employeeNumbers="+JSON.stringify(checkedFields));
+
+                AppComponents.htmlTable.render.apply(fieldComp);
+            }
+        }
+    ]
 };

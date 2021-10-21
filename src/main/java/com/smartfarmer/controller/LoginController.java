@@ -1,7 +1,9 @@
 package com.smartfarmer.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartfarmer.bean.LoginBean;
 import com.smartfarmer.dao.LoginBeanDaoI;
+import com.smartfarmer.model.LoginResponse;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.inject.Inject;
@@ -28,7 +30,7 @@ public class LoginController extends HttpServlet {
     }
     private void authenticate(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
-
+        LoginResponse loginResponse = new LoginResponse();
 
         try{
 
@@ -36,24 +38,29 @@ public class LoginController extends HttpServlet {
             BeanUtils.populate(login, request.getParameterMap());
 
             if(loginBean.checkUser(login)){
+
+                loginResponse.setSessionId(loginBean.getFarmerDetails(login).getId());
+                loginResponse.setUsername(login.getUsername());
+                loginResponse.setDetails(loginBean.getFarmerDetails(login));
+                loginResponse.setRedirectPage("./indexMain.jsp");
+
                 session.setAttribute("username",login.getUsername());
                 session.setAttribute("uid", loginBean.getFarmerDetails(login).getId());
                 session.setAttribute("details", loginBean.getFarmerDetails(login));
 
-                System.out.println(loginBean.getFarmerDetails(login).getId());
-
-                System.out.println(request.getSession().getAttribute("uid"));
-
-
-                response.sendRedirect("./indexMain.jsp");
+            }else {
+                loginResponse.setLoginError(true);
+                loginResponse.setLoginErrorMsg("Invalid Login Details");
             }
-            else{
-                session.setAttribute("LOGIN_MSG", "Invalid Login Details");
-                response.sendRedirect("./login.jsp");
-            }
-        } catch (Exception throwables) {
-            throwables.printStackTrace();
-            response.sendRedirect("./login.jsp");
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+            loginResponse.setLoginError(true);
+            loginResponse.setLoginErrorMsg("Invalid Login Details, '" + ex.getMessage());
         }
+
+        response.setContentType("application/json");
+        response.getWriter().print(new ObjectMapper().writeValueAsString(loginResponse));
+
     }
 }

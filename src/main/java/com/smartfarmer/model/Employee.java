@@ -97,6 +97,8 @@ public class Employee implements Serializable {
     }
 
     public String getEmployeeEmergencyContact() {
+
+
         return employeeEmergencyContact;
     }
 
@@ -105,6 +107,7 @@ public class Employee implements Serializable {
     }
 
     public Date getEmployeeDateOfEmp() {
+
         return employeeDateOfEmp;
     }
 

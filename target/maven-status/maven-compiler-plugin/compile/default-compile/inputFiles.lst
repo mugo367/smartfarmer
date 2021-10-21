@@ -9,6 +9,7 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/controller/EmployeeController.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/ResultWrapper.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/Farmer.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/LoginResponse.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/FarmerDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/EquipmentDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/Activity.java

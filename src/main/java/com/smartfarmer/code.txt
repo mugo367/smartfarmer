@@ -1,0 +1,49 @@
+ let tableRows = document.getElementById(transactionComp.id).rows;
+                let tableColumns = document.getElementById(transactionComp.id).rows[0].cells.length;
+
+
+                let tbody = grid.querySelector("tbody");
+
+                                /* let checkedInputs = document.querySelectorAll("input[type='checkbox']:checked");
+                                 Array.prototype.slice.call(checkedInputs)
+                                     .forEach( input => tbody.removeChild(input.parentNode.parentNode))*/
+
+                                /*let tableRows = document.getElementById(me.id).rows;
+
+
+
+                                let tableRef = document.getElementById(me.id);
+                                //let tbody = tableRef.querySelector("tbody");
+
+                                let checkedInputs = document.querySelectorAll("input[type='checkbox']:checked");
+                                Array.prototype.slice.call(checkedInputs)
+                                    .forEach( input => tbody.removeChild(input.parentNode.parentNode))
+
+                                console.log(checkedInputs)
+                               var checkedIndexes = [];
+                                for (var i = 0; i < tableRows.length; i++) {
+                                    let checkedInputs = document.querySelectorAll("input[type='checkbox']:checked");
+                                    if (checkedInputs) {
+                                        checkedIndexes.push(i);
+                                    }
+                                }
+
+                                for (var k = checkedIndexes.length - 1; k >= 0; k--) {
+                                    console.log(k);
+                                }*/
+
+
+
+
+
+
+
+                                  var queryString = "";
+                                                for(var i = 0; i < checkedTransactions.length; i++) {
+                                                    queryString += "myArray=" + checkedTransactions[i];
+
+                                                    //Append an & except after the last element
+                                                    if(i < checkedTransactions.length - 1) {
+                                                        queryString += "&";
+                                                    }
+                                                }

@@ -2,7 +2,9 @@ var transactionComp ={
     url: "./view-transactions",
     method: "GET",
     tableTitle: 'Transactions',
+    id:'transactionTable',
     renderTo: 'componentRender',
+    rowId:'transactionLabel',
     columns: [{
         header: "Transaction Date",
         dataIndex: "transactionDate",
@@ -24,7 +26,8 @@ var transactionComp ={
 
         }
     ],
-    buttons: [{
+    buttons: [
+        {
         label: 'Add',
         id: 'addTransaction',
         handler: function (){
@@ -32,7 +35,20 @@ var transactionComp ={
 
                 formTitle: 'Add New Transaction',
                 renderId: "transactionForm",
-                items: [{
+                items: [
+                    {
+                        label: "Transaction Type",
+                        id: "transactionType",
+                        name: "transactionType",
+                        labelClass: "form-label",
+                        option:"Transaction Type",
+                        type: "radio",
+                        divClass: "mb-3",
+                        options:{
+                            data:[{id:'Income', type:'Income'},{id:'Expense', type:'Expense'}],
+                            optionMap: {value:'id', display:'type'}
+                        }
+                    },{
                     label: "Transaction Date",
                     name: "transactionDate",
                     id: "transactionDate",
@@ -76,16 +92,6 @@ var transactionComp ={
                         labelClass: "form-label"
                     }
                 ],
-                selects : [
-                    {
-                        labelTitle: "Transaction Type",
-                        id: "transactionType",
-                        name: "transactionType",
-                        labelClass: "form-label",
-                        option:"Transaction Type",
-                        values: ["Income", "Expense"]
-                    },
-                ],
                 buttons:[{
                     btnDiv: "d-grid gap-2 col-6 mx-auto",
                     type: 'submit',
@@ -102,7 +108,44 @@ var transactionComp ={
                         AppComponents.htmlTable.render.apply(transactionComp);
                     }
                 }]
-            }) ;
+            });
         }
-    }]
+        },
+        {
+            label: 'Delete',
+            id: 'deleteTransactions',
+            handler: function(){
+                //Reference the Table.
+                let tableRef = document.getElementById(transactionComp.id);
+                //Reference the CheckBoxes in Table.
+                let checkBoxes = tableRef.getElementsByTagName("INPUT");
+
+                let checkedTransactions = [];
+                //Loop through the CheckBoxes.
+                for (let i = 0; i < checkBoxes.length; i++) {
+                    if (checkBoxes[i].checked) {
+                        let row = checkBoxes[i].parentNode.parentNode;
+                        checkedTransactions.push(row.cells[3].innerHTML);
+                    }
+                }
+                console.log(checkedTransactions)
+                //make ajax request to delete record
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function(){
+                    if (xhr.readyState === XMLHttpRequest.DONE){
+                        if (xhr.status === 200){
+                            console.log(xhr.responseText);
+                        }
+                    }
+                }
+
+                console.log(JSON.stringify(checkedTransactions))
+
+                xhr.open("DELETE", "./delete-transaction", false);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.send("transactionLabels="+JSON.stringify(checkedTransactions));
+
+                AppComponents.htmlTable.render.apply(transactionComp);
+            }
+        }]
 };

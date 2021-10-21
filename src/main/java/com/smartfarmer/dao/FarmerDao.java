@@ -5,6 +5,8 @@ import com.smartfarmer.util.Controller;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -14,11 +16,25 @@ public class FarmerDao {
     Controller controller;
 
     public boolean add(Farmer farmer) throws ParseException, SQLException {
+        Connection conn = controller.getConnection();
 
-        String query = "INSERT INTO register(fullName, username, phoneNumber, emailAddress, password, county, subCounty, farmName, farmSize, additionalInfo) VALUES(" +
-                "'"+farmer.getFullName()+"', '"+farmer.getUsername()+"', '"+ farmer.getPhoneNumber()+"', '"+ farmer.getEmailAddress()+"', '"+farmer.getPassword()+"'," +
-                "'"+farmer.getCounty()+"' , '"+farmer.getSubCounty()+"' , '"+farmer.getFarmName()+"', "+farmer.getFarmSize()+", '"+farmer.getAdditionalInfo()+"')";
-        return controller.writeData(query)==1;
+        String query = "INSERT INTO register(fullName, username, phoneNumber, emailAddress, password, county, subCounty, farmName, farmSize, additionalInfo) " +
+                " VALUES(?, ?, ?, ?, ?, ?, ?,?,?,?)";
+
+
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setString(1, farmer.getFullName());
+        preparedStatement.setString(2, farmer.getUsername());
+        preparedStatement.setString(3, farmer.getPhoneNumber());
+        preparedStatement.setString(4, farmer.getEmailAddress());
+        preparedStatement.setString(5, farmer.getPassword());
+        preparedStatement.setString(6, farmer.getCounty());
+        preparedStatement.setString(7, farmer.getSubCounty());
+        preparedStatement.setString(8, farmer.getFarmName());
+        preparedStatement.setDouble(9, farmer.getFarmSize());
+        preparedStatement.setString(10, farmer.getAdditionalInfo());
+
+        return  preparedStatement.executeUpdate() == 1;
     }
 
     public List<Farmer> read() throws SQLException, ParseException {

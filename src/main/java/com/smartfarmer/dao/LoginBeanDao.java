@@ -6,7 +6,10 @@ import com.smartfarmer.util.Controller;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Named(value ="LoginBeanDao")
 public class LoginBeanDao implements LoginBeanDaoI {
@@ -17,21 +20,31 @@ public class LoginBeanDao implements LoginBeanDaoI {
         String username = login.getUsername();
         String password = login.getPassword();
 
+        Connection conn = controller.getConnection();
+
         if (username == null || password == null){
             return false;
         }else{
-            String  query = "SELECT username, password FROM register WHERE username = '"+username+"' AND password = '"+password+"'";
-            return controller.readData(query).next();
+            String  query = "SELECT username, password FROM register WHERE username = ? AND password = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+
+            return  preparedStatement.executeQuery().next();
         }
     }
 
     @Override
-    public Farmer getFarmerDetails(LoginBean login) {
+    public Farmer getFarmerDetails(LoginBean login) throws SQLException {
+        Connection conn = controller.getConnection();
 
-        String query = "select * from register where username = '" + login.getUsername() + "'";
+        String query = "select * from register where username = ?";
+        PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setString(1, login.getUsername());
         Farmer farmer = new Farmer();
         try {
-            ResultSet resultSet = controller.readData(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 farmer.setId(resultSet.getInt(1));
                 farmer.setFullName(resultSet.getString(2));

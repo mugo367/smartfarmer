@@ -1,10 +1,9 @@
 package com.smartfarmer.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.smartfarmer.dao.FieldDetailDaoI;
 import com.smartfarmer.model.Farmer;
 import com.smartfarmer.model.Field;
-import com.smartfarmer.model.ResultWrapper;
 import com.smartfarmer.model.enumFiles.FieldStatus;
 
 import javax.inject.Inject;
@@ -36,9 +35,6 @@ public class FieldDetailsController extends BaseController {
                 case("/add-field"):
                     addField(request, response);
                     break;
-                case ("/delete-field"):
-                    deleteField(request, response);
-                    break;
                 case("/editFieldDetails"):
                     editFieldDetails(request, response);
                     break;
@@ -53,8 +49,21 @@ public class FieldDetailsController extends BaseController {
         String action = request.getServletPath();
 
         try{
-            if ("/view_fields".equals(action)) {
+            if ("/view-fields".equals(action)) {
                 viewFields(request, response);
+            }
+        }catch (Exception ex) {
+            throw new ServletException(ex);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try{
+            if ("/delete-field".equals(action)) {
+                deleteField(request, response);
             }
         }catch (Exception ex) {
             throw new ServletException(ex);
@@ -70,7 +79,7 @@ public class FieldDetailsController extends BaseController {
             Double remainingFieldSize = totalFieldSize - usedField;
 
 
-            if(remainingFieldSize !=0 & Double.parseDouble(request.getParameter("fieldSize"))>=remainingFieldSize){
+            if(remainingFieldSize !=0 & Double.parseDouble(request.getParameter("fieldSize"))<=remainingFieldSize){
                 Field field = new Field(
                         request.getParameter("fieldLabel"),
                         request.getParameter("fieldName"),
@@ -96,12 +105,15 @@ public class FieldDetailsController extends BaseController {
     //to delete a field
     private void deleteField(HttpServletRequest request, HttpServletResponse response) {
         try {
-            if(fieldDetailDao.delete(request.getParameter("fieldLabel"), Integer.parseInt(request.getParameter("uid")))){
-                response.sendRedirect("./viewFields.jsp");
-            }
+            int id = (Integer) request.getSession().getAttribute("uid");
+            String field = request.getParameter("fieldLabels");
 
-            //check on else
-        } catch (ParseException | SQLException | IOException e) {
+            List<String> fieldLabels = new Gson().fromJson( field, List.class );
+
+            for(String fieldLabel : fieldLabels) {
+                fieldDetailDao.delete(fieldLabel, id);
+            }
+        } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -125,16 +137,14 @@ public class FieldDetailsController extends BaseController {
 
     // to view fields
     private void viewFields(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //int id = Integer.parseInt(request.getParameter("uid"));
+        int id = (Integer) request.getSession().getAttribute("uid");
         List<Field> fieldList;
         try {
 
-            fieldList = fieldDetailDao.read(1);
-            ObjectMapper mapper = new ObjectMapper();
-            ResultWrapper wrapper = new ResultWrapper();
-            wrapper.setList(fieldList);
+            fieldList = fieldDetailDao.read(id);
+            resultWrapper.setList(fieldList);
             response.setContentType("application/json");
-            response.getWriter().print(mapper.writeValueAsString(wrapper));
+            response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
         } catch (SQLException | ParseException e) {
             e.printStackTrace();

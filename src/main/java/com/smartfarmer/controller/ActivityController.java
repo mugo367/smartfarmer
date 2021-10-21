@@ -1,9 +1,8 @@
 package com.smartfarmer.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.smartfarmer.dao.DaoI;
 import com.smartfarmer.model.Activity;
-import com.smartfarmer.model.ResultWrapper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,9 +35,6 @@ public class ActivityController extends BaseController {
                 case "/add-activity":
                     addActivity(request, response);
                     break;
-                case "/delete-activity":
-                    deleteActivity(request, response);
-                    break;
                 case "/edit-activity":
                     editActivity(request, response);
                     break;
@@ -56,10 +52,24 @@ public class ActivityController extends BaseController {
                 viewActivities(request, response);
             }
         } catch (Exception ex) {
-            throw new ServletException(ex);
+            ex.printStackTrace();
         }
 
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getServletPath();
+
+        try {
+            if ("/delete-activity".equals(action)) {
+                deleteActivity(request, response);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     //add activity
     private void addActivity(HttpServletRequest request, HttpServletResponse response) throws IOException {
        Activity activity = new Activity(
@@ -80,8 +90,14 @@ public class ActivityController extends BaseController {
     //delete activity
     private void deleteActivity(HttpServletRequest request, HttpServletResponse response) {
         try {
-            activityDao.delete(request.getParameter("activityLabel"), Integer.parseInt(request.getParameter("uid")));
+            int id = (Integer) request.getSession().getAttribute("uid");
+            String activity = request.getParameter("activityLabels");
 
+            List<String> activityLabels = new Gson().fromJson( activity, List.class );
+
+            for(String activityLabel : activityLabels) {
+                activityDao.delete(activityLabel, id);
+            }
         } catch (ParseException | SQLException e) {
             e.printStackTrace();
         }
@@ -92,7 +108,7 @@ public class ActivityController extends BaseController {
                 request.getParameter("activityLabel"),
                 request.getParameter("activityName"),
                 request.getParameter("activityDescription"),
-                Integer.parseInt(request.getParameter("uid"))
+                (Integer) request.getSession().getAttribute("uid")
         );
         try {
             if(activityDao.update(activity)){
@@ -105,16 +121,13 @@ public class ActivityController extends BaseController {
     }
     //view activities
     private void viewActivities(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //int id = Integer.parseInt(request.getParameter("uid"));
+        int id = (Integer) request.getSession().getAttribute("uid");
         List<Activity> activityList;
         try {
-
-            activityList = activityDao.read(1);
-            ObjectMapper mapper = new ObjectMapper();
-            ResultWrapper wrapper = new ResultWrapper();
-            wrapper.setList(activityList);
+            activityList = activityDao.read(id);
+            resultWrapper.setList(activityList);
             response.setContentType("application/json");
-            response.getWriter().print(mapper.writeValueAsString(wrapper));
+            response.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
 
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
