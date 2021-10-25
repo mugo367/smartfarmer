@@ -1,4 +1,4 @@
-package com.smartfarmer.controller;
+package com.smartfarmer.action;
 
 import com.google.gson.Gson;
 import com.smartfarmer.dao.DaoI;
