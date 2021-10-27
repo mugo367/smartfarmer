@@ -2,7 +2,7 @@ package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.ProductionEjbI;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +16,9 @@ import java.io.IOException;
                 "/add-production","/edit-production","/delete-production","view-productions"
         }
 )
-public class ProductionController extends BaseController {
+public class ProductionActions extends BaseController {
 
-    @Inject
+    @EJB
     ProductionEjbI productionEjb;
 
     @Override

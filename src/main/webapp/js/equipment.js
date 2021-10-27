@@ -56,8 +56,8 @@ var equipmentComp = {
                     ,
                     {
                         label: "Employee Condition",
-                        id: "equipmentCondition",
-                        name: "equipmentCondition",
+                        id: "equipmentConditionStr",
+                        name: "equipmentConditionStr",
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
@@ -81,8 +81,16 @@ var equipmentComp = {
                         values: ["Working", "NotWorking", "UnderMaintenance"]
                     },
                 ],
-                buttons: [{
-                    btnDiv: "d-grid gap-2 col-6 mx-auto",
+                buttons: [
+                    {
+                        type: 'cancel',
+                        value: 'Cancel',
+                        id: 'cancel',
+                        btnClass: "btn btn-success",
+                        handler: function(){
+                            AppComponents.htmlTable.render.apply(equipmentComp);
+                        }
+                    },{
                     type: 'submit',
                     url: "./add-equipment",
                     method: "POST",

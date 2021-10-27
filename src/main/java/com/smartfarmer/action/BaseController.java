@@ -1,4 +1,4 @@
-package com.smartfarmer.controller;
+package com.smartfarmer.action;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartfarmer.model.ResultWrapper;

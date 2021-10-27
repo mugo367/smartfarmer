@@ -17,13 +17,9 @@
 <body>
     <nav id="comp-topnav" class="navbar navbar-dark bg-dark"></nav>
 
-    <div class="container-fluid px-4">
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Farm Management System</li>
-        </ol>
-        <div id="componentRender" class="container-fluid"></div>
-    </div>
+    <div class="container-fluid px-4" id="userSessionData" style="text-align:right;"></div>
 
+    <div id="componentRender" class="container-fluid"></div>
 
     <script src="js/main.js"></script>
     <script src="js/app.js"></script>

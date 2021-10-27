@@ -1,12 +1,11 @@
 package com.smartfarmer.dao;
 
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.model.Transaction;
 import com.smartfarmer.model.enumFiles.TransactionType;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,14 +14,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Named(value ="TransactionDao")
-public class TransactionDao implements DaoI<Transaction> {
+
+public class TransactionDao implements TransactionDaoI<Transaction> {
    @Inject
-   Controller controller;
+   EntityManager entityManager;
 
     @Override
     public boolean add(Transaction transaction) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "INSERT INTO transactions (transactionDate, transactionType, transactionLabel, costPerUnit, units, transactionCost, transactionDetails, uid) " +
                 "VALUES (?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -41,7 +40,7 @@ public class TransactionDao implements DaoI<Transaction> {
 
     @Override
     public List<Transaction> read(int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         List<Transaction> transactionList = new ArrayList<>();
         String query= "SELECT * FROM transactions WHERE uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -65,7 +64,7 @@ public class TransactionDao implements DaoI<Transaction> {
 
     @Override
     public boolean update(Transaction transaction) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "UPDATE transactions SET transactionType = ?, costPerUnit =?, units =?, " +
                 " transactionCost = ?, transactionDetails = ? WHERE  transactionLabel = ? AND uid =?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -81,7 +80,7 @@ public class TransactionDao implements DaoI<Transaction> {
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "DELETE FROM transactions WHERE transactionLabel = ? AND uid =?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
 
@@ -91,10 +90,11 @@ public class TransactionDao implements DaoI<Transaction> {
         return  preparedStatement.executeUpdate() == 1;
     }
 
-    public Double getTotalIncome(Farmer farmer) throws SQLException {
-        Connection conn = controller.getConnection();
-        String query ="SELECT SUM(transactionCost) FROM transactions where uid="+farmer.getId()+" AND transactionType ='Income'";
+    public Double getTotalIncome(int id) throws SQLException {
+        Connection conn = entityManager.getConnection();
+        String query ="SELECT SUM(transactionCost) FROM transactions where uid= ? AND transactionType ='Income'";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         Double totalIncome = null;
         while (resultSet.next()){
@@ -105,10 +105,11 @@ public class TransactionDao implements DaoI<Transaction> {
 
     }
 
-    public Double getTotalExpense(Farmer farmer) throws SQLException {
-        Connection conn = controller.getConnection();
-        String query ="SELECT SUM(transactionCost) FROM transactions where uid="+farmer.getId()+" AND transactionType ='Expense'";
+    public Double getTotalExpense(int id) throws SQLException {
+        Connection conn = entityManager.getConnection();
+        String query ="SELECT SUM(transactionCost) FROM transactions where uid=? AND transactionType ='Expense'";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
+        preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         Double totalExpense = null;
         while (resultSet.next()){

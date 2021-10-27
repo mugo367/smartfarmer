@@ -14,12 +14,15 @@ public class Employee implements Serializable {
     private String employeeName;
     private int idNumber;
     private Gender employeeGender;
+    private String employeeGenderStr;
     private String employeeEmail;
     private String employeeContact;
     private String employeeEmergencyContact;
     private Date employeeDateOfEmp;
     private Designation employeeDesignation;
     private EmpType employeeType;
+    private String employeeDesignationStr;
+    private String employeeTypeStr;
      private int uid;
 
     public Employee() {
@@ -98,12 +101,35 @@ public class Employee implements Serializable {
 
     public String getEmployeeEmergencyContact() {
 
-
         return employeeEmergencyContact;
     }
 
     public void setEmployeeEmergencyContact(String employeeEmergencyContact) {
         this.employeeEmergencyContact = employeeEmergencyContact;
+    }
+
+    public String getEmployeeGenderStr() {
+        return employeeGenderStr;
+    }
+
+    public void setEmployeeGenderStr(String employeeGenderStr) {
+        this.employeeGenderStr = employeeGenderStr;
+    }
+
+    public String getEmployeeDesignationStr() {
+        return employeeDesignationStr;
+    }
+
+    public void setEmployeeDesignationStr(String employeeDesignationStr) {
+        this.employeeDesignationStr = employeeDesignationStr;
+    }
+
+    public String getEmployeeTypeStr() {
+        return employeeTypeStr;
+    }
+
+    public void setEmployeeTypeStr(String employeeTypeStr) {
+        this.employeeTypeStr = employeeTypeStr;
     }
 
     public Date getEmployeeDateOfEmp() {

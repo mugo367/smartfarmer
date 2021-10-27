@@ -3,7 +3,7 @@ package com.smartfarmer.action;
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
 import com.smartfarmer.model.Farmer;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +16,8 @@ import java.io.IOException;
                 "/add-field", "/delete-field", "/edit-fieldDetails", "/view-fields"
         }
 )
-public class FieldDetailsController extends BaseController {
-    @Inject
+public class FieldDetailsActions extends BaseController {
+    @EJB
     FieldDetailEjbI fieldDetailEjb;
 
     @Override

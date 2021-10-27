@@ -9,6 +9,7 @@ public class Transaction implements Serializable {
     private int id;
     private Date transactionDate;
     private TransactionType transactionType;
+    private String transactionTypeStr;
     private String transactionLabel;
     private double costPerUnit;
     private int units;
@@ -80,6 +81,14 @@ public class Transaction implements Serializable {
 
     public double getTransactionCost() {
         return transactionCost;
+    }
+
+    public String getTransactionTypeStr() {
+        return transactionTypeStr;
+    }
+
+    public void setTransactionTypeStr(String transactionTypeStr) {
+        this.transactionTypeStr = transactionTypeStr;
     }
 
     public void setTransactionCost(double transactionCost) {

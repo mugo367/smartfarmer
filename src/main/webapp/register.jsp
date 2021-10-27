@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="group">
                                     <p class="loginhere">
-                                        Have an account already? <a href="login.jsp" class="loginhere-link">Login here</a>
+                                        Have an account already? <a href="index.jsp" class="loginhere-link">Login here</a>
                                 </div>
                                 <div class="group">
                                     <input type="submit" class="button" value="Sign Up">

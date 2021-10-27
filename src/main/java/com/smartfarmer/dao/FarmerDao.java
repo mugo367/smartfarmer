@@ -1,7 +1,7 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.model.Farmer;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,10 +13,10 @@ import java.util.List;
 @Named(value ="FarmerDao")
 public class FarmerDao {
     @Inject
-    Controller controller;
+    EntityManager entityManager;
 
     public boolean add(Farmer farmer) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "INSERT INTO register(fullName, username, phoneNumber, emailAddress, password, county, subCounty, farmName, farmSize, additionalInfo) " +
                 " VALUES(?, ?, ?, ?, ?, ?, ?,?,?,?)";

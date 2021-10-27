@@ -10,6 +10,7 @@ public class Field implements Serializable {
     private String fieldName;
     private Double fieldSize;
     private FieldStatus fieldStatus;
+    private String fieldStatusStr;
     private int uid;
 
 
@@ -55,6 +56,14 @@ public class Field implements Serializable {
 
     public void setFieldSize(Double fieldSize) {
         this.fieldSize = fieldSize;
+    }
+
+    public String getFieldStatusStr() {
+        return fieldStatusStr;
+    }
+
+    public void setFieldStatusStr(String fieldStatusStr) {
+        this.fieldStatusStr = fieldStatusStr;
     }
 
     public FieldStatus getFieldStatus() {

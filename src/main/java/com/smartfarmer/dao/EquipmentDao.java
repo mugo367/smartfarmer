@@ -1,8 +1,9 @@
 package com.smartfarmer.dao;
 
+import com.smartfarmer.dao.interfaces.EquipmentDaoI;
 import com.smartfarmer.model.Equipment;
 import com.smartfarmer.model.enumFiles.Condition;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,12 +15,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 @Named(value ="EquipmentDao")
-public class EquipmentDao implements DaoI<Equipment> {
+public class EquipmentDao implements EquipmentDaoI<Equipment> {
     @Inject
-    Controller controller;
+    EntityManager entityManager;
     @Override
     public boolean add(Equipment equipment) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "INSERT INTO equipments (equipmentLabel, equipmentName, equipmentCondition, equipmentQuantity, uid) " +
                 "VALUES (?, ?, ?, ?, ? )";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -34,7 +35,7 @@ public class EquipmentDao implements DaoI<Equipment> {
 
     @Override
     public List<Equipment> read(int id) throws SQLException, ParseException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         List<Equipment> equipmentList = new ArrayList<>();
 
         String query = "SELECT * FROM equipments WHERE uid =?";
@@ -58,7 +59,7 @@ public class EquipmentDao implements DaoI<Equipment> {
 
     @Override
     public boolean update(Equipment equipment) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "UPDATE equipments SET equipmentName = ?, equipmentCondition = ?, equipmentQuantity = ? WHERE equipmentLabel =? AND uid =";
 
@@ -74,7 +75,7 @@ public class EquipmentDao implements DaoI<Equipment> {
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "DELETE FROM equipments WHERE equipmentLabel =? AND uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);

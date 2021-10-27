@@ -83,8 +83,8 @@ var productionComp = {
                 },
                 {
                     label: "Unit",
-                    id: "unit",
-                    name: "unit",
+                    id: "unitStr",
+                    name: "unitStr",
                     labelClass: "form-label",
                     option:"Unit",
                     type: "radio",
@@ -95,8 +95,15 @@ var productionComp = {
                     }
                 },
             ],
-            buttons: [{
-                btnDiv: "d-grid gap-2 col-6 mx-auto",
+            buttons: [ {
+                type: 'cancel',
+                value: 'Cancel',
+                id: 'cancel',
+                btnClass: "btn btn-success",
+                handler: function(){
+                    AppComponents.htmlTable.render.apply(productionComp);
+                }
+            },{
                 type: 'submit',
                 url: "./add-production",
                 method: "POST",

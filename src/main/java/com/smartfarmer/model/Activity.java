@@ -1,13 +1,11 @@
 package com.smartfarmer.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name ="activities")
 public class Activity implements Serializable {
-    private int id;
-    private String activityLabel;
-    private String activityName;
-    private String activityDescription;
-    private int uid;
 
     public Activity() {
     }
@@ -19,6 +17,19 @@ public class Activity implements Serializable {
         this.activityDescription = activityDescription;
         this.uid = uid;
     }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @Column
+    private String activityLabel;
+    @Column
+    private String activityName;
+    @Column
+    private String activityDescription;
+    @Column
+    private int uid;
+
 
     public int getId() {
         return id;

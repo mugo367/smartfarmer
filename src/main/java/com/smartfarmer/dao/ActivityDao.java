@@ -1,10 +1,10 @@
 package com.smartfarmer.dao;
 
+import com.smartfarmer.dao.interfaces.ActivityDaoI;
 import com.smartfarmer.model.Activity;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,15 +12,15 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-@Named(value ="ActivityDao")
-public class ActivityDao implements DaoI<Activity> {
+
+public class ActivityDao implements ActivityDaoI<Activity> {
 
     @Inject
-    Controller controller;
+    EntityManager entityManager;
 
     @Override
     public  boolean add(Activity activity) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "INSERT INTO activity(activityLabel, activityName, activityDescription, uid) " +
                 "VALUES(?, ?, ?, ?)";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -34,7 +34,7 @@ public class ActivityDao implements DaoI<Activity> {
 
     @Override
     public List<Activity> read(int id) throws SQLException, ParseException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         List<Activity> activityList = new ArrayList<>();
 
         String query="SELECT * FROM activity where uid =?";
@@ -56,7 +56,7 @@ public class ActivityDao implements DaoI<Activity> {
 
     @Override
     public boolean update(Activity activity) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = " UPDATE activity SET activityName = ?, activityDescription = ? +" +
                 "WHERE uid = ? AND activityLabel = ? ";
@@ -73,7 +73,7 @@ public class ActivityDao implements DaoI<Activity> {
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
 
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "DELETE FROM activity WHERE activityLabel = ? AND uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setString(1, label);

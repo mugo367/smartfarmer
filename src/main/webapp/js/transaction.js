@@ -38,8 +38,8 @@ var transactionComp ={
                 items: [
                     {
                         label: "Transaction Type",
-                        id: "transactionType",
-                        name: "transactionType",
+                        id: "transactionTypeStr",
+                        name: "transactionTypeStr",
                         labelClass: "form-label",
                         option:"Transaction Type",
                         type: "radio",
@@ -92,8 +92,15 @@ var transactionComp ={
                         labelClass: "form-label"
                     }
                 ],
-                buttons:[{
-                    btnDiv: "d-grid gap-2 col-6 mx-auto",
+                buttons:[ {
+                    type: 'cancel',
+                    value: 'Cancel',
+                    id: 'cancel',
+                    btnClass: "btn btn-success",
+                    handler: function(){
+                        AppComponents.htmlTable.render.apply(transactionComp);
+                    }
+                }, {
                     type: 'submit',
                     url: "./add-transaction",
                     method: "POST",
@@ -107,7 +114,9 @@ var transactionComp ={
                     failure: function(){
                         AppComponents.htmlTable.render.apply(transactionComp);
                     }
-                }]
+                }
+
+                ]
             });
         }
         },

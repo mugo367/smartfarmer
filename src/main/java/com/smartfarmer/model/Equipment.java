@@ -10,6 +10,7 @@ public class Equipment implements Serializable {
     private String equipmentLabel;
     private String equipmentName;
     private Condition equipmentCondition;
+    private String equipmentConditionStr;
     private String equipmentQuantity;
     private int uid;
 
@@ -46,6 +47,14 @@ public class Equipment implements Serializable {
 
     public void setEquipmentName(String equipmentName) {
         this.equipmentName = equipmentName;
+    }
+
+    public String getEquipmentConditionStr() {
+        return equipmentConditionStr;
+    }
+
+    public void setEquipmentConditionStr(String equipmentConditionStr) {
+        this.equipmentConditionStr = equipmentConditionStr;
     }
 
     public Condition getEquipmentCondition() {

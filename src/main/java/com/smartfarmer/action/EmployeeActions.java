@@ -1,21 +1,13 @@
 package com.smartfarmer.action;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
-import com.smartfarmer.dao.DaoI;
-import com.smartfarmer.ejb.EmployeeEjbI;
-import com.smartfarmer.model.Employee;
+import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
 
 @WebServlet(
         name = "EmployeeController",
@@ -23,9 +15,9 @@ import java.util.List;
                 "/add-employee", "/delete-employee", "/edit-employee", "/view-employees"
         }
 )
-public class EmployeeController extends BaseController {
-        @Inject
-        EmployeeEjbI employeeEjbI;
+public class EmployeeActions extends BaseController {
+        @EJB
+        EmployeeEjbI employeeEjb;
 
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +27,7 @@ public class EmployeeController extends BaseController {
 
                 if ("/view-employees".equals(action)) {
                         response.setContentType("application/json");
-                        response.getWriter().print(jsonMapper.writeValueAsString(employeeEjbI.listEmployees(id)));
+                        response.getWriter().print(jsonMapper.writeValueAsString(employeeEjb.listEmployees(id)));
                 }
         }
 
@@ -46,10 +38,10 @@ public class EmployeeController extends BaseController {
                 switch (action) {
                         case "/add-employee":
                                 response.setContentType("application/json");
-                                response.getWriter().print(jsonMapper.writeValueAsString(employeeEjbI.addEmployee(request.getParameterMap(), id)));
+                                response.getWriter().print(jsonMapper.writeValueAsString(employeeEjb.addEmployee(request.getParameterMap(), id)));
                                 break;
                         case "/edit-employee":
-                                editEmployee(request, response);
+
                                 break;
                 }
         }
@@ -60,7 +52,7 @@ public class EmployeeController extends BaseController {
                 int id = (Integer) request.getSession().getAttribute("uid");
 
                 if ("/delete-employee".equals(action)) {
-                        employeeEjbI.deleteEmployees(request.getParameter("employeeNumbers"), id);
+                        employeeEjb.deleteEmployees(request.getParameter("employeeNumbers"), id);
                 }
         }
 }

@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Controller {
+public class EntityManager {
     private PreparedStatement statement;
     @Resource(lookup = "java:jboss/datasources/farm_management_system")
     private DataSource dataSource;

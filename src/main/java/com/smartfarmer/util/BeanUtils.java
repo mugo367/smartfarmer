@@ -1,36 +1,22 @@
 package com.smartfarmer.util;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.DateConverter;
+import org.apache.commons.beanutils.converters.DateTimeConverter;
 
-public class DbUtil {
-    private static DbUtil dbUtil;
-    private DataSource dataSource;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
+public class BeanUtils {
+    public static Object populate(Object obj, Map<String, String[]> formData)
+            throws IllegalAccessException, InvocationTargetException {
 
-    private DbUtil(){
-        try {
-            InitialContext initialContext = new InitialContext();
-            dataSource = (DataSource) initialContext.lookup("java:jboss/datasources/farm_management_system");
-
-        } catch (NamingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static DbUtil getInstance(){
-        if( dbUtil== null){
-            dbUtil = new DbUtil();
-        }
-        return dbUtil;
-    }
-
-    public DataSource getDataSource() {
-        return dataSource;
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
+        DateTimeConverter dateConverter = new DateConverter(null);
+        dateConverter.setPatterns(new String[] {"yyyy-MM-dd"});
+        ConvertUtils
+                .register(dateConverter, java.util.Date.class);
+        BeanUtilsBean.getInstance().populate(obj, formData);
+        return obj;
     }
 }

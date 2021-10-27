@@ -2,7 +2,7 @@ package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;
 
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +16,9 @@ import java.io.IOException;
         }
 )
 
-public class EquipmentController extends BaseController {
+public class EquipmentActions extends BaseController {
 
-    @Inject
+    @EJB
     EquipmentEjbI equipmentEjb;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

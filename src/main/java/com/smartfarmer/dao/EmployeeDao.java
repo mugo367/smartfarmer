@@ -1,14 +1,14 @@
 package com.smartfarmer.dao;
 
 
+import com.smartfarmer.dao.interfaces.EmployeeDaoI;
 import com.smartfarmer.model.Employee;
 import com.smartfarmer.model.enumFiles.Designation;
 import com.smartfarmer.model.enumFiles.EmpType;
 import com.smartfarmer.model.enumFiles.Gender;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,13 +17,12 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Named(value ="EmployeeDao")
-public class EmployeeDao implements DaoI<Employee> {
+public class EmployeeDao implements EmployeeDaoI<Employee> {
     @Inject
-    Controller controller;
+    EntityManager entityManager;
     @Override
     public boolean add(Employee employee) throws ParseException, SQLException {
-        Connection con = controller.getConnection();
+        Connection con = entityManager.getConnection();
         String query = "INSERT INTO employees(employeeNumber, employeeName, idNumber, employeeGender, employeeEmail, employeeContact, employeeEmergencyContact, employeeDateOfEmp, employeeDesignation, employeeType, uid) " +
                 "VALUES(?, ?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = con.prepareStatement(query);
@@ -46,7 +45,7 @@ public class EmployeeDao implements DaoI<Employee> {
 
     @Override
     public List<Employee> read(int id) throws ParseException, SQLException{
-        Connection con = controller.getConnection();
+        Connection con = entityManager.getConnection();
         List<Employee> employeeList = new ArrayList<>();
 
         String query="SELECT * FROM employees WHERE uid = ?";
@@ -79,7 +78,7 @@ public class EmployeeDao implements DaoI<Employee> {
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "DELETE FROM employees WHERE uid = ? AND employeeNumber = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setInt(1, id);

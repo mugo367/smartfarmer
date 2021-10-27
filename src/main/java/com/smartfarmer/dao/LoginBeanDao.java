@@ -1,8 +1,9 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.bean.LoginBean;
+import com.smartfarmer.dao.interfaces.LoginBeanDaoI;
 import com.smartfarmer.model.Farmer;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -13,14 +14,15 @@ import java.sql.SQLException;
 
 @Named(value ="LoginBeanDao")
 public class LoginBeanDao implements LoginBeanDaoI {
-    @Inject Controller controller;
+    @Inject
+    EntityManager entityManager;
 
     //Check if user details exists in database
     public boolean checkUser(LoginBean login) throws Exception {
         String username = login.getUsername();
         String password = login.getPassword();
 
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         if (username == null || password == null){
             return false;
@@ -37,7 +39,7 @@ public class LoginBeanDao implements LoginBeanDaoI {
 
     @Override
     public Farmer getFarmerDetails(LoginBean login) throws SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "select * from register where username = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);

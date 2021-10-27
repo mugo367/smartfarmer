@@ -73,8 +73,8 @@ var employeeComp = {
                     labelClass: "form-label"
                 }, {
                         label: "Employee Gender",
-                        id: "employeeGender",
-                        name: "employeeGender",
+                        id: "employeeGenderStr",
+                        name: "employeeGenderStr",
                         type: "radio",
                         labelClass: "form-label",
                         divClass: "mb-3",
@@ -129,8 +129,8 @@ var employeeComp = {
                     },
                     {
                         label: "Employee Designation",
-                        id: "employeeDesignation",
-                        name: "employeeDesignation",
+                        id: "employeeDesignationStr",
+                        name: "employeeDesignationStr",
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
@@ -146,8 +146,8 @@ var employeeComp = {
                     },
                     {
                         label: "Employee Type",
-                        id: "employeeType",
-                        name: "employeeType",
+                        id: "employeeTypeStr",
+                        name: "employeeTypeStr",
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
@@ -160,8 +160,18 @@ var employeeComp = {
                             optionMap:{value: 'id', display: 'type'}
                         }
                     }],
-                buttons: [{
-                    btnDiv:"d-grid gap-2 d-md-flex justify-content-md-end",
+                buttons: [
+                    {
+
+                        type: 'cancel',
+                        value: 'Cancel',
+                        id: 'cancel',
+                        btnClass: "btn btn-success",
+                        handler: function(){
+                            AppComponents.htmlTable.render.apply(employeeComp);
+                        }
+                    },{
+
                     type: 'submit',
                     value: 'Save',
                     btnClass:"btn btn-success btn-lg",

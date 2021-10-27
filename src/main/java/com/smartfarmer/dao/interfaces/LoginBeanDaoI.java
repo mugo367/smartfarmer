@@ -1,4 +1,4 @@
-package com.smartfarmer.dao;
+package com.smartfarmer.dao.interfaces;
 
 
 import com.smartfarmer.bean.LoginBean;

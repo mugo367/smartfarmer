@@ -1,5 +1,6 @@
 let appNavBarLinks = {
     renderTo: "comp-topnav",
+    userDataLink: "./login",
     links: [{
         label: "Employees",
         id: "employees",
@@ -52,6 +53,16 @@ let appNavBarLinks = {
                 let me = this;
                 AppComponents.htmlToNavBar.changeStyle.call(appNavBarLinks, me.id);
                 AppComponents.htmlTable.render.apply(transactionComp);
+            }
+        },
+        {
+            label: "Log Out",
+            id: "logout",
+            handler: function(){
+                let userSessionData = AppComponents.htmlToNavBar.loadSessionData('./logout');
+                if (!userSessionData.sessionId)
+                    location.href = './';
+
             }
         }
     ]

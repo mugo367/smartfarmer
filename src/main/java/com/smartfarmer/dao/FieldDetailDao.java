@@ -1,9 +1,10 @@
 package com.smartfarmer.dao;
 
 
+import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.model.Field;
 import com.smartfarmer.model.enumFiles.FieldStatus;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
 import java.sql.Connection;
@@ -15,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FieldDetailDao implements FieldDetailDaoI {
+public class FieldDetailDao implements FieldDetailDaoI<Field> {
     @Inject
-    Controller controller;
+    EntityManager entityManager;
     @Override
     public boolean add(Field field) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "INSERT INTO field(fieldLabel, fieldName, fieldSize, fieldStatus, uid) " +
                 "VALUES(?,?,?,?,?)";
@@ -38,7 +39,7 @@ public class FieldDetailDao implements FieldDetailDaoI {
     @Override
     public List<Field> read(int id) throws SQLException, ParseException {
         List<Field> fieldList = new ArrayList<>();
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "SELECT * FROM field WHERE uid =?" ;
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -61,7 +62,7 @@ public class FieldDetailDao implements FieldDetailDaoI {
 
     @Override
     public boolean update(Field field) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "UPDATE field SET fieldName = ?, fieldStatus =? WHERE fieldLabel = ? AND uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setString(1, field.getFieldName());
@@ -75,7 +76,7 @@ public class FieldDetailDao implements FieldDetailDaoI {
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "DELETE FROM field WHERE uid = ? AND fieldLabel= ?";
 
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -89,7 +90,7 @@ public class FieldDetailDao implements FieldDetailDaoI {
 
 
     public Double getUsedFieldSize(int id) throws SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "SELECT SUM(fieldSize) FROM field WHERE uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
 
@@ -105,7 +106,7 @@ public class FieldDetailDao implements FieldDetailDaoI {
     }
 
     public int getFieldId (String fieldName, int id) throws SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "SELECT id FROM field WHERE fieldName = ? AND uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
 

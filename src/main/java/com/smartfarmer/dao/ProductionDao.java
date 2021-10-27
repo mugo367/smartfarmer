@@ -1,9 +1,10 @@
 package com.smartfarmer.dao;
 
 
+import com.smartfarmer.dao.interfaces.ProductionDaoI;
 import com.smartfarmer.model.Production;
 import com.smartfarmer.model.enumFiles.Unit;
-import com.smartfarmer.util.Controller;
+import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,12 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named(value ="ProductionDao")
-public class ProductionDao implements DaoI<Production> {
+public class ProductionDao implements ProductionDaoI<Production> {
     @Inject
-    Controller controller;
+    EntityManager entityManager;
     @Override
     public boolean add(Production production) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
 
         String query = "INSERT INTO productions (productionLabel, productionDate, fieldId, productionQuantity, unit, productionDetails, uid)  " +
                 "values (?, ?,?, ?, ?,?,?)";
@@ -42,7 +43,7 @@ public class ProductionDao implements DaoI<Production> {
     @Override
     public List<Production> read(int id) throws SQLException, ParseException {
         List<Production> productionList = new ArrayList<>();
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "SELECT fieldName, productionLabel, productionDate, productionQuantity, unit, productionDetails FROM productions INNER JOIN field on productions.fieldId = field.id WHERE productions.uid = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setInt(1, id);
@@ -63,7 +64,7 @@ public class ProductionDao implements DaoI<Production> {
 
     @Override
     public boolean update(Production production) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query ="UPDATE productions SET productionQuantity = ?, unit = ?, productionDetails = ? " +
                 "WHERE uid = ? AND productionLabel = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
@@ -78,7 +79,7 @@ public class ProductionDao implements DaoI<Production> {
 
     @Override
     public boolean delete(String label, int id) throws ParseException, SQLException {
-        Connection conn = controller.getConnection();
+        Connection conn = entityManager.getConnection();
         String query = "DELETE FROM productions WHERE uid =? AND productionLabel = ?";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
 

@@ -48,29 +48,33 @@ var AppComponents = {
 
             });
 
-            me.buttons.forEach(submitBtn=>{
-                formToRender += '<div class = "'+submitBtn.btnDiv+'"> ';
-
-                formToRender += '<button class ="'+submitBtn.btnClass+'" id="' + submitBtn.id + '"type="' + submitBtn.type + '">' + submitBtn.value + '</button></div></form>';
+            formToRender += '<div class = "d-grid gap-2 d-md-flex justify-content-md-end"> ';
+            me.buttons.forEach(btn=>{
+                formToRender += '<button class ="'+btn.btnClass+'" id="' + btn.id + '"type="' + btn.type + '">' + btn.value + '</button>';
             });
+            formToRender += '</div></form>';
 
             document.getElementById('componentRender').innerHTML = formToRender;
 
             console.log(formToRender);
 
             me.buttons.forEach(btn=>{
-                document.getElementById(btn.id).addEventListener("click",  event=>{
-                    event.preventDefault();
+                if(btn.type==="cancel"){
+                    document.getElementById(btn.id).addEventListener("click", btn.handler);
+                }else if (btn.type==="submit"){
+                    document.getElementById(btn.id).addEventListener("click",  event=>{
+                        event.preventDefault();
 
-                    me.url = btn.url;
-                    me.method = btn.method;
-                    me.showMsg = btn.showMsg;
-                    me.success = btn.success; // will execute if saving is success
-                    me.failure = btn.failure; //will execute if saving is failure
+                        me.url = btn.url;
+                        me.method = btn.method;
+                        me.showMsg = btn.showMsg;
+                        me.success = btn.success; // will execute if saving is success
+                        me.failure = btn.failure; //will execute if saving is failure
 
-                    AppComponents.htmlForm.submit.apply(me);
+                        AppComponents.htmlForm.submit.apply(me);
 
-                });
+                    });
+                }
             });
         },
         submit: function(){
@@ -173,12 +177,14 @@ var AppComponents = {
             });
                  topNavToolBar+= '</ul> </div>';
 
+            let userSessionData = AppComponents.htmlToNavBar.loadSessionData(me.userDataLink);
+
             document.getElementById(me.renderTo).innerHTML = topNavToolBar;
 
             me.links.forEach(link=>{
                 document.getElementById(link.id).addEventListener("click", link.handler);
             });
-
+            document.getElementById('userSessionData').innerHTML ='<div class="small">Logged in as:</div>' + userSessionData.username ;
         },
        changeStyle: function(linkId){
             let me = this;
@@ -194,9 +200,32 @@ var AppComponents = {
 
                 }
             });
+        },
+        loadSessionData: function(userDataLink){
+            let userSessionData = {};
+
+            var ajaxReq = new XMLHttpRequest();
+            ajaxReq.onreadystatechange = function(){
+                if (ajaxReq.readyState == XMLHttpRequest.DONE){
+                    if (ajaxReq.status == 200){
+                        let reqRes = eval('(' + ajaxReq.responseText + ')');
+
+                        reqRes.list.forEach(row=>{
+                            userSessionData = row;
+                        });
+                    }
+                }
+            }
+
+            ajaxReq.open('get', userDataLink, false);
+            ajaxReq.send();
+
+
+
+            return userSessionData;
+
         }
     }
-
 };
 
 function ajaxSelect(selectOptions, formItem) {

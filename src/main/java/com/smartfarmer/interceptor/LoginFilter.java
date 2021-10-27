@@ -28,7 +28,7 @@ public class LoginFilter implements Filter {
                 chain.doFilter(request, response);
             }
 
-            else if(servletPath.equals("/index.jsp") || servletPath.equals("/register.jsp") ||(servletPath.equals("/login.jsp")) || (servletPath.equals("/js/*"))){
+            else if(servletPath.equals("/start.jsp") || servletPath.equals("/register.jsp") ||(servletPath.equals("/index.jsp")) || (servletPath.equals("/js/*"))){
                 chain.doFilter(request, response);
                 response.getWriter().flush();
             } else {

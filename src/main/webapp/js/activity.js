@@ -46,8 +46,16 @@ var activitiesComp = {
                     inputClass: "form-control",
                     labelClass: "form-label"
                 }],
-                buttons: [{
-                    btnDiv: "d-grid gap-2 col-6 mx-auto",
+                buttons: [
+                    {
+                        type: 'cancel',
+                        value: 'Cancel',
+                        id: 'cancel',
+                        btnClass: "btn btn-success",
+                        handler: function(){
+                            AppComponents.htmlTable.render.apply(activitiesComp);
+                        }
+                    },{
                     type: 'submit',
                     url: "./add-activity",
                     method: "POST",

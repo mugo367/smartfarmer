@@ -53,9 +53,9 @@ var fieldComp = {
                 labelClass: "form-label"
             },
                 {
-                    labelTitle: "Field Status",
-                    id: "fieldStatus",
-                    name: "fieldStatus",
+                    label: "Field Status",
+                    id: "fieldStatusStr",
+                    name: "fieldStatusStr",
                     labelClass: "form-label",
                     option:"Field Status",
                     type: "radio",
@@ -66,8 +66,18 @@ var fieldComp = {
                     }
                 },
             ],
-            buttons: [{
-                btnDiv: "d-grid gap-2 col-6 mx-auto",
+            buttons: [
+                {
+                    btnDiv: "d-grid gap-2 d-md-flex justify-content-md-end",
+                    type: 'cancel',
+                    value: 'Cancel',
+                    id: 'cancel',
+                    btnClass: "btn btn-success",
+                    handler: function(){
+                        AppComponents.htmlTable.render.apply(fieldComp);
+                    }
+                },{
+                btnDiv: "d-grid gap-2 d-md-flex justify-content-md-end",
                 type: 'submit',
                 url: "./add-field",
                 method: "POST",

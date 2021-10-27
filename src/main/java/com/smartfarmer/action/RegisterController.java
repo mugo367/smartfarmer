@@ -1,4 +1,4 @@
-package com.smartfarmer.controller;
+package com.smartfarmer.action;
 
 import com.smartfarmer.dao.FarmerDao;
 import com.smartfarmer.model.Farmer;
@@ -35,7 +35,7 @@ public class RegisterController extends HttpServlet {
             BeanUtils.populate(farmer, req.getParameterMap());
             if(farmerDao.add(farmer)){
                 output.print("Registration was Successfully");
-                resp.sendRedirect("./login.jsp");
+                resp.sendRedirect("./index.jsp");
             }else{
                 output.print("An error occurred during the process !!");
                 resp.sendRedirect("./register.jsp");

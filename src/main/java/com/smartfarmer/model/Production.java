@@ -11,6 +11,7 @@ public class Production implements Serializable {
     private Date productionDate;
     private int fieldId;
     private Double productionQuantity;
+    private String unitStr;
     private Unit unit;
     private String productionDetails;
     private int uid;
@@ -68,6 +69,14 @@ public class Production implements Serializable {
 
     public void setProductionQuantity(Double productionQuantity) {
         this.productionQuantity = productionQuantity;
+    }
+
+    public String getUnitStr() {
+        return unitStr;
+    }
+
+    public void setUnitStr(String unitStr) {
+        this.unitStr = unitStr;
     }
 
     public Unit getUnit() {
