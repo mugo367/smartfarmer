@@ -3,11 +3,11 @@ package com.smartfarmer.ejb;
 import com.google.gson.Gson;
 import com.smartfarmer.dao.interfaces.EmployeeDaoI;
 import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
-import com.smartfarmer.model.Employee;
+import com.smartfarmer.entities.Employee;
+import com.smartfarmer.entities.enumFiles.Designation;
+import com.smartfarmer.entities.enumFiles.EmpType;
+import com.smartfarmer.entities.enumFiles.Gender;
 import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.model.enumFiles.Designation;
-import com.smartfarmer.model.enumFiles.EmpType;
-import com.smartfarmer.model.enumFiles.Gender;
 import com.smartfarmer.util.BeanUtils;
 
 import javax.ejb.Stateless;

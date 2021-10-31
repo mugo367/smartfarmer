@@ -4,9 +4,9 @@ package com.smartfarmer.ejb;
 import com.google.gson.Gson;
 import com.smartfarmer.dao.interfaces.EquipmentDaoI;
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;
-import com.smartfarmer.model.Equipment;
+import com.smartfarmer.entities.Equipment;
+import com.smartfarmer.entities.enumFiles.Condition;
 import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.model.enumFiles.Condition;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.ejb.Stateless;

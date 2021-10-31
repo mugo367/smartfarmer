@@ -2,7 +2,7 @@ package com.smartfarmer.dao;
 
 import com.smartfarmer.bean.LoginBean;
 import com.smartfarmer.dao.interfaces.LoginBeanDaoI;
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.entities.Farmer;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

@@ -1,12 +1,13 @@
-package com.smartfarmer.model;
+package com.smartfarmer.entities;
 
-import com.smartfarmer.model.enumFiles.Designation;
-import com.smartfarmer.model.enumFiles.EmpType;
-import com.smartfarmer.model.enumFiles.Gender;
-import lombok.*;
+import com.smartfarmer.entities.enumFiles.Designation;
+import com.smartfarmer.entities.enumFiles.EmpType;
+import com.smartfarmer.entities.enumFiles.Gender;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -15,7 +16,7 @@ import java.util.Date;
 
 @Entity
 @Table (name ="tbl_employees")
-public class Employee extends BaseEntity implements Serializable {
+public class Employee extends BaseEntity {
 
     @Column(name="employee_number", unique = true)
     private String employeeNumber;

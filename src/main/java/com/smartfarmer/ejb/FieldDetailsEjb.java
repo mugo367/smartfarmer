@@ -3,10 +3,10 @@ package com.smartfarmer.ejb;
 import com.google.gson.Gson;
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
-import com.smartfarmer.model.Farmer;
-import com.smartfarmer.model.Field;
+import com.smartfarmer.entities.Farmer;
+import com.smartfarmer.entities.Field;
+import com.smartfarmer.entities.enumFiles.FieldStatus;
 import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.model.enumFiles.FieldStatus;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.ejb.Stateless;

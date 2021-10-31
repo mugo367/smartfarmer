@@ -1,7 +1,7 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.entities.Farmer;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;

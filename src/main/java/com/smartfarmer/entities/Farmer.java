@@ -1,11 +1,12 @@
-package com.smartfarmer.model;
+package com.smartfarmer.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +18,7 @@ import java.util.List;
 public class Farmer implements Serializable {
 
     @Id
+    @Column(name="farmer_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
@@ -50,30 +52,5 @@ public class Farmer implements Serializable {
     @Column(name = "additionalInfo")
     private String additionalInfo;
 
-    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY)
-    private List<Production> productions = new ArrayList<>();
-    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY)
-    private List<Field> fields = new ArrayList<>();
-    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY)
-    private List<Employee> employees = new ArrayList<>();
-    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY)
-    private List<Transaction> transactions = new ArrayList<>();
-    @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY)
-    private List<Activity> activities = new ArrayList<>();
-
-
-    public Farmer(int id, String fullName, String username, String phoneNumber, String emailAddress, String password, String county, String subCounty, String farmName, Double farmSize, String additionalInfo) {
-        this.id = id;
-        this.fullName = fullName;
-        this.username = username;
-        this.phoneNumber = phoneNumber;
-        this.emailAddress = emailAddress;
-        this.password = password;
-        this.county = county;
-        this.subCounty = subCounty;
-        this.farmName = farmName;
-        this.farmSize = farmSize;
-        this.additionalInfo = additionalInfo;
-    }
 
 }

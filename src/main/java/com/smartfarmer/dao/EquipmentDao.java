@@ -1,8 +1,8 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.dao.interfaces.EquipmentDaoI;
-import com.smartfarmer.model.Equipment;
-import com.smartfarmer.model.enumFiles.Condition;
+import com.smartfarmer.entities.Equipment;
+import com.smartfarmer.entities.enumFiles.Condition;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

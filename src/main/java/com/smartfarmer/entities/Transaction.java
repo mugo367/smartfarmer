@@ -1,10 +1,11 @@
-package com.smartfarmer.model;
+package com.smartfarmer.entities;
 
-import com.smartfarmer.model.enumFiles.TransactionType;
-import lombok.*;
+import com.smartfarmer.entities.enumFiles.TransactionType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tbl_transactions")
-public class Transaction extends BaseEntity  implements Serializable {
+public class Transaction extends BaseEntity{
 
     @Column(name = "transaction_date")
     @Temporal(TemporalType.DATE)

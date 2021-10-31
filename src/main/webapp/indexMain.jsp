@@ -1,4 +1,4 @@
-<%@ page import="com.smartfarmer.model.Farmer" %><%--
+<%@ page import="com.smartfarmer.entities.Farmer" %><%--
   Created by IntelliJ IDEA.
   User: mugo367
   Date: 10/2/21

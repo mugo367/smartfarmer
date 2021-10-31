@@ -1,6 +1,6 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.entities.Farmer;
 import com.smartfarmer.model.ResultWrapper;
 
 import java.util.Map;

@@ -221,6 +221,7 @@ let AppComponents = {
 
             ajax('GET', userDataLink, getUserSessionData);
 
+
             return userSessionData;
         }
     }
@@ -236,7 +237,6 @@ function ajax(method, url, Function, submitData) {
             }
         }
     }
-
     ajaxReq.open(method, url, false);
     ajaxReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     if (method === 'POST'){

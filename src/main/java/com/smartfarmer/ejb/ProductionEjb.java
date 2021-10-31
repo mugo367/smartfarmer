@@ -3,9 +3,9 @@ package com.smartfarmer.ejb;
 import com.google.gson.Gson;
 import com.smartfarmer.dao.interfaces.ProductionDaoI;
 import com.smartfarmer.ejb.interfaces.ProductionEjbI;
-import com.smartfarmer.model.Production;
+import com.smartfarmer.entities.Production;
+import com.smartfarmer.entities.enumFiles.Unit;
 import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.model.enumFiles.Unit;
 import com.smartfarmer.util.BeanUtils;
 
 import javax.ejb.Stateless;

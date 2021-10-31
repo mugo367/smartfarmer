@@ -1,11 +1,12 @@
-package com.smartfarmer.model;
+package com.smartfarmer.entities;
 
-import com.smartfarmer.model.enumFiles.Unit;
-import lombok.*;
+import com.smartfarmer.entities.enumFiles.Unit;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="tbl_productions")
-public class Production extends BaseEntity implements Serializable {
+public class Production extends BaseEntity {
 
     @Column(name = "production_label", unique = true)
     private String productionLabel;

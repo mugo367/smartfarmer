@@ -1,8 +1,8 @@
 package com.smartfarmer.dao;
 
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
-import com.smartfarmer.model.Transaction;
-import com.smartfarmer.model.enumFiles.TransactionType;
+import com.smartfarmer.entities.Transaction;
+import com.smartfarmer.entities.enumFiles.TransactionType;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

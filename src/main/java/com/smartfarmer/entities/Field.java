@@ -1,10 +1,11 @@
-package com.smartfarmer.model;
+package com.smartfarmer.entities;
 
-import com.smartfarmer.model.enumFiles.FieldStatus;
-import lombok.*;
+import com.smartfarmer.entities.enumFiles.FieldStatus;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_fields")
-public class Field  extends BaseEntity implements Serializable {
+public class Field  extends BaseEntity {
 
     @OneToMany(mappedBy = "field", fetch = FetchType.LAZY)
     private List<Production> productions = new ArrayList<Production>();

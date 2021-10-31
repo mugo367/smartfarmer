@@ -1,84 +1,59 @@
 package com.smartfarmer.dao;
 
-import com.smartfarmer.dao.interfaces.ActivityDaoI;
-import com.smartfarmer.model.Activity;
-import com.smartfarmer.util.EntityManager;
+import com.smartfarmer.entities.Activity;
 
-import javax.inject.Inject;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
-public class ActivityDao implements ActivityDaoI<Activity> {
+public class ActivityDao implements GenericDaoI<Activity> {
 
-    @Inject
-    EntityManager entityManager;
+    @PersistenceContext
+    protected EntityManager entityManager;
+
 
     @Override
-    public  boolean add(Activity activity) throws ParseException, SQLException {
-        Connection conn = entityManager.getConnection();
-        String query = "INSERT INTO activity(activityLabel, activityName, activityDescription, uid) " +
-                "VALUES(?, ?, ?, ?)";
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setString(1, activity.getActivityLabel());
-        preparedStatement.setString(2, activity.getActivityName());
-        preparedStatement.setString(3, activity.getActivityDescription());
-        preparedStatement.setInt(4, activity.getUid());
-
-        return  preparedStatement.executeUpdate() == 1;
+    public Activity save(Activity activity) {
+        entityManager.persist(activity);
+        entityManager.flush();
+        return activity;
     }
 
     @Override
-    public List<Activity> read(int id) throws SQLException, ParseException {
-        Connection conn = entityManager.getConnection();
-        List<Activity> activityList = new ArrayList<>();
-
-        String query="SELECT * FROM activity where uid =?";
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setInt(1, id);
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()){
-            Activity activity = new Activity();
-            activity.setId(resultSet.getInt(1));
-            activity.setActivityLabel(resultSet.getString(2));
-            activity.setActivityName(resultSet.getString(3));
-            activity.setActivityDescription(resultSet.getString(4));
-            activity.setUid(resultSet.getInt(5));
-            activityList.add(activity);
-        }
-        return activityList;
+    public Boolean delete(Activity activity) throws Exception {
+        entityManager.remove(activity);
+        return true;
     }
 
     @Override
-    public boolean update(Activity activity) throws ParseException, SQLException {
-        Connection conn = entityManager.getConnection();
+    @SuppressWarnings("unchecked")
+    public ModelListWrapper<Activity> list(Activity filter, int start, int limit) {
+        ModelListWrapper<Activity> results = new ModelListWrapper<>();
 
-        String query = " UPDATE activity SET activityName = ?, activityDescription = ? +" +
-                "WHERE uid = ? AND activityLabel = ? ";
+        String hql = "SELECT a FROM Activity a WHERE a.id is not null";
+        Query query = entityManager.createQuery(hql, Activity.class);
 
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setString(1, activity.getActivityName());
-        preparedStatement.setString(2, activity.getActivityDescription());
-        preparedStatement.setInt(3, activity.getUid());
-        preparedStatement.setString(4, activity.getActivityLabel());
+        if (start > 0)
+            query.setFirstResult(start);
 
-        return preparedStatement.executeUpdate()==1;
+        if (limit > 0)
+            query.setMaxResults(limit);
+
+        List<Activity> resultList = query.getResultList();
+
+        results.setList(resultList);
+
+        return results;
     }
 
     @Override
-    public boolean delete(String label, int id) throws ParseException, SQLException {
-
-        Connection conn = entityManager.getConnection();
-        String query = "DELETE FROM activity WHERE activityLabel = ? AND uid = ?";
-        PreparedStatement preparedStatement = conn.prepareStatement(query);
-        preparedStatement.setString(1, label);
-        preparedStatement.setInt(2, id);
-        return preparedStatement.executeUpdate() ==1;
+    public Activity edit(Activity activity) throws Exception {
+        return null;
     }
 
+    @Override
+    public Activity find(int tId) {
+        return null;
+    }
 }

@@ -2,8 +2,8 @@ package com.smartfarmer.dao;
 
 
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
-import com.smartfarmer.model.Field;
-import com.smartfarmer.model.enumFiles.FieldStatus;
+import com.smartfarmer.entities.Field;
+import com.smartfarmer.entities.enumFiles.FieldStatus;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

@@ -1,5 +1,7 @@
 package com.smartfarmer.model;
 
+import com.smartfarmer.entities.Farmer;
+
 import java.io.Serializable;
 
 public class LoginResponse implements Serializable {

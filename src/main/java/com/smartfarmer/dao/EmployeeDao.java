@@ -2,10 +2,10 @@ package com.smartfarmer.dao;
 
 
 import com.smartfarmer.dao.interfaces.EmployeeDaoI;
-import com.smartfarmer.model.Employee;
-import com.smartfarmer.model.enumFiles.Designation;
-import com.smartfarmer.model.enumFiles.EmpType;
-import com.smartfarmer.model.enumFiles.Gender;
+import com.smartfarmer.entities.Employee;
+import com.smartfarmer.entities.enumFiles.Designation;
+import com.smartfarmer.entities.enumFiles.EmpType;
+import com.smartfarmer.entities.enumFiles.Gender;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

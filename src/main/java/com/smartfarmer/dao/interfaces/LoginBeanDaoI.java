@@ -2,7 +2,7 @@ package com.smartfarmer.dao.interfaces;
 
 
 import com.smartfarmer.bean.LoginBean;
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.entities.Farmer;
 
 import java.sql.SQLException;
 

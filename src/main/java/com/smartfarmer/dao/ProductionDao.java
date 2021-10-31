@@ -2,8 +2,8 @@ package com.smartfarmer.dao;
 
 
 import com.smartfarmer.dao.interfaces.ProductionDaoI;
-import com.smartfarmer.model.Production;
-import com.smartfarmer.model.enumFiles.Unit;
+import com.smartfarmer.entities.Production;
+import com.smartfarmer.entities.enumFiles.Unit;
 import com.smartfarmer.util.EntityManager;
 
 import javax.inject.Inject;

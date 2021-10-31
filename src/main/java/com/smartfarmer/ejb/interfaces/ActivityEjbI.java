@@ -1,11 +1,10 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.model.ResultWrapper;
-
-import java.util.Map;
+import com.smartfarmer.dao.ModelListWrapper;
+import com.smartfarmer.entities.Activity;
 
 public interface ActivityEjbI {
-    ResultWrapper addActivity(Map<String, String[]> formData, int id);
-    ResultWrapper listActivities(int id);
+    Activity addActivity(Activity activity) throws Exception;
+    ModelListWrapper<Activity> listActivities(Activity filter, int start, int limit);
     void deleteActivities(String activities, int id);
 }

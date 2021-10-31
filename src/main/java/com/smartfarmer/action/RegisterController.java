@@ -1,7 +1,7 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.dao.FarmerDao;
-import com.smartfarmer.model.Farmer;
+import com.smartfarmer.entities.Farmer;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.ServletException;
