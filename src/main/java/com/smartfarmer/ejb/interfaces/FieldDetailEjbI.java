@@ -1,12 +1,14 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.entities.Farmer;
-import com.smartfarmer.model.ResultWrapper;
+import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.entities.Field;
 
-import java.util.Map;
+import java.util.Optional;
 
 public interface FieldDetailEjbI {
-    ResultWrapper addField(Map<String, String[]> formData, int id, Farmer farmerDetails);
-    ResultWrapper listFields(int id);
-    void deleteField(String field, int id);
+    Field addField(Field field) throws Exception;
+    Field editField(Field field);
+    ModelListWrapper<Field> listFields(Field filter, int start, int limit);
+    void deleteField(Long id);
+    Optional<Field> findById(Long id);
 }

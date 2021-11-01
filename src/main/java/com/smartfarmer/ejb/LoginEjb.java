@@ -26,7 +26,7 @@ public class LoginEjb implements LoginEjbI {
 
             if(loginBean.checkUser(login)){
 
-                loginResponse.setSessionId(loginBean.getFarmerDetails(login).getId());
+                loginResponse.setSessionId((int) loginBean.getFarmerDetails(login).getId());
                 loginResponse.setUsername(login.getUsername());
                 loginResponse.setDetails(loginBean.getFarmerDetails(login));
                 loginResponse.setRedirectPage("./indexMain.jsp");

@@ -1,13 +1,8 @@
 package com.smartfarmer.dao.interfaces;
 
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
+import com.smartfarmer.entities.Production;
 
-public interface ProductionDaoI<Production> {
-    boolean add(Production t) throws ParseException, SQLException;
-    List<Production> read(int id) throws SQLException, ParseException;
-    boolean update(Production production) throws ParseException, SQLException;
-    boolean delete(String label, int id) throws ParseException, SQLException;
+public interface ProductionDaoI extends DaoI<Production, Long> {
+
 }
 

@@ -2,7 +2,7 @@ package com.smartfarmer.action;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartfarmer.model.ResultWrapper;
-import org.apache.commons.beanutils.BeanUtils;
+import com.smartfarmer.util.BeanUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;

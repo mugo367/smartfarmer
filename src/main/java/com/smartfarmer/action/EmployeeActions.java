@@ -1,6 +1,8 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
+import com.smartfarmer.entities.Employee;
+import lombok.SneakyThrows;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -19,26 +21,28 @@ public class EmployeeActions extends BaseController {
         @EJB
         EmployeeEjbI employeeEjb;
 
+        private Employee employee = new Employee();
+
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
-                int id = (Integer) request.getSession().getAttribute("uid");
-                jsonMapper.setDateFormat(df);
 
                 if ("/view-employees".equals(action)) {
-                        response.setContentType("application/json");
-                        response.getWriter().print(jsonMapper.writeValueAsString(employeeEjb.listEmployees(id)));
+                        transform(employee, request.getParameterMap());
+                        handleResponse(response, employeeEjb.listEmployees(employee, 0, 0).getList());
                 }
         }
 
+        @SneakyThrows
         @Override
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
-                int id = (Integer) request.getSession().getAttribute("uid");
+
                 switch (action) {
                         case "/add-employee":
-                                response.setContentType("application/json");
-                                response.getWriter().print(jsonMapper.writeValueAsString(employeeEjb.addEmployee(request.getParameterMap(), id)));
+                                transform(employee, request.getParameterMap());
+                                employeeEjb.addEmployee(employee);
+                                handleResponse(response);
                                 break;
                         case "/edit-employee":
 
@@ -49,10 +53,9 @@ public class EmployeeActions extends BaseController {
         @Override
         protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
-                int id = (Integer) request.getSession().getAttribute("uid");
 
                 if ("/delete-employee".equals(action)) {
-                        employeeEjb.deleteEmployees(request.getParameter("employeeNumbers"), id);
+
                 }
         }
 }

@@ -1,11 +1,14 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.model.ResultWrapper;
+import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.entities.Equipment;
 
-import java.util.Map;
+import java.util.Optional;
 
 public interface EquipmentEjbI {
-    ResultWrapper addEquipment(Map<String, String[]> formData, int id);
-    ResultWrapper listEquipments(int id);
-    void deleteEquipments(String equipment, int id);
+    Equipment addEquipment(Equipment equipment) throws Exception;
+    Equipment editEquipment(Equipment equipment);
+    ModelListWrapper<Equipment> listEquipments(Equipment filter, int start, int limit);
+    void deleteEquipment(Long id);
+    Optional<Equipment> findById(Long id);
 }

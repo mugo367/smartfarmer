@@ -1,11 +1,14 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.model.ResultWrapper;
+import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.entities.Employee;
 
-import java.util.Map;
+import java.util.Optional;
 
 public interface EmployeeEjbI {
-    ResultWrapper addEmployee(Map<String, String[]> formData, int id);
-    ResultWrapper listEmployees(int id);
-    void deleteEmployees(String employees, int id);
+    Employee addEmployee(Employee employee) throws Exception;
+    Employee editEmployee(Employee employee);
+    ModelListWrapper<Employee> listEmployees(Employee filter, int start, int limit);
+    void deleteEmployee(Long id);
+    Optional<Employee> findById(Long id);
 }

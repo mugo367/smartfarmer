@@ -1,11 +1,14 @@
 package com.smartfarmer.ejb.interfaces;
 
-import com.smartfarmer.model.ResultWrapper;
+import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.entities.Transaction;
 
-import java.util.Map;
+import java.util.Optional;
 
 public interface TransactionEjbI {
-    ResultWrapper addTransaction(Map<String, String[]> formData, int id);
-    ResultWrapper listTransactions(int id);
-    void deleteTransactions(String transactions, int id);
+    Transaction addTransaction(Transaction transaction) throws Exception;
+    Transaction editTransaction(Transaction transaction);
+    ModelListWrapper<Transaction> listActivities(Transaction filter, int start, int limit);
+    void deleteTransaction(Long id);
+    Optional<Transaction> findById(Long id);
 }

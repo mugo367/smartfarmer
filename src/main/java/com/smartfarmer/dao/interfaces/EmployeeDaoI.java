@@ -1,12 +1,7 @@
 package com.smartfarmer.dao.interfaces;
 
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
+import com.smartfarmer.entities.Employee;
 
-public interface EmployeeDaoI <Employee> {
-    boolean add(Employee employee) throws ParseException, SQLException;
-    List<Employee> read(int id) throws SQLException, ParseException;
-    boolean update(Employee employee) throws ParseException, SQLException;
-    boolean delete(String label, int id) throws ParseException, SQLException;
+public interface EmployeeDaoI extends DaoI<Employee, Long> {
+
 }

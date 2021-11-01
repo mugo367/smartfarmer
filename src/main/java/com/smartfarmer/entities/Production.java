@@ -30,7 +30,7 @@ public class Production extends BaseEntity {
     @Formula("(field_id)")
     private int fieldId;
 
-    @Formula("(select f.field_name from tbl_fields f where f.id=field_id and f.uid=uid)")
+    @Formula("(select f.field_name from tbl_fields f where f.id=field_id)")
     private String fieldName;
 
     @Column(name = "quantity")

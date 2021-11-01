@@ -2,6 +2,7 @@ package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.ActivityEjbI;
 import com.smartfarmer.entities.Activity;
+import lombok.SneakyThrows;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -23,51 +24,40 @@ public class ActivityActions extends BaseController {
 
     private Activity activity = new Activity();
 
+    @SneakyThrows
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
-        try {
-            switch (action) {
-                case "/add-activity":
 
-                    transform(activity, request.getParameterMap());
-                    activityEjb.addActivity(activity);
+        switch (action) {
+            case "/add-activity":
 
-                    handleResponse(response);
-                    break;
-                case "/edit-activity":
+                transform(activity, request.getParameterMap());
+                activityEjb.addActivity(activity);
 
-                    break;
-            }
-        } catch (Exception ex) {
-            throw new ServletException(ex);
+                handleResponse(response);
+                break;
+            case "/edit-activity":
+
+                break;
         }
     }
 
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
-        try {
-            if ("/view-activities".equals(action)) {
-                transform(activity, request.getParameterMap());
-                handleResponse(response, activityEjb.listActivities(activity, 0, 0).getList());
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
+        if ("/view-activities".equals(action)) {
+            transform(activity, request.getParameterMap());
+            handleResponse(response, activityEjb.listActivities(activity, 0, 0).getList());
+        }
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
-        try {
-            if ("/delete-activity".equals(action)) {
-                //activityEjb.deleteActivities(request.getParameter("activityLabels"),id);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        if ("/delete-activity".equals(action)) {
+            //activityEjb.deleteActivities(request.getParameter("activityLabels"),id);
         }
     }
 }

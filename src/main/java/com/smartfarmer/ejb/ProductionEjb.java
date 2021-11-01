@@ -1,79 +1,59 @@
 package com.smartfarmer.ejb;
 
-import com.google.gson.Gson;
+import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.ProductionDaoI;
 import com.smartfarmer.ejb.interfaces.ProductionEjbI;
+import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.Production;
 import com.smartfarmer.entities.enumFiles.Unit;
-import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.util.BeanUtils;
+import com.smartfarmer.util.AppException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.persistence.EntityManager;
+import java.util.Optional;
 
 @Stateless
 public class ProductionEjb implements ProductionEjbI {
     @Inject
-    ProductionDaoI<Production> productionDao;
-    @Override
-    public ResultWrapper addProduction(Map<String, String[]> formData, int id) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        Production production = new Production();
-        try {
-            BeanUtils.populate(production, formData);
-            if(production.getUnit() == null && production.getUnitStr() !=null )
-                production.setUnit(Unit.valueOf(production.getUnitStr()));
+    private EntityManager entityManager;
 
-            production.setUid(id);
-        } catch (Exception ex) {
-            resultWrapper.setMessage(ex.getMessage());
-            ex.printStackTrace();
-            production = null;
-        }
-        if (production == null){
-            resultWrapper.setSuccess(false);
-            return resultWrapper;
-        }
-        try {
-            productionDao.add(production);
-        } catch (ParseException | SQLException e) {
-            resultWrapper.setSuccess(false);
-            resultWrapper.setMessage(e.getMessage());
-        }
-        return  resultWrapper;
+    @Inject
+    ProductionDaoI productionDao;
+
+
+    @Override
+    public Production addProduction(Production production) throws Exception {
+
+        if (production == null)
+            throw new AppException("Invalid production details!!");
+
+        if(production.getUnit() == null && production.getUnitStr() !=null )
+            production.setUnit(Unit.valueOf(production.getUnitStr()));
+
+        if (production.getFieldId() > 0)
+            production.setField(entityManager.find(Field.class, production.getFieldId()));
+
+        return productionDao.save(production);
     }
 
     @Override
-    public ResultWrapper listProductions(int id) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        List<Production> productionList = new ArrayList<>();
-
-        try {
-            productionList = productionDao.read(id);
-
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        resultWrapper.setList(productionList);
-        return resultWrapper;
+    public Production editProduction(Production production) {
+        return productionDao.edit(production);
     }
 
     @Override
-    public void deleteProduction(String productions, int id) {
-        try {
-            List<String> productionLabels = new Gson().fromJson( productions, List.class );
+    public ModelListWrapper<Production> listProductions(Production filter, int start, int limit) {
+        return productionDao.list(filter, start, limit);
+    }
 
-            for(String productionLabel : productionLabels) {
-                productionDao.delete(productionLabel, id);
-            }
-        } catch (ParseException | SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void deleteProduction(Long id) {
+        productionDao.deleteById(id);
+    }
+
+    @Override
+    public Optional<Production> findById(Long id) {
+        return productionDao.findById(id);
     }
 }

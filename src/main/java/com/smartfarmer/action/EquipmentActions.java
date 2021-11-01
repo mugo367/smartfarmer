@@ -1,6 +1,8 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;
+import com.smartfarmer.entities.Equipment;
+import lombok.SneakyThrows;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,18 +22,21 @@ public class EquipmentActions extends BaseController {
 
     @EJB
     EquipmentEjbI equipmentEjb;
+
+    private Equipment equipment = new Equipment();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
-        jsonMapper.setDateFormat(df);
 
         if ("/view-equipments".equals(action)) {
-            response.setContentType("application/json");
-            response.getWriter().print(jsonMapper.writeValueAsString(equipmentEjb.listEquipments(id)));
+            transform(equipment, request.getParameterMap());
+            handleResponse(response, equipmentEjb.listEquipments(equipment, 0, 0).getList());
         }
 
     }
+
+    @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -39,9 +44,10 @@ public class EquipmentActions extends BaseController {
 
         switch (action) {
             case "/add-equipment":
-                response.setContentType("application/json");
-                response.getWriter().print(jsonMapper.writeValueAsString(equipmentEjb.addEquipment(request.getParameterMap(), id)));
-                break;
+                transform(equipment, request.getParameterMap());
+                equipmentEjb.addEquipment(equipment);
+
+                handleResponse(response);break;
             case "/edit-equipment":
 
                 break;
@@ -53,9 +59,9 @@ public class EquipmentActions extends BaseController {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
+
         if ("/delete-equipment".equals(action)) {
-            equipmentEjb.deleteEquipments(request.getParameter("equipmentLabels"), id);
+
         }
     }
 

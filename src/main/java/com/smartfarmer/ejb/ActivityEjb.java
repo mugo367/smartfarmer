@@ -1,40 +1,38 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.dao.GenericDaoI;
-import com.smartfarmer.dao.ModelListWrapper;
+import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.dao.interfaces.ActivityDaoI;
 import com.smartfarmer.ejb.interfaces.ActivityEjbI;
 import com.smartfarmer.entities.Activity;
-import com.smartfarmer.entities.Farmer;
 import com.smartfarmer.util.AppException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.Optional;
 
 @Stateless
 public class ActivityEjb implements ActivityEjbI {
 
-    @PersistenceContext
-    EntityManager entityManager;
-
     @Inject
-    GenericDaoI<Activity> activityDao;
+    private ActivityDaoI activityDao;
 
     @Override
     public Activity addActivity(Activity activity) throws Exception {
 
         if (activity == null)
-            throw new AppException("Invalid item details!!");
+            throw new AppException("Invalid activity details!!");
 
         if(activity.getActivityLabel() == null || activity.getActivityName() == null || activity.getActivityDescription() == null){
             throw new AppException("Label, Name, Description are required!");
         }
 
-        if (activity.getUid() > 0)
-            activity.setFarmer(entityManager.find(Farmer.class, activity.getUid()));
+        return  activityDao.save(activity);
+    }
 
-        return  activity;
+    @Override
+    public Activity editActivity(Activity activity) {
+
+        return  activityDao.edit(activity);
     }
 
     @Override
@@ -43,7 +41,14 @@ public class ActivityEjb implements ActivityEjbI {
     }
 
     @Override
-    public void deleteActivities(String activities, int id) {
-
+    public void deleteActivity(Long id) {
+        activityDao.deleteById(id);
     }
+
+    @Override
+    public Optional<Activity> findById(Long id) {
+        return activityDao.findById(id);
+    }
+
+
 }

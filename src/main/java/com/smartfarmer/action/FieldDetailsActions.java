@@ -2,6 +2,8 @@ package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
 import com.smartfarmer.entities.Farmer;
+import com.smartfarmer.entities.Field;
+import lombok.SneakyThrows;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,15 +22,20 @@ public class FieldDetailsActions extends BaseController {
     @EJB
     FieldDetailEjbI fieldDetailEjb;
 
+    private Field field = new Field();
+
+    @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
+
         Farmer farmerDetails = (Farmer) request.getSession().getAttribute("details");
         switch (action) {
             case ("/add-field"):
-                response.setContentType("application/json");
-                response.getWriter().print(jsonMapper.writeValueAsString(fieldDetailEjb.addField(request.getParameterMap(), id, farmerDetails)));
+                transform(field, request.getParameterMap());
+                fieldDetailEjb.addField(field);
+
+                handleResponse(response);
                 break;
             case ("/editFieldDetails"):
 
@@ -39,19 +46,19 @@ public class FieldDetailsActions extends BaseController {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
+
         if ("/view-fields".equals(action)) {
-            response.setContentType("application/json");
-            response.getWriter().print(jsonMapper.writeValueAsString(fieldDetailEjb.listFields(id)));
+            transform(field, request.getParameterMap());
+            handleResponse(response, fieldDetailEjb.listFields(field, 0, 0).getList());
         }
     }
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
+
         if ("/delete-field".equals(action)) {
-            fieldDetailEjb.deleteField(request.getParameter("fieldLabels"), id);
+
         }
     }
 }

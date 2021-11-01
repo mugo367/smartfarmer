@@ -18,9 +18,9 @@ import java.io.Serializable;
 public class Farmer implements Serializable {
 
     @Id
-    @Column(name="farmer_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @Column()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "full_name")
     private String fullName;
@@ -51,6 +51,7 @@ public class Farmer implements Serializable {
 
     @Column(name = "additionalInfo")
     private String additionalInfo;
+
 
 
 }

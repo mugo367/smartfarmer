@@ -1,88 +1,54 @@
 package com.smartfarmer.ejb;
 
-import com.google.gson.Gson;
+import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.ejb.interfaces.TransactionEjbI;
 import com.smartfarmer.entities.Transaction;
 import com.smartfarmer.entities.enumFiles.TransactionType;
-import com.smartfarmer.model.ResultWrapper;
-import com.smartfarmer.util.BeanUtils;
+import com.smartfarmer.util.AppException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Stateless
 public class TransactionEjb implements TransactionEjbI {
 
     @Inject
-    TransactionDaoI<Transaction> transactionDao;
+    TransactionDaoI transactionDao;
 
-    public ResultWrapper addTransaction(Map<String, String[]> formData, int id){
-        ResultWrapper resultWrapper = new ResultWrapper();
 
-        Transaction transaction = new Transaction();
+    @Override
+    public Transaction addTransaction(Transaction transaction) throws Exception {
+        if (transaction == null)
+            throw new AppException("Invalid transaction details!!");
 
-        try{
-            BeanUtils.populate(transaction, formData);
+        if (transaction.getTransactionType() == null && transaction.getTransactionTypeStr() != null)
+        transaction.setTransactionType(TransactionType.valueOf(transaction.getTransactionTypeStr()));
 
-            if (transaction.getTransactionType() == null && transaction.getTransactionTypeStr() != null)
-                transaction.setTransactionType(TransactionType.valueOf(transaction.getTransactionTypeStr()));
+        if (transaction.getCostPerUnit() != 0 && transaction.getUnits() != 0)
+            transaction.setTransactionCost(transaction.getCostPerUnit()*transaction.getUnits());
 
-            if (transaction.getCostPerUnit() != 0 && transaction.getUnits() != 0)
-                transaction.setTransactionCost(transaction.getCostPerUnit()*transaction.getUnits());
-
-            transaction.setUid(id);
-
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-            resultWrapper.setMessage(e.getMessage());
-            resultWrapper.setSuccess(false);
-            return resultWrapper;
-        }
-
-        try {
-            transactionDao.add(transaction);
-        } catch (ParseException | SQLException e) {
-            e.printStackTrace();
-            resultWrapper.setSuccess(false);
-            resultWrapper.setMessage(e.getMessage());
-        }
-
-        return resultWrapper;
+        return transactionDao.save(transaction);
     }
 
-    public ResultWrapper listTransactions(int id) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        List<Transaction> transactionList = new ArrayList<>();
-
-        try {
-            transactionList = transactionDao.read(id);
-
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-            resultWrapper.setSuccess(false);
-            resultWrapper.setMessage(e.getMessage());
-        }
-
-        resultWrapper.setList(transactionList);
-        return resultWrapper;
+    @Override
+    public Transaction editTransaction(Transaction transaction) {
+        return transactionDao.edit(transaction);
     }
 
-    public void deleteTransactions(String transactions, int id) {
-        try {
-            List<String> transactionLabels = new Gson().fromJson( transactions, List.class );
+    @Override
+    public ModelListWrapper<Transaction> listActivities(Transaction filter, int start, int limit) {
+        return transactionDao.list(filter, start, limit);
+    }
 
-            for(String transactionLabel : transactionLabels) {
-                transactionDao.delete(transactionLabel, id);
-            }
-        } catch (ParseException | SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void deleteTransaction(Long id) {
+        transactionDao.deleteById(id);
+    }
+
+    @Override
+    public Optional<Transaction> findById(Long id) {
+        return transactionDao.findById(id);
     }
 }

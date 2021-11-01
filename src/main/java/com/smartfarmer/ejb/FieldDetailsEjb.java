@@ -1,93 +1,55 @@
 package com.smartfarmer.ejb;
 
-import com.google.gson.Gson;
+import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
-import com.smartfarmer.entities.Farmer;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.enumFiles.FieldStatus;
-import com.smartfarmer.model.ResultWrapper;
-import org.apache.commons.beanutils.BeanUtils;
+import com.smartfarmer.util.AppException;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Stateless
 public class FieldDetailsEjb implements FieldDetailEjbI {
     @Inject
-    FieldDetailDaoI<Field> fieldDetailDao;
+    FieldDetailDaoI fieldDetailDao;
+
     @Override
-    public ResultWrapper addField(Map<String, String[]> formData, int id, Farmer farmerDetails) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        Field field = new Field();
-        try {
-            Double totalFieldSize = farmerDetails.getFarmSize();
-            Double usedField = fieldDetailDao.getUsedFieldSize(id);
-            double remainingFieldSize = totalFieldSize - usedField;
-            BeanUtils.populate(field, formData);
-            field.setUid(id);
+    public Field addField(Field field) throws Exception {
 
-            if(field.getFieldStatus() == null & field.getFieldStatusStr() != null){
-                field.setFieldStatus(FieldStatus.valueOf(field.getFieldStatusStr()));
-            }
+        if (field == null)
+            throw new AppException("Invalid field details!!");
+        /**
+         * CHECK LOGIC
+         * get used field size // remaining land
+         * */
 
-
-            if(remainingFieldSize < field.getFieldSize()){
-                resultWrapper.setSuccess(false);
-                resultWrapper.setMessage("Field Size entered is greater than the remaining size");
-                return resultWrapper;
-            }
-
-        } catch (Exception e) {
-            resultWrapper.setMessage(e.getMessage());
-            field = null;
+        if(field.getFieldStatus() == null & field.getFieldStatusStr() != null){
+            field.setFieldStatus(FieldStatus.valueOf(field.getFieldStatusStr()));
         }
 
-        if (field == null){
-            resultWrapper.setSuccess(false);
-            return resultWrapper;
-        }
-
-        try {
-            fieldDetailDao.add(field);
-        } catch (ParseException | SQLException e) {
-            resultWrapper.setSuccess(false);
-            resultWrapper.setMessage(e.getMessage());
-        }
-        return resultWrapper;
+        return fieldDetailDao.save(field);
     }
 
     @Override
-    public ResultWrapper listFields(int id) {
-        ResultWrapper resultWrapper = new ResultWrapper();
-        List<Field> fieldList = new ArrayList<>();
-
-        try {
-            fieldList = fieldDetailDao.read(id);
-
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        resultWrapper.setList(fieldList);
-        return resultWrapper;
+    public Field editField(Field field) {
+        return fieldDetailDao.edit(field);
     }
 
     @Override
-    public void deleteField(String field, int id) {
-        try {
-            List<String> fieldLabels = new Gson().fromJson( field, List.class );
+    public ModelListWrapper<Field> listFields(Field filter, int start, int limit) {
+        return fieldDetailDao.list(filter, start, limit);
+    }
 
-            for(String fieldLabel : fieldLabels) {
-                fieldDetailDao.delete(fieldLabel, id);
-            }
-        } catch (ParseException | SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void deleteField(Long id) {
+        fieldDetailDao.deleteById(id);
+    }
+
+    @Override
+    public Optional<Field> findById(Long id) {
+        return fieldDetailDao.findById(id);
     }
 }

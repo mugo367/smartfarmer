@@ -1,12 +1,15 @@
 package com.smartfarmer.dao.interfaces;
 
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.util.List;
+import com.smartfarmer.util.ModelListWrapper;
 
-public interface DaoI<T> {
-    boolean add(T t) throws ParseException, SQLException;
-    List<T> read(int id) throws SQLException, ParseException;
-    boolean update(T t) throws ParseException, SQLException;
-    boolean delete(String label, int id) throws ParseException, SQLException;
+import java.util.Optional;
+
+public interface DaoI<T, P> extends Repository<T, P> {
+    T save(T t);
+    T edit(T t);
+    void delete(T t);
+    void deleteById(P id) ;
+    ModelListWrapper<T> list(T filter, int start, int limit );
+    Optional<T> findById(P id);
+    int count();
 }

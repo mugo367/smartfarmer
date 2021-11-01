@@ -55,4 +55,34 @@ eanUtilsBean beanUtilsBean = new BeanUtilsBean(new ConvertUtilsBean() {
                                                     if(i < checkedTransactions.length - 1) {
                                                         queryString += "&";
                                                     }
-                                                }
+
+
+                                           }
+
+                                           @ManyToOne(fetch = FetchType.LAZY, optional = false)
+                                               @JoinColumn(name = "uid", nullable = false)
+                                               @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+                                               @JsonIdentityReference(alwaysAsId = true)
+                                               @JsonProperty("farmerId")
+                                               @Setter(AccessLevel.NONE)
+                                               private Farmer farmer;
+
+                                               @Transient
+                                               private int uid;
+
+                                               @JsonProperty("farmerId")
+                                               public void setFarmerById(Long farmerId) {
+                                                   farmer = Farmer.fromId(farmerId);
+                                               }
+
+
+                                           @OneToMany(mappedBy = "farmer", fetch = FetchType.LAZY,
+                                                       cascade = CascadeType.ALL,orphanRemoval = true)
+
+                                               private Set<Activity> activities;
+
+                                               public static Farmer fromId(Long farmerId) {
+                                                   Farmer farmer = new Farmer();
+                                                   farmer.id = farmerId;
+                                                   return farmer;
+                                               }
