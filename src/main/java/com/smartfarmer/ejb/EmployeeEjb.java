@@ -19,7 +19,7 @@ public class EmployeeEjb implements EmployeeEjbI {
     EmployeeDaoI employeeDao;
 
     @Override
-    public Employee addEmployee(Employee employee) throws Exception {
+    public Employee add(Employee employee) throws Exception {
 
         if (employee == null)
             throw new AppException("Invalid employee details!!");
@@ -41,22 +41,27 @@ public class EmployeeEjb implements EmployeeEjbI {
     }
 
     @Override
-    public Employee editEmployee(Employee employee) {
+    public Employee edit(Employee employee) {
         return employeeDao.edit(employee);
     }
 
     @Override
-    public ModelListWrapper<Employee> listEmployees(Employee filter, int start, int limit) {
+    public ModelListWrapper<Employee> list(Employee filter, int start, int limit) {
         return employeeDao.list(filter, start, limit);
     }
 
     @Override
-    public void deleteEmployee(Long id) {
+    public void delete(Long id) {
         employeeDao.deleteById(id);
     }
 
     @Override
     public Optional<Employee> findById(Long id) {
         return employeeDao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return employeeDao.existsById(id);
     }
 }

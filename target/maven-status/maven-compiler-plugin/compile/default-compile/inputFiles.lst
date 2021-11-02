@@ -5,10 +5,12 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/bean/LoginBean.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/LoginBeanDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/BaseEntity.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/RestConfig.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/enumFiles/EmpType.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/enumFiles/Condition.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/FieldTask.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/util/EntityManager.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/ActivityApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/enumFiles/Designation.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/DaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/LoginEjbI.java
@@ -61,6 +63,7 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/LoginBeanDaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/BaseController.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/RegisterController.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dto/RestResponse.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/ProductionActions.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/LoginController.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Equipment.java

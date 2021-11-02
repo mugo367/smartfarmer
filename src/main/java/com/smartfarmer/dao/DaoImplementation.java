@@ -72,6 +72,11 @@ public abstract class DaoImplementation<T,P> implements DaoI<T,P> {
         return results;
     }
 
+    @Override
+    public boolean existsById(P id) {
+        Optional<T> optionalT = findById(id);
+        return optionalT.isPresent();
+    }
 
 
     @Override

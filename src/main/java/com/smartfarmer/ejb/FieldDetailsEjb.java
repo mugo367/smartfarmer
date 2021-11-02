@@ -17,7 +17,7 @@ public class FieldDetailsEjb implements FieldDetailEjbI {
     FieldDetailDaoI fieldDetailDao;
 
     @Override
-    public Field addField(Field field) throws Exception {
+    public Field add(Field field) throws Exception {
 
         if (field == null)
             throw new AppException("Invalid field details!!");
@@ -34,22 +34,27 @@ public class FieldDetailsEjb implements FieldDetailEjbI {
     }
 
     @Override
-    public Field editField(Field field) {
+    public Field edit(Field field) {
         return fieldDetailDao.edit(field);
     }
 
     @Override
-    public ModelListWrapper<Field> listFields(Field filter, int start, int limit) {
+    public ModelListWrapper<Field> list(Field filter, int start, int limit) {
         return fieldDetailDao.list(filter, start, limit);
     }
 
     @Override
-    public void deleteField(Long id) {
+    public void delete(Long id) {
         fieldDetailDao.deleteById(id);
     }
 
     @Override
     public Optional<Field> findById(Long id) {
         return fieldDetailDao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return fieldDetailDao.existsById(id);
     }
 }

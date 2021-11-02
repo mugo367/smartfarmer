@@ -18,7 +18,7 @@ public class EquipmentEJB implements EquipmentEjbI {
     EquipmentDaoI equipmentDao;
 
     @Override
-    public Equipment addEquipment(Equipment equipment) throws Exception {
+    public Equipment add(Equipment equipment) throws Exception {
 
         if (equipment == null)
             throw new AppException("Invalid equipment details!!");
@@ -30,22 +30,27 @@ public class EquipmentEJB implements EquipmentEjbI {
     }
 
     @Override
-    public Equipment editEquipment(Equipment equipment) {
+    public Equipment edit(Equipment equipment) {
         return equipmentDao.edit(equipment);
     }
 
     @Override
-    public ModelListWrapper<Equipment> listEquipments(Equipment filter, int start, int limit) {
+    public ModelListWrapper<Equipment> list(Equipment filter, int start, int limit) {
         return equipmentDao.list(filter, start, limit);
     }
 
     @Override
-    public void deleteEquipment(Long id) {
+    public void delete(Long id) {
         equipmentDao.deleteById(id);
     }
 
     @Override
     public Optional<Equipment> findById(Long id) {
         return equipmentDao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return equipmentDao.existsById(id);
     }
 }

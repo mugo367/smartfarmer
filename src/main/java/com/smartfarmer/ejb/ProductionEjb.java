@@ -23,7 +23,7 @@ public class ProductionEjb implements ProductionEjbI {
 
 
     @Override
-    public Production addProduction(Production production) throws Exception {
+    public Production add(Production production) throws Exception {
 
         if (production == null)
             throw new AppException("Invalid production details!!");
@@ -38,22 +38,27 @@ public class ProductionEjb implements ProductionEjbI {
     }
 
     @Override
-    public Production editProduction(Production production) {
+    public Production edit(Production production) {
         return productionDao.edit(production);
     }
 
     @Override
-    public ModelListWrapper<Production> listProductions(Production filter, int start, int limit) {
+    public ModelListWrapper<Production> list(Production filter, int start, int limit) {
         return productionDao.list(filter, start, limit);
     }
 
     @Override
-    public void deleteProduction(Long id) {
+    public void delete(Long id) {
         productionDao.deleteById(id);
     }
 
     @Override
     public Optional<Production> findById(Long id) {
         return productionDao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return productionDao.existsById(id);
     }
 }

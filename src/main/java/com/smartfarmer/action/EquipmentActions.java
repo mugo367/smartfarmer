@@ -31,7 +31,7 @@ public class EquipmentActions extends BaseController {
 
         if ("/view-equipments".equals(action)) {
             transform(equipment, request.getParameterMap());
-            handleResponse(response, equipmentEjb.listEquipments(equipment, 0, 0).getList());
+            handleResponse(response, equipmentEjb.list(equipment, 0, 0).getList());
         }
 
     }
@@ -45,7 +45,7 @@ public class EquipmentActions extends BaseController {
         switch (action) {
             case "/add-equipment":
                 transform(equipment, request.getParameterMap());
-                equipmentEjb.addEquipment(equipment);
+                equipmentEjb.add(equipment);
 
                 handleResponse(response);break;
             case "/edit-equipment":

@@ -31,7 +31,7 @@ public class ProductionActions extends BaseController {
 
         if ("/view-productions".equals(action)) {
             transform(production, request.getParameterMap());
-            handleResponse(response, productionEjb.listProductions(production, 0, 0).getList());
+            handleResponse(response, productionEjb.list(production, 0, 0).getList());
 
         }
     }
@@ -43,7 +43,7 @@ public class ProductionActions extends BaseController {
         switch (action){
             case "/add-production":
                 transform(production, request.getParameterMap());
-                productionEjb.addProduction(production);
+                productionEjb.add(production);
 
                 handleResponse(response);
                 break;

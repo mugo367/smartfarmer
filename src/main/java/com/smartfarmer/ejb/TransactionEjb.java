@@ -17,9 +17,8 @@ public class TransactionEjb implements TransactionEjbI {
     @Inject
     TransactionDaoI transactionDao;
 
-
     @Override
-    public Transaction addTransaction(Transaction transaction) throws Exception {
+    public Transaction add(Transaction transaction) throws Exception {
         if (transaction == null)
             throw new AppException("Invalid transaction details!!");
 
@@ -33,22 +32,27 @@ public class TransactionEjb implements TransactionEjbI {
     }
 
     @Override
-    public Transaction editTransaction(Transaction transaction) {
+    public Transaction edit(Transaction transaction) {
         return transactionDao.edit(transaction);
     }
 
     @Override
-    public ModelListWrapper<Transaction> listActivities(Transaction filter, int start, int limit) {
+    public ModelListWrapper<Transaction> list(Transaction filter, int start, int limit) {
         return transactionDao.list(filter, start, limit);
     }
 
     @Override
-    public void deleteTransaction(Long id) {
+    public void delete(Long id) {
         transactionDao.deleteById(id);
     }
 
     @Override
     public Optional<Transaction> findById(Long id) {
         return transactionDao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return transactionDao.existsById(id);
     }
 }

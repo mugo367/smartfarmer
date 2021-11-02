@@ -19,6 +19,7 @@ import java.io.IOException;
 )
 public class ActivityActions extends BaseController {
 
+
     @EJB
     ActivityEjbI activityEjb;
 
@@ -32,7 +33,7 @@ public class ActivityActions extends BaseController {
             case "/add-activity":
 
                 transform(activity, request.getParameterMap());
-                activityEjb.addActivity(activity);
+                activityEjb.add(activity);
 
                 handleResponse(response);
                 break;
@@ -48,7 +49,7 @@ public class ActivityActions extends BaseController {
 
         if ("/view-activities".equals(action)) {
             transform(activity, request.getParameterMap());
-            handleResponse(response, activityEjb.listActivities(activity, 0, 0).getList());
+            handleResponse(response, activityEjb.list(activity, 0, 0).getList());
         }
     }
 

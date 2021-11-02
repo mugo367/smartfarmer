@@ -29,7 +29,7 @@ public class EmployeeActions extends BaseController {
 
                 if ("/view-employees".equals(action)) {
                         transform(employee, request.getParameterMap());
-                        handleResponse(response, employeeEjb.listEmployees(employee, 0, 0).getList());
+                        handleResponse(response, employeeEjb.list(employee, 0, 0).getList());
                 }
         }
 
@@ -41,7 +41,7 @@ public class EmployeeActions extends BaseController {
                 switch (action) {
                         case "/add-employee":
                                 transform(employee, request.getParameterMap());
-                                employeeEjb.addEmployee(employee);
+                                employeeEjb.add(employee);
                                 handleResponse(response);
                                 break;
                         case "/edit-employee":

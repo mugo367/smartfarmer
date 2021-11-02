@@ -30,7 +30,7 @@ public class TransactionActions extends BaseController {
 
         if ("/view-transactions".equals(action)) {
             transform(transaction, request.getParameterMap());
-            handleResponse(response, transactionEjb.listActivities(transaction, 0, 0).getList());
+            handleResponse(response, transactionEjb.list(transaction, 0, 0).getList());
         }
     }
 
@@ -42,7 +42,7 @@ public class TransactionActions extends BaseController {
         switch (action) {
             case "/add-transaction":
                 transform(transaction, request.getParameterMap());
-                transactionEjb.addTransaction(transaction);
+                transactionEjb.add(transaction);
 
                 handleResponse(response);
                 break;
@@ -56,7 +56,6 @@ public class TransactionActions extends BaseController {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
 
         if ("/delete-transaction".equals(action)) {
 

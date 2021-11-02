@@ -1,7 +1,6 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
-import com.smartfarmer.entities.Farmer;
 import com.smartfarmer.entities.Field;
 import lombok.SneakyThrows;
 
@@ -29,11 +28,10 @@ public class FieldDetailsActions extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
-        Farmer farmerDetails = (Farmer) request.getSession().getAttribute("details");
         switch (action) {
             case ("/add-field"):
                 transform(field, request.getParameterMap());
-                fieldDetailEjb.addField(field);
+                fieldDetailEjb.add(field);
 
                 handleResponse(response);
                 break;
@@ -49,7 +47,7 @@ public class FieldDetailsActions extends BaseController {
 
         if ("/view-fields".equals(action)) {
             transform(field, request.getParameterMap());
-            handleResponse(response, fieldDetailEjb.listFields(field, 0, 0).getList());
+            handleResponse(response, fieldDetailEjb.list(field, 0, 0).getList());
         }
     }
 
