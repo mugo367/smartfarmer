@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 public class BeanUtils {
-    public static Object populate(Object obj, Map<String, String[]> formData)
+    public static void populate(Object obj, Map<String, String[]> formData)
             throws IllegalAccessException, InvocationTargetException {
 
         DateTimeConverter dateConverter = new DateConverter(null);
@@ -17,6 +17,5 @@ public class BeanUtils {
         ConvertUtils
                 .register(dateConverter, java.util.Date.class);
         BeanUtilsBean.getInstance().populate(obj, formData);
-        return obj;
     }
 }

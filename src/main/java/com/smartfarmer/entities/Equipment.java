@@ -1,6 +1,7 @@
 package com.smartfarmer.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartfarmer.entities.enumFiles.Condition;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Equipment extends BaseEntity {
     @Column (name="quantity")
     private String equipmentQuantity;
 
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String equipmentConditionStr;
 

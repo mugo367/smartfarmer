@@ -1,5 +1,6 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Activity.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/ActivityActions.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/EjbI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/LoginResponse.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/FieldDetailsEjb.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/bean/LoginBean.java

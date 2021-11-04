@@ -4,7 +4,8 @@ var fieldComp = {
     tableTitle: 'Fields',
     renderTo: 'componentRender',
     id:'fieldTable',
-    columns: [{
+    columns: [
+        {
         header: "Field Label",
         dataIndex: "fieldLabel",
     },{

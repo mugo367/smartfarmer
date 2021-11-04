@@ -1,5 +1,6 @@
 package com.smartfarmer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartfarmer.entities.enumFiles.Designation;
 import com.smartfarmer.entities.enumFiles.EmpType;
 import com.smartfarmer.entities.enumFiles.Gender;
@@ -52,11 +53,13 @@ public class Employee extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EmpType employeeType;
 
-
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeGenderStr;
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeDesignationStr;
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeTypeStr;
 

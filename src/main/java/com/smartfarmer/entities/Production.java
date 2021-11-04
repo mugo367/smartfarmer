@@ -1,5 +1,6 @@
 package com.smartfarmer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartfarmer.entities.enumFiles.Unit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +25,11 @@ public class Production extends BaseEntity {
     @Temporal(TemporalType.DATE)
     private Date productionDate;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Field field;
 
     @Formula("(field_id)")
-    private int fieldId;
+    private long fieldId;
 
     @Formula("(select f.field_name from tbl_fields f where f.id=field_id)")
     private String fieldName;
@@ -43,6 +44,7 @@ public class Production extends BaseEntity {
     @Column(name = "details", columnDefinition = "LONGTEXT")
     private String productionDetails;
 
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String unitStr;
 }

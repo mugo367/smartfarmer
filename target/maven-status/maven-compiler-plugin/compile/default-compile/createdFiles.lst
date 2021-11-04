@@ -41,6 +41,7 @@ com/smartfarmer/dao/interfaces/Repository.class
 com/smartfarmer/model/LoginResponse.class
 com/smartfarmer/model/ModelListWrapper.class
 com/smartfarmer/entities/Employee.class
+com/smartfarmer/ejb/interfaces/EjbI.class
 com/smartfarmer/ejb/interfaces/LoginEjbI.class
 com/smartfarmer/dao/interfaces/FieldDetailDaoI.class
 com/smartfarmer/ejb/EmployeeEjb.class

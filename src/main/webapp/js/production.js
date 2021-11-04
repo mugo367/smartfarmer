@@ -53,8 +53,8 @@ var productionComp = {
                 labelClass: "form-label"
             },{
                 label: "Field Name",
-                name: "fieldName",
-                id: "fieldName",
+                name: "fieldId",
+                id: "fieldId",
                 type: "select",
                 labelClass: "form-label",
                 divClass: "mb-3",

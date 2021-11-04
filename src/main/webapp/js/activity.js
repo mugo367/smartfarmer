@@ -4,7 +4,11 @@ var activitiesComp = {
     tableTitle: 'Activities',
     renderTo: 'componentRender',
     id:'activityTable',
-    columns: [{
+    columns: [
+        {
+        id:true,
+        dataIndex: "id",
+    },{
         header: "Activity Label",
         dataIndex: "activityLabel",
     },{
@@ -79,17 +83,14 @@ var activitiesComp = {
             //Reference the Table.
             let tableRef = document.getElementById(activitiesComp.id);
             //Reference the CheckBoxes in Table.
-            let checkBoxes = tableRef.getElementsByTagName("INPUT");
+            let checkBox = tableRef.getElementsByTagName("INPUT");
 
-            let checkedActivities = [];
-            //Loop through the CheckBoxes.
-            for (let i = 0; i < checkBoxes.length; i++) {
-                if (checkBoxes[i].checked) {
-                    let row = checkBoxes[i].parentNode.parentNode;
-                    checkedActivities.push(row.cells[1].innerHTML);
+                if (checkBox.checked) {
+                    var iddd = checkBox.id;
+                    console.log(iddd)
                 }
-            }
-            console.log(checkedActivities)
+
+                console.log(id)
             //make ajax request to delete record
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){
@@ -100,11 +101,9 @@ var activitiesComp = {
                 }
             }
 
-            console.log(JSON.stringify(checkedActivities))
 
             xhr.open("DELETE", "./delete-activity", false);
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.send("activityLabels="+JSON.stringify(checkedActivities));
 
             AppComponents.htmlTable.render.apply(activitiesComp);
         }

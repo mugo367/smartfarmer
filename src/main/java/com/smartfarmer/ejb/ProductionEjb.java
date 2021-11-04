@@ -1,21 +1,23 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.ProductionDaoI;
 import com.smartfarmer.ejb.interfaces.ProductionEjbI;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.Production;
 import com.smartfarmer.entities.enumFiles.Unit;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Stateless
 public class ProductionEjb implements ProductionEjbI {
-    @Inject
+
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Inject
@@ -33,6 +35,7 @@ public class ProductionEjb implements ProductionEjbI {
 
         if (production.getFieldId() > 0)
             production.setField(entityManager.find(Field.class, production.getFieldId()));
+
 
         return productionDao.save(production);
     }

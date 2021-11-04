@@ -40,7 +40,6 @@ public class EquipmentActions extends BaseController {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
-        int id = (Integer) request.getSession().getAttribute("uid");
 
         switch (action) {
             case "/add-equipment":

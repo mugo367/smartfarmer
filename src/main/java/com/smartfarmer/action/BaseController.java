@@ -33,12 +33,14 @@ public class BaseController extends HttpServlet {
 
     public void handleResponse(HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
+        jsonMapper.setDateFormat(df);
         res.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));
     }
 
     @SuppressWarnings("unchecked")
     public void handleResponse(HttpServletResponse res, Object obj) throws IOException {
         res.setContentType("application/json");
+        jsonMapper.setDateFormat(df);
         if (obj instanceof Collection<?>){
             resultWrapper.setList((List<?>) obj);
             res.getWriter().print(jsonMapper.writeValueAsString(resultWrapper));

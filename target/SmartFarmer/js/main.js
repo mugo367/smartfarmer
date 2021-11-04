@@ -136,10 +136,9 @@ let AppComponents = {
             let tableColGroup = '<colgroup>';
             let tableHeaders = '<thead><tr>';
             tableColGroup += '<col span="1" style="width: 3%">';
-            tableHeaders += '<th></th>';
 
             me.columns.forEach(col=>{
-                tableHeaders += '<th>' + col.header + '</th>';
+                tableHeaders += '<th>' + (col.id? '' : col.header) + '</th>';
 
             });
 
@@ -150,10 +149,11 @@ let AppComponents = {
 
             function getData(reqRes){
                 reqRes.list.forEach(row=>{
-                    tableToRender += '<tr><td><input type="checkbox" name="row-check" class="checkAll" />&nbsp;</td>';
+                    tableToRender += '<tr>';
                     me.columns.forEach(col=>{
-                        tableToRender += '<td>' + row[col.dataIndex] + '</td>'
+                        tableToRender += '<td>' +(col.id?'<input type="checkbox" id="'+row[col.dataIndex]+'" name="row-check" class="checkAll" />&nbsp;': row[col.dataIndex]) + '</td>'
                     });
+                    tableToRender += '</tr>';
                 });
                 tableToRender += '</tbody></div>'
                 document.getElementById(me.renderTo).innerHTML = tableToRender;

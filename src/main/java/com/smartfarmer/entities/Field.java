@@ -1,5 +1,6 @@
 package com.smartfarmer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartfarmer.entities.enumFiles.FieldStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,9 @@ import java.util.List;
 @Table(name = "tbl_fields")
 public class Field  extends BaseEntity {
 
+    @Getter(onMethod_ = @JsonIgnore)
     @OneToMany(mappedBy = "field", fetch = FetchType.LAZY)
-    private List<Production> productions = new ArrayList<Production>();
+    private List<Production> productions = new ArrayList<>();
 
     @Column(name = "field_label", unique = true)
     private String fieldLabel;
@@ -33,9 +35,14 @@ public class Field  extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private FieldStatus fieldStatus;
 
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String fieldStatusStr;
 
 
+    @PrePersist
+    public void beforeSave() {
+        this.setFieldStatus(FieldStatus.NotPlanted);
+    }
 
 }
