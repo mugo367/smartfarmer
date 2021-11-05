@@ -4,7 +4,10 @@ var productionComp = {
     tableTitle: 'Productions',
     renderTo: 'componentRender',
     id:'productionTable',
-    columns: [{
+    columns: [ {
+        id:true,
+        dataIndex: "id",
+    },{
         header: "Production Label",
         dataIndex: "productionLabel",
     },{
@@ -124,37 +127,9 @@ var productionComp = {
         {
             label: 'Delete',
             id: 'deleteProduction',
+            method: 'DELETE',
+            url: './delete-production',
             handler: function(){
-                //Reference the Table.
-                let tableRef = document.getElementById(productionComp.id);
-                //Reference the CheckBoxes in Table.
-                let checkBoxes = tableRef.getElementsByTagName("INPUT");
-
-                let checkedProductions = [];
-                //Loop through the CheckBoxes.
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    if (checkBoxes[i].checked) {
-                        let row = checkBoxes[i].parentNode.parentNode;
-                        checkedProductions.push(row.cells[1].innerHTML);
-                    }
-                }
-                console.log(checkedProductions)
-                //make ajax request to delete record
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        if (xhr.status === 200){
-                            console.log(xhr.responseText);
-                        }
-                    }
-                }
-
-                console.log(JSON.stringify(checkedProductions))
-
-                xhr.open("DELETE", "./delete-production", false);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("productionLabels="+JSON.stringify(checkedProductions));
-
                 AppComponents.htmlTable.render.apply(productionComp);
             }
         }]

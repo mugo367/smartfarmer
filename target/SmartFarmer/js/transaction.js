@@ -5,7 +5,10 @@ var transactionComp ={
     id:'transactionTable',
     renderTo: 'componentRender',
     rowId:'transactionLabel',
-    columns: [{
+    columns: [ {
+        id:true,
+        dataIndex: "id",
+    },{
         header: "Transaction Date",
         dataIndex: "transactionDate",
     },{
@@ -123,36 +126,9 @@ var transactionComp ={
         {
             label: 'Delete',
             id: 'deleteTransactions',
+            method: 'DELETE',
+            url: './delete-transaction',
             handler: function(){
-                //Reference the Table.
-                let tableRef = document.getElementById(transactionComp.id);
-                //Reference the CheckBoxes in Table.
-                let checkBoxes = tableRef.getElementsByTagName("INPUT");
-
-                let checkedTransactions = [];
-                //Loop through the CheckBoxes.
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    if (checkBoxes[i].checked) {
-                        let row = checkBoxes[i].parentNode.parentNode;
-                        checkedTransactions.push(row.cells[3].innerHTML);
-                    }
-                }
-                console.log(checkedTransactions)
-                //make ajax request to delete record
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        if (xhr.status === 200){
-                            console.log(xhr.responseText);
-                        }
-                    }
-                }
-
-                console.log(JSON.stringify(checkedTransactions))
-
-                xhr.open("DELETE", "./delete-transaction", false);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("transactionLabels="+JSON.stringify(checkedTransactions));
 
                 AppComponents.htmlTable.render.apply(transactionComp);
             }

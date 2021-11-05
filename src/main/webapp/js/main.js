@@ -137,6 +137,7 @@ let AppComponents = {
             let tableHeaders = '<thead><tr>';
             tableColGroup += '<col span="1" style="width: 3%">';
 
+
             me.columns.forEach(col=>{
                 tableHeaders += '<th>' + (col.id? '' : col.header) + '</th>';
 
@@ -151,7 +152,7 @@ let AppComponents = {
                 reqRes.list.forEach(row=>{
                     tableToRender += '<tr>';
                     me.columns.forEach(col=>{
-                        tableToRender += '<td>' +(col.id?'<input type="checkbox" value="'+row[col.dataIndex]+'" name="row-check" class="checkAll" />&nbsp;': row[col.dataIndex]) + '</td>'
+                        tableToRender += '<td>' +(col.id?'<input type="checkbox" value="'+row[col.dataIndex]+'" name="row-check" class="checkAll" id ="checkbox"/>&nbsp;': row[col.dataIndex]) + '</td>'
                     });
                     tableToRender += '</tr>';
                 });
@@ -162,6 +163,27 @@ let AppComponents = {
             ajax(me.method, me.url, getData);
 
             me.buttons.forEach(btn=>{
+                if(btn.method === 'DELETE'){
+
+                    document.getElementById(btn.id).addEventListener("click",  event=>{
+                        event.preventDefault();
+                        let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
+
+                        let checkedIds = [];
+
+                        checkboxes.forEach((checkbox) => {
+                            checkedIds.push(checkbox.value);
+                        });
+
+                        function check(reqRes){
+                            console.log(reqRes)
+                        }
+
+                        ajax(btn.method, btn.url,check, "ids="+checkedIds);
+
+                    });
+
+                }
                 document.getElementById(btn.id).addEventListener("click", btn.handler);
             });
         }
@@ -239,7 +261,7 @@ function ajax(method, url, Function, submitData) {
     }
     ajaxReq.open(method, url, false);
     ajaxReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    if (method === 'POST'){
+    if (method === 'POST' || method === 'DELETE'){
         ajaxReq.send(submitData);
     }
     else{

@@ -4,7 +4,11 @@ var employeeComp = {
     tableTitle: 'Employees',
     renderTo: 'componentRender',
     id:'employeeTable',
-    columns: [{
+    columns: [
+        {
+            id:true,
+            dataIndex: "id",
+        },{
         header: "Employee Number",
         dataIndex: "employeeNumber",
     },{
@@ -192,37 +196,9 @@ var employeeComp = {
         {
             label: 'Delete',
             id: 'deleteEmployees',
+            method: 'DELETE',
+            url:'./delete-employee',
             handler: function(){
-                //Reference the Table.
-                let tableRef = document.getElementById(employeeComp.id);
-                //Reference the CheckBoxes in Table.
-                let checkBoxes = tableRef.getElementsByTagName("INPUT");
-
-                let checkedEmployees = [];
-                //Loop through the CheckBoxes.
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    if (checkBoxes[i].checked) {
-                        let row = checkBoxes[i].parentNode.parentNode;
-                        checkedEmployees.push(row.cells[1].innerHTML);
-                    }
-                }
-                console.log(checkedEmployees)
-                //make ajax request to delete record
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        if (xhr.status === 200){
-                            console.log(xhr.responseText);
-                        }
-                    }
-                }
-
-                console.log(JSON.stringify(checkedEmployees))
-
-                xhr.open("DELETE", "./delete-employee", false);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("employeeNumbers="+JSON.stringify(checkedEmployees));
-
                 AppComponents.htmlTable.render.apply(employeeComp);
             }
         }]

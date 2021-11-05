@@ -5,7 +5,10 @@ var equipmentComp = {
     tableTitle: 'Equipments',
     renderTo: 'componentRender',
     id:'equipmentTable',
-    columns: [{
+    columns: [ {
+        id:true,
+        dataIndex: "id",
+    },{
         header: "Equipment Label",
         dataIndex: "equipmentLabel",
     },
@@ -23,6 +26,7 @@ var equipmentComp = {
     buttons: [{
         label: 'Add',
         id: 'addEquipment',
+
         handler: function(){
             AppComponents.htmlForm.render.call({
 
@@ -111,36 +115,10 @@ var equipmentComp = {
         {
             label: 'Delete',
             id: 'deleteEquipment',
+            method:'DELETE',
+            url: './delete-equipment',
             handler: function(){
-                //Reference the Table.
-                let tableRef = document.getElementById(equipmentComp.id);
-                //Reference the CheckBoxes in Table.
-                let checkBoxes = tableRef.getElementsByTagName("INPUT");
 
-                let checkedEquipments = [];
-                //Loop through the CheckBoxes.
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    if (checkBoxes[i].checked) {
-                        let row = checkBoxes[i].parentNode.parentNode;
-                        checkedEquipments.push(row.cells[1].innerHTML);
-                    }
-                }
-                console.log(checkedEquipments)
-                //make ajax request to delete record
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        if (xhr.status === 200){
-                            console.log(xhr.responseText);
-                        }
-                    }
-                }
-
-                console.log(JSON.stringify(checkedEquipments))
-
-                xhr.open("DELETE", "./delete-equipment", false);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("equipmentLabels="+JSON.stringify(checkedEquipments));
 
                 AppComponents.htmlTable.render.apply(equipmentComp);
             }

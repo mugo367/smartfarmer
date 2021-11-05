@@ -79,32 +79,9 @@ var activitiesComp = {
     }, {
         label: 'Delete',
         id: 'deleteActivity',
+        url: './delete-activity',
+        method: 'DELETE',
         handler: function(){
-            //Reference the Table.
-            let tableRef = document.getElementById(activitiesComp.id);
-            //Reference the CheckBoxes in Table.
-            let checkBox = tableRef.getElementsByTagName("INPUT");
-
-                if (checkBox.checked) {
-                    var iddd = checkBox.id;
-                    console.log(iddd)
-                }
-
-                console.log(id)
-            //make ajax request to delete record
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function(){
-                if (xhr.readyState ===XMLHttpRequest.DONE){
-                    if (xhr.status === 200){
-                        console.log(xhr.responseText);
-                    }
-                }
-            }
-
-
-            xhr.open("DELETE", "./delete-activity", false);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
             AppComponents.htmlTable.render.apply(activitiesComp);
         }
     }]

@@ -4,7 +4,10 @@ var fieldComp = {
     tableTitle: 'Fields',
     renderTo: 'componentRender',
     id:'fieldTable',
-    columns: [
+    columns: [ {
+        id:true,
+        dataIndex: "id",
+    },
         {
         header: "Field Label",
         dataIndex: "fieldLabel",
@@ -99,36 +102,9 @@ var fieldComp = {
         {
             label: 'Delete',
             id: 'deleteFields',
+            url: './delete-field',
+            method: 'DELETE',
             handler: function(){
-                //Reference the Table.
-                let tableRef = document.getElementById(fieldComp.id);
-                //Reference the CheckBoxes in Table.
-                let checkBoxes = tableRef.getElementsByTagName("INPUT");
-
-                let checkedFields = [];
-                //Loop through the CheckBoxes.
-                for (let i = 0; i < checkBoxes.length; i++) {
-                    if (checkBoxes[i].checked) {
-                        let row = checkBoxes[i].parentNode.parentNode;
-                        checkedFields.push(row.cells[1].innerHTML);
-                    }
-                }
-                //make ajax request to delete record
-                let xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function(){
-                    if (xhr.readyState === XMLHttpRequest.DONE){
-                        if (xhr.status === 200){
-                            console.log(xhr.responseText);
-                        }
-                    }
-                }
-
-                console.log(JSON.stringify(checkedFields))
-
-                xhr.open("DELETE", "./delete-field", false);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.send("fieldLabels="+JSON.stringify(checkedFields));
-
                 AppComponents.htmlTable.render.apply(fieldComp);
             }
         }

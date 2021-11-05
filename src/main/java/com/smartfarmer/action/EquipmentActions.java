@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @WebServlet(
         name="EquipmentController",
@@ -60,7 +62,10 @@ public class EquipmentActions extends BaseController {
         String action = request.getServletPath();
 
         if ("/delete-equipment".equals(action)) {
-
+            List<String> ids = Arrays.asList(request.getParameter("ids"));
+            for(String id : ids) {
+                equipmentEjb.delete(Long.valueOf(id));
+            }
         }
     }
 
