@@ -3,6 +3,7 @@ package com.smartfarmer.rest;
 import com.smartfarmer.dto.RestResponse;
 import com.smartfarmer.ejb.interfaces.TransactionEjbI;
 import com.smartfarmer.entities.Transaction;
+import com.smartfarmer.entities.enumFiles.TransactionType;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -18,13 +19,14 @@ public class TransactionApi {
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list(){
+    public Response list(@QueryParam("type") TransactionType type){
 
         Transaction filter = new Transaction();
         return Response.ok().entity(transactionEjb.list(filter, 0, 0)).build();
 
     }
 
+    @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") long id){

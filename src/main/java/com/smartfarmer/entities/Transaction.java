@@ -1,5 +1,6 @@
 package com.smartfarmer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smartfarmer.entities.enumFiles.TransactionType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,7 @@ public class Transaction extends BaseEntity{
     @Column(name = "details", columnDefinition = "LONGTEXT")
     private String transactionDetails;
 
+    @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String transactionTypeStr;
 

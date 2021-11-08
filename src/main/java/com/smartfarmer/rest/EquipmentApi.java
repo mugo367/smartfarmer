@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Path("/equipments")
 public class EquipmentApi {
-
     @EJB
     private EquipmentEjbI equipmentEjb;
 

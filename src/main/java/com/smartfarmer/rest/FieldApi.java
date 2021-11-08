@@ -31,7 +31,7 @@ public class FieldApi {
 
         if(field.isPresent()){
             return Response.ok().entity(
-                    RestResponse.builder().success(true).data(field.get()).build()
+                    RestResponse.builder().success(true).build()
             ).build();
         }else{
             return Response.status(Response.Status.NOT_FOUND).entity(
@@ -48,7 +48,7 @@ public class FieldApi {
         try {
             Field fi = fieldDetailEjb.add(field);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(fi)
+                    RestResponse.builder().message("Added Successfully")
             ).build();
 
         }catch (Exception ex){
@@ -67,7 +67,7 @@ public class FieldApi {
             ).build();
         }
         fieldDetailEjb.delete(id);
-        return Response.ok().entity(RestResponse.builder().success(true).data(id).message("Deleted Successfully")).build();
+        return Response.ok().entity(RestResponse.builder().success(true).message("Deleted Successfully")).build();
 
     }
 

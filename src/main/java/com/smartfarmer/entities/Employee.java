@@ -56,9 +56,11 @@ public class Employee extends BaseEntity {
     @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeGenderStr;
+
     @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeDesignationStr;
+
     @Getter(onMethod_ = @JsonIgnore)
     @Transient
     private String employeeTypeStr;

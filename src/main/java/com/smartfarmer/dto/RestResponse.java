@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,6 +15,9 @@ public class RestResponse implements Serializable {
     private boolean success = true;
     private String message = "Done";
     private Object data;
-    private long totalCount;
 
+    public RestResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
 }

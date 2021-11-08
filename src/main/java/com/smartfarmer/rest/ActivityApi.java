@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
+//localhost/SmartFarmer/rest/activities/list
 @Path("/activities")
 public class ActivityApi {
     @EJB
@@ -25,6 +26,7 @@ public class ActivityApi {
 
     }
 
+    @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") long id){
@@ -49,7 +51,7 @@ public class ActivityApi {
         try {
             Activity ac = activityEjb.add(activity);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(ac)
+                    RestResponse.builder().success(true).message("Added Successfully").data(ac).build()
             ).build();
 
         }catch (Exception ex){
@@ -64,11 +66,10 @@ public class ActivityApi {
 
         if (!activityEjb.existsById(id)) {
             return Response.status(Response.Status.NOT_FOUND).entity(
-                    RestResponse.builder().success(false).message("Not found").build()
-            ).build();
+                    new RestResponse( false, "Not found")).build() ;
         }
         activityEjb.delete(id);
-        return Response.ok().entity(RestResponse.builder().success(true).data(id).message("Deleted Successfully")).build();
+        return Response.ok().entity(new RestResponse( true, "Deleted Successfully")).build();
 
     }
 

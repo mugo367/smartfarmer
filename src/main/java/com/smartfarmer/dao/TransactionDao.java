@@ -2,9 +2,12 @@ package com.smartfarmer.dao;
 
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.entities.Transaction;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 
 
 public class TransactionDao extends DaoImplementation<Transaction, Long> implements TransactionDaoI {
@@ -23,8 +26,6 @@ public class TransactionDao extends DaoImplementation<Transaction, Long> impleme
 
     public Double getTotalIncome(int id) {
 
-        String query ="SELECT SUM(transactionCost) FROM transactions where uid= ? AND transactionType ='Income'";
-
         Double totalIncome = null;
 
         return totalIncome;
@@ -33,11 +34,32 @@ public class TransactionDao extends DaoImplementation<Transaction, Long> impleme
 
     public Double getTotalExpense(int id) {
 
-        String query ="SELECT SUM(transactionCost) FROM transactions where uid=? AND transactionType ='Expense'";
-
         Double totalExpense = null;
 
         return totalExpense;
 
+    }
+
+    @Override
+    public ModelListWrapper<Transaction> list(Transaction filter, int start, int limit) {
+
+        ModelListWrapper<Transaction> results = new ModelListWrapper<>();
+        String hql = "SELECT t FROM Transaction t WHERE t.id is not null";
+
+
+        Query query = getEntityManager().createQuery(hql, Transaction.class);
+
+        if (start > 0)
+            query.setFirstResult(start);
+
+        if (limit > 0)
+            query.setMaxResults(limit);
+
+        List<Transaction> resultList = query.getResultList();
+
+        results.setList(resultList);
+        results.setCount(this.count());
+
+        return results;
     }
 }

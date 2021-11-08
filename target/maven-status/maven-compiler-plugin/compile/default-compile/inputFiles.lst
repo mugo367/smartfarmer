@@ -1,6 +1,7 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Activity.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/ActivityActions.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/EjbI.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/EmployeeApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/LoginResponse.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/FieldDetailsEjb.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/bean/LoginBean.java
@@ -12,10 +13,12 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/FieldTask.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/util/EntityManager.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/ActivityApi.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/FieldApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/enumFiles/Designation.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/DaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/LoginEjbI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/Repository.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/ProductionApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/ActivityDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/interceptor/LoginFilter.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/ActivityEjbI.java
@@ -23,9 +26,11 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Farmer.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/FieldDetailsActions.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Transaction.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/TransactionApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/FieldDetailDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/EquipmentEJB.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/util/EntityManagerProducer.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/EquipmentApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/LoginEjb.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/model/ResultWrapper.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/EmployeeActions.java
@@ -51,6 +56,7 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/EmployeeDao.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/EquipmentActions.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Employee.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/rest/FieldTaskApi.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/TransactionEjb.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/util/AppException.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/ActivityDaoI.java
