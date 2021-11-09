@@ -17,9 +17,20 @@ public class FieldTaskApi {
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list(){
+    public Response listAll(){
 
         FieldTask filter = new FieldTask();
+        return Response.ok().entity(fieldTaskEjb.list(filter, 0, 0)).build();
+
+    }
+
+    @GET
+    @Path("list/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response list(@PathParam("id") long id){
+
+        FieldTask filter = new FieldTask();
+        filter.setFieldId(id);
         return Response.ok().entity(fieldTaskEjb.list(filter, 0, 0)).build();
 
     }

@@ -55,4 +55,24 @@ public class TransactionEjb implements TransactionEjbI {
     public boolean existsById(Long id) {
         return transactionDao.existsById(id);
     }
+
+    @Override
+    public ModelListWrapper<Transaction> listExpenses(Transaction filter, int start, int limit) {
+        return transactionDao.listExpenses(filter, start, limit);
+    }
+
+    @Override
+    public ModelListWrapper<Transaction> listIncomes(Transaction filter, int start, int limit) {
+        return transactionDao.listIncomes(filter, start, limit);
+    }
+
+    @Override
+    public double totalIncomes(Transaction tr) {
+        return transactionDao.getTotalIncome(tr);
+    }
+
+    @Override
+    public double totalExpenses(Transaction tr) {
+        return transactionDao.getTotalExpense(tr);
+    }
 }

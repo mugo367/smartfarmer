@@ -3,7 +3,6 @@ package com.smartfarmer.rest;
 import com.smartfarmer.dto.RestResponse;
 import com.smartfarmer.ejb.interfaces.TransactionEjbI;
 import com.smartfarmer.entities.Transaction;
-import com.smartfarmer.entities.enumFiles.TransactionType;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -19,11 +18,43 @@ public class TransactionApi {
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list(@QueryParam("type") TransactionType type){
+    public Response list(){
 
         Transaction filter = new Transaction();
         return Response.ok().entity(transactionEjb.list(filter, 0, 0)).build();
+    }
 
+    @GET
+    @Path("listExpenses")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listExpenses(){
+
+        Transaction filter = new Transaction();
+        return Response.ok().entity(transactionEjb.listExpenses(filter, 0, 0)).build();
+    }
+
+    @GET
+    @Path("listIncomes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listIncomes(){
+        Transaction filter = new Transaction();
+        return Response.ok().entity(transactionEjb.listIncomes(filter, 0, 0)).build();
+    }
+
+    @GET
+    @Path("totalIncome")
+    @Produces(MediaType.APPLICATION_JSON)
+    public double totalIncome(){
+        Transaction transaction = new Transaction();
+        return transactionEjb.totalIncomes(transaction);
+    }
+
+    @GET
+    @Path("totalExpense")
+    @Produces(MediaType.APPLICATION_JSON)
+    public double totalExpense(){
+        Transaction transaction = new Transaction();
+        return transactionEjb.totalExpenses(transaction);
     }
 
     @GET

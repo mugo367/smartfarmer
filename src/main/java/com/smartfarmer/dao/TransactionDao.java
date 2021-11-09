@@ -2,6 +2,7 @@ package com.smartfarmer.dao;
 
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.entities.Transaction;
+import com.smartfarmer.entities.enumFiles.TransactionType;
 import com.smartfarmer.util.ModelListWrapper;
 
 import javax.inject.Inject;
@@ -24,30 +25,59 @@ public class TransactionDao extends DaoImplementation<Transaction, Long> impleme
         return entityManager;
     }
 
-    public Double getTotalIncome(int id) {
+    public double getTotalIncome(Transaction tr) {
 
-        Double totalIncome = null;
+        ModelListWrapper<Transaction> incomes = listIncomes(tr, 0,0);
 
-        return totalIncome;
+        if (incomes != null) {
+            Query q = entityManager.createQuery("SELECT SUM(t.transactionCost) FROM Transaction t WHERE t.transactionType=:transactionType");
+            q.setParameter("transactionType", TransactionType.Income.name());
 
+            return (Double) q.getSingleResult();
+        }
+    return 0;
     }
 
-    public Double getTotalExpense(int id) {
+    public double getTotalExpense(Transaction tr) {
 
-        Double totalExpense = null;
+        ModelListWrapper<Transaction> expenses = listExpenses(tr, 0,0);
 
-        return totalExpense;
+        if (expenses != null) {
+            Query query = entityManager.createQuery("SELECT SUM(t.transactionCost) FROM Transaction t WHERE t.transactionType=:transactionType");
+            query.setParameter("transactionType", TransactionType.Expense.name());
 
+            return (Double) query.getSingleResult();
+        }
+        return 0;
     }
 
     @Override
-    public ModelListWrapper<Transaction> list(Transaction filter, int start, int limit) {
-
+    public ModelListWrapper<Transaction> listExpenses(Transaction filter, int start, int limit) {
         ModelListWrapper<Transaction> results = new ModelListWrapper<>();
-        String hql = "SELECT t FROM Transaction t WHERE t.id is not null";
 
+        Query query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.id is not null and t.transactionType=:transactionType", Transaction.class);
+        query.setParameter("transactionType", TransactionType.Expense.name());
 
-        Query query = getEntityManager().createQuery(hql, Transaction.class);
+        if (start > 0)
+            query.setFirstResult(start);
+
+        if (limit > 0)
+            query.setMaxResults(limit);
+
+        List<Transaction> resultList = query.getResultList();
+
+        results.setList(resultList);
+        results.setCount(this.count());
+
+        return results;
+    }
+
+    @Override
+    public ModelListWrapper<Transaction> listIncomes(Transaction filter, int start, int limit) {
+        ModelListWrapper<Transaction> results = new ModelListWrapper<>();
+
+        Query query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.id is not null and t.transactionType=:transactionType", Transaction.class);
+        query.setParameter("transactionType", TransactionType.Income.name());
 
         if (start > 0)
             query.setFirstResult(start);
