@@ -56,6 +56,15 @@ let appNavBarLinks = {
             }
         },
         {
+            label: "Tasks",
+            id: "Tasks",
+            handler: function(){
+                let me = this;
+                AppComponents.htmlToNavBar.changeStyle.call(appNavBarLinks, me.id);
+                AppComponents.htmlTable.render.apply(tasksComp);
+            }
+        },
+        {
             label: "Log Out",
             id: "logout",
             handler: function(){

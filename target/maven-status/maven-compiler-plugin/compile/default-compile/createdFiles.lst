@@ -17,6 +17,8 @@ com/smartfarmer/entities/enumFiles/Gender.class
 com/smartfarmer/entities/Field.class
 com/smartfarmer/entities/enumFiles/Condition.class
 com/smartfarmer/rest/TransactionApi.class
+com/smartfarmer/ejb/interfaces/FieldTaskEjbI.class
+com/smartfarmer/dao/FieldTaskDao.class
 com/smartfarmer/interceptor/LoginFilter.class
 com/smartfarmer/ejb/FieldDetailsEjb.class
 com/smartfarmer/dao/EmployeeDao.class
@@ -27,6 +29,7 @@ com/smartfarmer/entities/FieldTask.class
 com/smartfarmer/rest/RestConfig.class
 com/smartfarmer/ejb/interfaces/EquipmentEjbI.class
 com/smartfarmer/action/LogoutAction.class
+com/smartfarmer/ejb/FieldTaskEjb.class
 com/smartfarmer/action/LoginController.class
 com/smartfarmer/dao/DaoImplementation.class
 com/smartfarmer/ejb/ActivityEjb.class
@@ -43,7 +46,6 @@ com/smartfarmer/dao/interfaces/ProductionDaoI.class
 com/smartfarmer/dao/interfaces/ActivityDaoI.class
 com/smartfarmer/dao/interfaces/Repository.class
 com/smartfarmer/model/LoginResponse.class
-com/smartfarmer/model/ModelListWrapper.class
 com/smartfarmer/entities/Employee.class
 com/smartfarmer/ejb/interfaces/EjbI.class
 com/smartfarmer/ejb/interfaces/LoginEjbI.class
@@ -70,6 +72,7 @@ com/smartfarmer/dao/FieldDetailDao.class
 com/smartfarmer/dao/EquipmentDao.class
 com/smartfarmer/dao/interfaces/EquipmentDaoI.class
 com/smartfarmer/action/ProductionActions.class
+com/smartfarmer/dao/interfaces/FieldTaskDaoI.class
 com/smartfarmer/ejb/ProductionEjb.class
 com/smartfarmer/entities/Transaction.class
 com/smartfarmer/dao/TransactionDao.class
@@ -77,3 +80,4 @@ com/smartfarmer/action/RegisterController.class
 com/smartfarmer/dao/ActivityDao.class
 com/smartfarmer/entities/enumFiles/Designation.class
 com/smartfarmer/action/ActivityActions.class
+com/smartfarmer/action/FieldTaskActions.class

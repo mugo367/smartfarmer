@@ -9,11 +9,13 @@ import com.smartfarmer.entities.FieldTask;
 import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
+@Stateless
 public class FieldTaskEjb implements FieldTaskEjbI {
 
     @PersistenceContext

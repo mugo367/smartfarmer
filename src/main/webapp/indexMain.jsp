@@ -29,6 +29,7 @@
     <script src="js/field.js"></script>
     <script src="js/production.js"></script>
     <script src="js/transaction.js"></script>
+    <script src="js/fieldTask.js"></script>
 
 </body>
 </html>

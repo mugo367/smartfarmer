@@ -1,6 +1,5 @@
 package com.smartfarmer.ejb;
 
-
 import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.EquipmentDaoI;
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;

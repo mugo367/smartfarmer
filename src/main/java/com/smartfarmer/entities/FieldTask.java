@@ -43,7 +43,7 @@ public class FieldTask extends BaseEntity{
     @Formula("(employee_id)")
     private long employeeId;
 
-    @Formula("(select e.employee_name from tbl_employees f where f.id=employee_id)")
+    @Formula("(select e.employee_name from tbl_employees e where e.id=employee_id)")
     private String employeeName;
 
     @Temporal(TemporalType.DATE)
