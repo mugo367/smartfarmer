@@ -34,6 +34,7 @@ var productionComp = {
     buttons: [{
         label: 'Add',
         id: 'addActivity',
+        class: 'btn btn-dark',
         handler: function(){
             AppComponents.htmlForm.render.call({
             formTitle: 'Add New Production',
@@ -45,6 +46,7 @@ var productionComp = {
                 type: "date",
                 divClass: "mb-3",
                 inputClass: "form-control",
+                required: true,
                 labelClass: "form-label"
             },{
                 label: "Production Label",
@@ -53,6 +55,7 @@ var productionComp = {
                 type: "text",
                 divClass: "mb-3",
                 inputClass: "form-control",
+                required: true,
                 labelClass: "form-label"
             },{
                 label: "Field Name",
@@ -61,6 +64,7 @@ var productionComp = {
                 type: "select",
                 labelClass: "form-label",
                 divClass: "mb-3",
+                required: true,
                 select: {
                     url: './view-fields',
                     optionMap:{value: 'id', display: 'fieldName'}
@@ -73,6 +77,7 @@ var productionComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 },
                 {
@@ -82,6 +87,7 @@ var productionComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 },
                 {
@@ -92,6 +98,7 @@ var productionComp = {
                     option:"Unit",
                     type: "radio",
                     divClass: "mb-3",
+                    required: true,
                     options:{
                         data:[{id:'Kgs', type:'Kgs'},{id:'Bags', type:'Bags'}],
                         optionMap: {value:'id', display:'type'}
@@ -116,9 +123,11 @@ var productionComp = {
                 showMsg: 'showErrorMsg',
                 success: function(){
                     AppComponents.htmlTable.render.apply(productionComp);
+                    swal("Done!", "Record was added successfully", "success");
                 },
                 failure: function(){
                     AppComponents.htmlTable.render.apply(productionComp);
+                    swal("Failed!", "An issue occured please try again", "error");
                 }
             }]
             });
@@ -128,6 +137,7 @@ var productionComp = {
             label: 'Delete',
             id: 'deleteProduction',
             method: 'DELETE',
+            class:'btn btn-danger',
             url: './delete-production',
             handler: function(){
                 AppComponents.htmlTable.render.apply(productionComp);

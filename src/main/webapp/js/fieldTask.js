@@ -3,6 +3,7 @@ var tasksComp = {
     method: "GET",
     tableTitle: 'Scheduled Activities',
     renderTo: 'componentRender',
+    class: 'btn btn-dark',
     id:'taskTable',
     columns: [
         {
@@ -30,6 +31,7 @@ var tasksComp = {
     buttons: [{
         label: 'Add',
         id: 'addActivity',
+        class: 'btn btn-dark',
         handler: function(){
             AppComponents.htmlForm.render.call({
                 formTitle: 'Add New Task',
@@ -112,11 +114,14 @@ var tasksComp = {
                         id: 'addActivity',
                         btnClass: "btn btn-success",
                         showMsg: 'showErrorMsg',
+                        required: true,
                         success: function(){
                             AppComponents.htmlTable.render.apply(tasksComp);
+                            swal("Done!", "Record was added successfully", "success");
                         },
                         failure: function(){
                             AppComponents.htmlTable.render.apply(tasksComp);
+                            swal("Failed!", "An issue occured please try again", "error");
                         }
                     }]
             });
@@ -125,6 +130,7 @@ var tasksComp = {
         label: 'Delete',
         id: 'deleteActivity',
         url: './delete-task',
+        class:'btn btn-danger',
         method: 'DELETE',
         handler: function(){
             AppComponents.htmlTable.render.apply(tasksComp);

@@ -12,7 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home | Smart Farmer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <style>
+        .swal-overlay {
+            background-color: rgba(194, 255, 218, 0.45);
+        }
+    </style>
 </head>
 <body>
     <nav id="comp-topnav" class="navbar navbar-dark bg-dark"></nav>

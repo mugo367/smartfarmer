@@ -21,6 +21,7 @@ var activitiesComp = {
     }],
     buttons: [{
         label: 'Add',
+        class: 'btn btn-dark',
         id: 'addActivity',
         handler: function(){
             AppComponents.htmlForm.render.call({
@@ -32,6 +33,7 @@ var activitiesComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }, {
                     label: "Activity Name",
@@ -40,6 +42,7 @@ var activitiesComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }, {
                     label: "Activity Description",
@@ -48,6 +51,7 @@ var activitiesComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }],
                 buttons: [
@@ -69,9 +73,11 @@ var activitiesComp = {
                     showMsg: 'showErrorMsg',
                     success: function(){
                         AppComponents.htmlTable.render.apply(activitiesComp);
+                        swal("Done!", "Record was added successfully", "success");
                     },
                     failure: function(){
                         AppComponents.htmlTable.render.apply(activitiesComp);
+                        swal("Failed!", "An issue occured please try again", "error");
                     }
                 }]
             });
@@ -80,6 +86,7 @@ var activitiesComp = {
         label: 'Delete',
         id: 'deleteActivity',
         url: './delete-activity',
+        class:'btn btn-danger',
         method: 'DELETE',
         handler: function(){
             AppComponents.htmlTable.render.apply(activitiesComp);

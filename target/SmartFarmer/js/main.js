@@ -3,14 +3,15 @@ let AppComponents = {
         render: function(){
             let me = this;
 
-            let formToRender = '<div class ="container"><h2>' + me.formTitle + '</h2>';
+            let formToRender = '<div class ="container"><h2 style=" text-align: center">' + me.formTitle + '</h2>';
 
             formToRender += '<form>';
 
             me.items.forEach(formItem=>{
                 if (formItem.type === 'select'){
 
-                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.label + ':</label><br>'
+                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">'  + formItem.label
+                        + (formItem.required?'<span style="color: red;">*</span>':'') + ':</label><br>'
                         +'<select name="' + formItem.name + '" id="' + formItem.id + '" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" >'
                     let selectOptions;
 
@@ -32,7 +33,8 @@ let AppComponents = {
                     formToRender += '</select></div>';
 
                 }else if (formItem.type === 'radio'){
-                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.label + ':</label> &nbsp;&nbsp;&nbsp;'
+                    formToRender +='<div class = "'+formItem.divClass+'"> <label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">'  + formItem.label
+                        + (formItem.required?'<span style="color: red;">*</span>':'') + ':</label> &nbsp;&nbsp;&nbsp;'
 
                     let selectOptions;
                     if (formItem.options && formItem.options.data){
@@ -52,7 +54,8 @@ let AppComponents = {
                 }
                 else{
                     formToRender += '<div class = "'+formItem.divClass+'"> ';
-                    formToRender += '<label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">' + formItem.label + ':</label><br>'
+                    formToRender += '<label  class = "'+formItem.labelClass+'" for="' + formItem.id +'">'  + formItem.label
+                        + (formItem.required?'<span style="color: red;">*</span>':'') + ':</label><br>'
                         +'<input class="'+formItem.inputClass+'" type="' + formItem.type + '" id="' + formItem.id +'" name="' + formItem.name + '"><br></div>';
                 }
 
@@ -84,6 +87,8 @@ let AppComponents = {
                         AppComponents.htmlForm.submit.apply(me);
 
                     });
+                }else if (btn.type==="button"){
+                    document.getElementById(btn.id).addEventListener("click", btn.handler);
                 }
             });
         },
@@ -96,19 +101,26 @@ let AppComponents = {
             //loop through the form to be submitted and collect the values while populating the submitForm variable
             me.items.forEach(field=>{
                 let fieldVal = document.getElementById(field.id).value;
+
+                if (field.required === true && !fieldVal)
+                    submitForm = false;
+
                 formData += encodeURIComponent(field.name) + '=' + encodeURIComponent(fieldVal) + '&';
             });
 
             if (!submitForm){
-                document.getElementById(me.showMsg).innerHTML = 'Please Enter All Required Fields(*)';
+               swal("Error!!","Please Enter All Required Fields(*)", "info");
                 return;
             }
 
             function submit(reqRes) {
                 if (reqRes.loginError)
-                    document.getElementById(me.showMsg).innerHTML = reqRes.loginErrorMsg;
-                else if (reqRes.redirectPage)
+                    swal("Failed!",reqRes.loginErrorMsg , "error");
+                else if (reqRes.redirectPage){
                     location.href = reqRes.redirectPage;
+                    swal("Welcome!", "Login is successfully", "success");
+                }
+
                 else if (reqRes.success)
                     me.success();
                 else if (reqRes.failure)
@@ -128,7 +140,7 @@ let AppComponents = {
                 + '<h3>'+me.tableTitle+ '</h3> </div> <div class="card-body"> <div class="d-grid gap-2 d-md-block">'
 
             me.buttons.forEach(btn=>{
-                tableToRender += '<button  type="button" class="btn btn-dark" id="' + btn.id + '">' + btn.label + '</button> &nbsp;&nbsp;';
+                tableToRender += '<button  type="button" class="'+btn.class+'" id="' + btn.id + '">' + btn.label + '</button> &nbsp;&nbsp;';
             });
 
             tableToRender +='</div> </div> <table id="'+me.id+'" class="table table-striped table-hover">';
@@ -166,23 +178,41 @@ let AppComponents = {
                 if(btn.method === 'DELETE'){
 
                     document.getElementById(btn.id).addEventListener("click",  event=>{
-                        event.preventDefault();
-                        let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
+                        swal({
+                            title: "Are you sure?",
+                            text: "Once deleted, you will not be able to recover this record!",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        })
+                            .then((willDelete) => {
+                                if (willDelete) {
+                                    event.preventDefault();
+                                    let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
 
-                        let checkedIds = [];
+                                    let checkedIds = [];
 
-                        checkboxes.forEach((checkbox) => {
-                            checkedIds.push(checkbox.value);
-                        });
+                                    checkboxes.forEach((checkbox) => {
+                                        checkedIds.push(checkbox.value);
+                                    });
 
-                        function check(reqRes){
-                            console.log(reqRes)
-                        }
+                                    function check(reqRes){
+                                        console.log(reqRes)
+                                    }
 
-                        ajax(btn.method, btn.url,check, "ids="+checkedIds);
-
+                                    if(checkedIds.length===0){
+                                        swal("Ooops! No Record to deleted!", {
+                                            icon: "error",
+                                        });
+                                    }else{
+                                        ajax(btn.method, btn.url,check, "ids="+checkedIds);
+                                        swal("Done! Record has been deleted!", {
+                                            icon: "success",
+                                        });
+                                    }
+                                }
+                            });
                     });
-
                 }
                 document.getElementById(btn.id).addEventListener("click", btn.handler);
             });
@@ -242,7 +272,6 @@ let AppComponents = {
             }
 
             ajax('GET', userDataLink, getUserSessionData);
-
 
             return userSessionData;
         }

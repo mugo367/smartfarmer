@@ -1,4 +1,5 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/Activity.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/events/EmailEvent.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/action/ActivityActions.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/interfaces/EjbI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/ejb/FieldTaskEjb.java
@@ -49,6 +50,7 @@
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/EquipmentDaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/ProductionDaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/FieldDetailDaoI.java
+/home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/events/AuditTrail.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/EmployeeDaoI.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/entities/enumFiles/FieldStatus.java
 /home/mugo367/IdeaProjects/SmartFarmer/src/main/java/com/smartfarmer/dao/interfaces/TransactionDaoI.java

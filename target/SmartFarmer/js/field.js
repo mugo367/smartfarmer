@@ -25,6 +25,7 @@ var fieldComp = {
     buttons: [{
         label: 'Add',
         id: 'addActivity',
+        class: 'btn btn-dark',
         handler: function(){
         AppComponents.htmlForm.render.call({
             url: "./add-field",
@@ -38,6 +39,7 @@ var fieldComp = {
                 type: "text",
                 divClass: "mb-3",
                 inputClass: "form-control",
+                required: true,
                 labelClass: "form-label"
             },{
                 label: "Field Name",
@@ -46,6 +48,7 @@ var fieldComp = {
                 type: "text",
                 divClass: "mb-3",
                 inputClass: "form-control",
+                required: true,
                 labelClass: "form-label"
             },{
                 label: "Field Size",
@@ -64,6 +67,7 @@ var fieldComp = {
                     option:"Field Status",
                     type: "radio",
                     divClass: "mb-3",
+                    required: true,
                     options:{
                         data:[{id:'Planted', status:'Planted'},{id:'NotPlanted', status:'NotPlanted'}],
                         optionMap: {value:'id', display:'status'}
@@ -77,24 +81,28 @@ var fieldComp = {
                     value: 'Cancel',
                     id: 'cancel',
                     btnClass: "btn btn-success",
+                    required: true,
                     handler: function(){
                         AppComponents.htmlTable.render.apply(fieldComp);
                     }
                 },{
-                btnDiv: "d-grid gap-2 d-md-flex justify-content-md-end",
-                type: 'submit',
-                url: "./add-field",
-                method: "POST",
-                value: 'Save',
-                id: 'addActivity',
-                btnClass: "btn btn-success",
-                showMsg: 'showErrorMsg',
-                success: function(){
-                    AppComponents.htmlTable.render.apply(fieldComp);
-                },
-                failure: function(){
-                    AppComponents.htmlTable.render.apply(fieldComp);
-                }
+                    btnDiv: "d-grid gap-2 d-md-flex justify-content-md-end",
+                    type: 'submit',
+                    url: "./add-field",
+                    method: "POST",
+                    value: 'Save',
+                    id: 'addActivity',
+                    btnClass: "btn btn-success",
+                    showMsg: 'showErrorMsg',
+                        required: true,
+                    success: function(){
+                        AppComponents.htmlTable.render.apply(fieldComp);
+                        swal("Done!", "Record was added successfully", "success");
+                    },
+                    failure: function(){
+                        AppComponents.htmlTable.render.apply(fieldComp);
+                        swal("Failed!", "An issue occured please try again", "error");
+                    }
             }]
         });
         }
@@ -103,6 +111,7 @@ var fieldComp = {
             label: 'Delete',
             id: 'deleteFields',
             url: './delete-field',
+            class:'btn btn-danger',
             method: 'DELETE',
             handler: function(){
                 AppComponents.htmlTable.render.apply(fieldComp);

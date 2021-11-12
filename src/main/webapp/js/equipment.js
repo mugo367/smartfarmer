@@ -26,7 +26,7 @@ var equipmentComp = {
     buttons: [{
         label: 'Add',
         id: 'addEquipment',
-
+        class: 'btn btn-dark',
         handler: function(){
             AppComponents.htmlForm.render.call({
 
@@ -39,6 +39,7 @@ var equipmentComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }, {
                     label: "Equipment Name",
@@ -47,6 +48,7 @@ var equipmentComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }, {
                     label: "Equipment Quantity",
@@ -55,6 +57,7 @@ var equipmentComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }
                     ,
@@ -65,6 +68,7 @@ var equipmentComp = {
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
+                        required: true,
                         select: {
                             data:[{
                                 id:'Working', condition:'Working'},
@@ -82,6 +86,7 @@ var equipmentComp = {
                         name: "equipmentCondition",
                         labelClass: "form-label",
                         option: "Equipment Condition",
+                        required: true,
                         values: ["Working", "NotWorking", "UnderMaintenance"]
                     },
                 ],
@@ -104,9 +109,11 @@ var equipmentComp = {
                     showMsg: 'showErrorMsg',
                     success: function(){
                         AppComponents.htmlTable.render.apply(equipmentComp);
+                        swal("Done!", "Record was added successfully", "success");
                     },
                     failure: function(){
                         AppComponents.htmlTable.render.apply(equipmentComp);
+                        swal("Failed!", "An issue occured please try again", "error");
                     }
                 }]
             });
@@ -116,6 +123,7 @@ var equipmentComp = {
             label: 'Delete',
             id: 'deleteEquipment',
             method:'DELETE',
+            class:'btn btn-danger',
             url: './delete-equipment',
             handler: function(){
 

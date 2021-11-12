@@ -27,9 +27,7 @@ public abstract class DaoImplementation<T,P> implements DaoI<T,P> {
     @Transactional(REQUIRED)
     @Override
     public T save(T t) {
-        getEntityManager().persist(t);
-        getEntityManager().flush();
-        return t;
+        return getEntityManager().merge(t);
     }
 
     @Transactional(REQUIRED)

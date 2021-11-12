@@ -55,6 +55,7 @@ var employeeComp = {
     buttons: [{
         label: 'Add',
         id: 'addActivity',
+        class: 'btn btn-dark',
         handler: function (){
             AppComponents.htmlForm.render.call({
                 formTitle: 'Add New Employee',
@@ -66,6 +67,7 @@ var employeeComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 },{
                     label: "Employee Name",
@@ -74,26 +76,29 @@ var employeeComp = {
                     type: "text",
                     divClass: "mb-3",
                     inputClass: "form-control",
+                    required: true,
                     labelClass: "form-label"
                 }, {
-                        label: "Employee Gender",
-                        id: "employeeGenderStr",
-                        name: "employeeGenderStr",
-                        type: "radio",
-                        labelClass: "form-label",
-                        divClass: "mb-3",
+                    label: "Employee Gender",
+                    id: "employeeGenderStr",
+                    name: "employeeGenderStr",
+                    type: "radio",
+                    labelClass: "form-label",
+                    divClass: "mb-3",
+                    required: true,
                         options:{
                             data:[{id:'Male', gender:'Male'},{id:'Female', gender:'Female'}],
                             optionMap: {value:'id', display:'gender'}
                         }
                     },{
-                    label: "ID Number",
-                    name: "idNumber",
-                    id: "idNumber",
-                    type: "text",
-                    divClass: "mb-3",
-                    inputClass: "form-control",
-                    labelClass: "form-label"
+                        label: "ID Number",
+                        name: "idNumber",
+                        id: "idNumber",
+                        type: "text",
+                        divClass: "mb-3",
+                        inputClass: "form-control",
+                        required: true,
+                        labelClass: "form-label"
                 },
                     {
                         label: "Employee Email",
@@ -101,6 +106,7 @@ var employeeComp = {
                         id: "employeeEmail",
                         type: "text",
                         divClass: "mb-3",
+                        required: true,
                         inputClass: "form-control",
                         labelClass: "form-label"
                     },
@@ -111,6 +117,7 @@ var employeeComp = {
                         type: "text",
                         divClass: "mb-3",
                         inputClass: "form-control",
+                        required: true,
                         labelClass: "form-label"
                     },
                     {
@@ -120,6 +127,7 @@ var employeeComp = {
                         type: "text",
                         divClass: "mb-3",
                         inputClass: "form-control",
+                        required: true,
                         labelClass: "form-label"
                     },
                     {
@@ -129,6 +137,7 @@ var employeeComp = {
                         type: "Date",
                         divClass: "mb-3",
                         inputClass: "form-control",
+                        required: true,
                         labelClass: "form-label"
                     },
                     {
@@ -138,6 +147,7 @@ var employeeComp = {
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
+                        required: true,
                         select: {
                             data:[{
                                 id:'Manager', designation:'Manager'},
@@ -155,6 +165,7 @@ var employeeComp = {
                         type: "select",
                         labelClass: "form-label",
                         divClass: "mb-3",
+                        required: true,
                         select: {
                             data:[{
                                 id:'FullTime', type:'FullTime'},
@@ -185,9 +196,11 @@ var employeeComp = {
                     showMsg: 'showErrorMsg',
                     success: function(){
                         AppComponents.htmlTable.render.apply(employeeComp);
+                        swal("Done!", "Record was added successfully", "success");
                     },
                     failure: function(){
                         AppComponents.htmlTable.render.apply(employeeComp);
+                        swal("Failed!", "An issue occured please try again", "error");
                     }
                 }]
             });
@@ -197,6 +210,7 @@ var employeeComp = {
             label: 'Delete',
             id: 'deleteEmployees',
             method: 'DELETE',
+            class:'btn btn-danger',
             url:'./delete-employee',
             handler: function(){
                 AppComponents.htmlTable.render.apply(employeeComp);

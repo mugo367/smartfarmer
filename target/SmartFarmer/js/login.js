@@ -1,5 +1,5 @@
 AppComponents.htmlForm.render.call({
-    formTitle: 'Login Details',
+    formTitle: 'Login',
     renderId: "componentRender",
     items: [{
         label: "Username",
@@ -7,6 +7,7 @@ AppComponents.htmlForm.render.call({
         id: "username",
         type: "text",
         divClass: "mb-3",
+        required: true,
         inputClass: "form-control",
         labelClass: "form-label"
     },{
@@ -16,9 +17,22 @@ AppComponents.htmlForm.render.call({
         type: "password",
         divClass: "mb-3",
         inputClass: "form-control",
+        required: true,
         labelClass: "form-label"
     }],
-    buttons: [{
+    buttons: [
+        {
+            btnDiv: "d-grid gap-2 col-6 mx-auto",
+            type: 'button',
+            url: "./register.jsp",
+            value: 'Sign Up',
+            id: 'register',
+            btnClass: "btn btn-primary",
+            handler: function(){
+                location.href = "./register.jsp";
+            }
+
+        },{
         btnDiv: "d-grid gap-2 col-6 mx-auto",
         type: 'submit',
         url: "./login",
@@ -28,5 +42,5 @@ AppComponents.htmlForm.render.call({
         btnClass: "btn btn-success",
         showMsg: 'showErrorMsg'
 
-    }]
+    }, ]
 });

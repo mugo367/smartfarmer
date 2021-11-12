@@ -41,7 +41,9 @@ com/smartfarmer/action/FieldDetailsActions.class
 com/smartfarmer/ejb/interfaces/ActivityEjbI.class
 com/smartfarmer/dto/RestResponse.class
 com/smartfarmer/entities/Equipment.class
+com/smartfarmer/events/AuditTrail.class
 com/smartfarmer/entities/enumFiles/Unit.class
+com/smartfarmer/events/EmailEvent.class
 com/smartfarmer/dao/interfaces/ProductionDaoI.class
 com/smartfarmer/dao/interfaces/ActivityDaoI.class
 com/smartfarmer/dao/interfaces/Repository.class
