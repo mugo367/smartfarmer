@@ -116,12 +116,10 @@ let AppComponents = {
             function submit(reqRes) {
                 if (reqRes.loginError)
                     swal("Failed!",reqRes.loginErrorMsg , "error");
-                else if (reqRes.redirectPage){
+                else if (reqRes.redirectPage) {
                     location.href = reqRes.redirectPage;
                     swal("Welcome!", "Login is successfully", "success");
-                }
-
-                else if (reqRes.success)
+                } else if (reqRes.success)
                     me.success();
                 else if (reqRes.failure)
                     me.failure();
@@ -178,40 +176,37 @@ let AppComponents = {
                 if(btn.method === 'DELETE'){
 
                     document.getElementById(btn.id).addEventListener("click",  event=>{
+                        event.preventDefault();
+                        let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
+
+                        let checkedIds = [];
+
+                        checkboxes.forEach((checkbox) => {
+                            checkedIds.push(checkbox.value);
+                        });
+                        if(checkedIds.length===0){
+                            swal("Ooops! No Record to deleted!", {
+                                icon: "error",
+                            });
+                        }
                         swal({
                             title: "Are you sure?",
                             text: "Once deleted, you will not be able to recover this record!",
                             icon: "warning",
                             buttons: true,
                             dangerMode: true,
-                        })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    event.preventDefault();
-                                    let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
+                        }).then((willDelete) => {
+                            if (willDelete) {
 
-                                    let checkedIds = [];
-
-                                    checkboxes.forEach((checkbox) => {
-                                        checkedIds.push(checkbox.value);
-                                    });
-
-                                    function check(reqRes){
-                                        console.log(reqRes)
-                                    }
-
-                                    if(checkedIds.length===0){
-                                        swal("Ooops! No Record to deleted!", {
-                                            icon: "error",
-                                        });
-                                    }else{
-                                        ajax(btn.method, btn.url,check, "ids="+checkedIds);
-                                        swal("Done! Record has been deleted!", {
-                                            icon: "success",
-                                        });
-                                    }
+                                function check(reqRes){
+                                    console.log(reqRes)
                                 }
-                            });
+                                ajax(btn.method, btn.url,check, "ids="+checkedIds);
+                                swal("Done! Record has been deleted!", {
+                                    icon: "success",
+                                });
+                            }
+                        });
                     });
                 }
                 document.getElementById(btn.id).addEventListener("click", btn.handler);

@@ -1,12 +1,10 @@
 package com.smartfarmer.dao.interfaces;
 
 
-import com.smartfarmer.bean.LoginBean;
 import com.smartfarmer.entities.Farmer;
-
-import java.sql.SQLException;
+import com.smartfarmer.model.LoginBean;
 
 public interface LoginBeanDaoI {
-    boolean checkUser(LoginBean login) throws Exception;
-    Farmer getFarmerDetails(LoginBean login) throws SQLException;
+
+    Farmer getUser(LoginBean login);
 }

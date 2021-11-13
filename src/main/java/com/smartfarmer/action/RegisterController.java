@@ -1,50 +1,44 @@
 package com.smartfarmer.action;
 
-import com.smartfarmer.dao.FarmerDao;
+import com.smartfarmer.ejb.interfaces.RegisterEjbI;
 import com.smartfarmer.entities.Farmer;
-import org.apache.commons.beanutils.BeanUtils;
+import com.smartfarmer.model.RegisterResponse;
+import lombok.SneakyThrows;
 
-import javax.servlet.ServletException;
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
-import java.text.ParseException;
+import javax.servlet.http.HttpSession;
 
 @WebServlet(
         name = "RegisterController",
         urlPatterns = "/register"
 )
-public class RegisterController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-    }
+public class RegisterController extends BaseController {
+    @EJB
+    RegisterEjbI registerEjb;
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        FarmerDao farmerDao = new FarmerDao();
-        PrintWriter output = resp.getWriter();
-        try {
+    private Farmer farmer = new Farmer();
 
-            Farmer farmer = new Farmer();
-            BeanUtils.populate(farmer, req.getParameterMap());
-            if(farmerDao.add(farmer)){
-                output.print("Registration was Successfully");
-                resp.sendRedirect("./index.jsp");
-            }else{
-                output.print("An error occurred during the process !!");
-                resp.sendRedirect("./register.jsp");
-            }
-        } catch (IllegalAccessException | SQLException | ParseException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+
+    @SneakyThrows
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(true);
+        transform(farmer, request.getParameterMap());
+        response.setContentType("application/json");
+        jsonMapper.setDateFormat(df);
+
+        RegisterResponse registerResponse = registerEjb.register(farmer);
+
+        response.getWriter().print(jsonMapper.writeValueAsString(registerResponse));
+
+        if(registerResponse.isRegisterError()){
+            response.sendRedirect("./register.jsp");
+            session.setAttribute("message", registerResponse.getRegisterErrorMsg());
+        }else{
+            response.sendRedirect("./login.jsp");
         }
-
     }
 }

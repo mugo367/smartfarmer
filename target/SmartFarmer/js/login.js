@@ -33,14 +33,20 @@ AppComponents.htmlForm.render.call({
             }
 
         },{
-        btnDiv: "d-grid gap-2 col-6 mx-auto",
-        type: 'submit',
-        url: "./login",
-        method: "POST",
-        value: 'Sign In',
-        id: 'login',
-        btnClass: "btn btn-success",
-        showMsg: 'showErrorMsg'
+            btnDiv: "d-grid gap-2 col-6 mx-auto",
+            type: 'submit',
+            url: "./login",
+            method: "POST",
+            value: 'Sign In',
+            id: 'login',
+            btnClass: "btn btn-success",
+            showMsg: 'showErrorMsg',
+            success: function(){
+                swal("Done!", "Login was successfully", "success");
+            },
+            failure: function(){
+                swal("Failed!", "An issue occured please try again", "error");
+            }
 
     }, ]
 });

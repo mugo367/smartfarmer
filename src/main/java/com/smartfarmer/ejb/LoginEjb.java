@@ -1,39 +1,36 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.bean.LoginBean;
 import com.smartfarmer.dao.interfaces.LoginBeanDaoI;
 import com.smartfarmer.ejb.interfaces.LoginEjbI;
+import com.smartfarmer.entities.Farmer;
+import com.smartfarmer.model.LoginBean;
 import com.smartfarmer.model.LoginResponse;
-import org.apache.commons.beanutils.BeanUtils;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 @Stateless
 public class LoginEjb implements LoginEjbI {
     @Inject
-    LoginBeanDaoI loginBean;
-    public  LoginResponse authenticate(Map<String, String[]> params, HttpSession session) {
+    LoginBeanDaoI loginBeanDao;
+    public  LoginResponse authenticate(LoginBean login, HttpSession session) {
 
         LoginResponse loginResponse = new LoginResponse();
 
         try{
+            Farmer farmer = loginBeanDao.getUser(login);
 
-            LoginBean login = new LoginBean( );
-            BeanUtils.populate(login, params);
+            if(farmer !=null){
 
-            if(loginBean.checkUser(login)){
-
-                loginResponse.setSessionId((int) loginBean.getFarmerDetails(login).getId());
+                loginResponse.setSessionId((int) farmer.getId());
                 loginResponse.setUsername(login.getUsername());
-                loginResponse.setDetails(loginBean.getFarmerDetails(login));
+                loginResponse.setDetails(farmer);
                 loginResponse.setRedirectPage("./indexMain.jsp");
 
                 session.setAttribute("username",login.getUsername());
-                session.setAttribute("uid", loginBean.getFarmerDetails(login).getId());
-                session.setAttribute("details", loginBean.getFarmerDetails(login));
+                session.setAttribute("uid", farmer.getId());
+                session.setAttribute("details", farmer);
 
             }else {
                 loginResponse.setLoginError(true);

@@ -116,6 +116,17 @@ var fieldComp = {
             handler: function(){
                 AppComponents.htmlTable.render.apply(fieldComp);
             }
+        },
+
+        {
+            label: 'Start Production',
+            id: 'production',
+            url: './start-field',
+            class:'btn btn-primary',
+            method: 'POST',
+            handler: function(){
+                
+            }
         }
     ]
 };

@@ -1,8 +1,14 @@
 package com.smartfarmer.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+@Getter
+@Setter
 
 public class ResultWrapper<T> implements Serializable {
 
@@ -11,27 +17,4 @@ public class ResultWrapper<T> implements Serializable {
 
     private String message = "Done";
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public List<T> getList() {
-        return list;
-    }
-
-    public void setList(List<T> list) {
-        this.list = list;
-    }
 }

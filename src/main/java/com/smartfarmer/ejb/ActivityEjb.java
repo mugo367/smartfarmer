@@ -23,9 +23,6 @@ public class ActivityEjb implements ActivityEjbI {
         if (activity == null)
             throw new AppException("Invalid activity details!!");
 
-        if(activity.getActivityLabel() == null || activity.getActivityName() == null || activity.getActivityDescription() == null){
-            throw new AppException("Label, Name, Description are required!");
-        }
 
         return  activityDao.save(activity);
     }
