@@ -52,11 +52,12 @@ var employeeComp = {
 
 
     ],
-    buttons: [{
-        label: 'Add',
-        id: 'addActivity',
-        class: 'btn btn-dark',
-        handler: function (){
+    buttons: [
+        {
+            label: 'Add',
+            id: 'addActivity',
+            class: 'btn btn-dark',
+            handler: function (){
             AppComponents.htmlForm.render.call({
                 formTitle: 'Add New Employee',
                 renderId: "employeeForm",
@@ -205,7 +206,7 @@ var employeeComp = {
                 }]
             });
         }
-    },
+        },
         {
             label: 'Delete',
             id: 'deleteEmployees',
@@ -215,12 +216,21 @@ var employeeComp = {
             handler: function(){
                 AppComponents.htmlTable.render.apply(employeeComp);
             }
-        },{
+        },
+        {
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(employeeComp);
+            }
+        },
+        {
             label: 'Salaries and Remunerations',
             id: 'salaries',
             class:'btn btn-primary',
             handler: function(){
-                AppComponents.htmlTable.render.apply(activitiesComp);
+                AppComponents.htmlTable.render.apply(salariesComp);
             }
         }
         ]

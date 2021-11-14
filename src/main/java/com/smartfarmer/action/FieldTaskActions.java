@@ -31,16 +31,11 @@ public class FieldTaskActions extends BaseController{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
-        switch (action) {
-            case ("/add-task"):
-                transform(fieldTask, request.getParameterMap());
-                fieldTaskEjb.add(fieldTask);
+        if ("/add-task".equals(action)) {
+            transform(fieldTask, request.getParameterMap());
+            fieldTaskEjb.add(fieldTask);
 
-                handleResponse(response);
-                break;
-            case ("/edit-task"):
-
-                break;
+            handleResponse(response);
         }
     }
 

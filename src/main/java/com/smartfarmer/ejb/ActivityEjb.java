@@ -1,10 +1,11 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.ActivityDaoI;
 import com.smartfarmer.ejb.interfaces.ActivityEjbI;
 import com.smartfarmer.entities.Activity;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -18,13 +19,12 @@ public class ActivityEjb implements ActivityEjbI {
     private ActivityDaoI activityDao;
 
     @Override
-    public Activity add(Activity activity) throws Exception {
+    public Response add(Activity activity) throws Exception {
 
         if (activity == null)
             throw new AppException("Invalid activity details!!");
 
-
-        return  activityDao.save(activity);
+        return new Response(true, "Successfully added",  activityDao.save(activity));
     }
 
     @Override

@@ -58,9 +58,9 @@ public class FieldTaskApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(FieldTask fieldTask){
         try {
-            FieldTask task = fieldTaskEjb.add(fieldTask);
+            fieldTaskEjb.add(fieldTask);
             return Response.ok().entity(
-                    RestResponse.builder().success(true).message("Added Successfully").data(task).build()
+                    RestResponse.builder().success(true).message("Added Successfully").data(fieldTask).build()
             ).build();
 
         }catch (Exception ex){

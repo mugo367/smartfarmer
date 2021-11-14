@@ -117,7 +117,14 @@ var fieldComp = {
                 AppComponents.htmlTable.render.apply(fieldComp);
             }
         },
-
+        {
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(fieldComp);
+            }
+        },
         {
             label: 'Start Production',
             id: 'production',

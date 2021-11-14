@@ -31,17 +31,11 @@ public class ActivityActions extends BaseController {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
-        switch (action) {
-            case "/add-activity":
+        if ("/add-activity".equals(action)) {
+            transform(activity, request.getParameterMap());
+            activityEjb.add(activity);
 
-                transform(activity, request.getParameterMap());
-                activityEjb.add(activity);
-
-                handleResponse(response);
-                break;
-            case "/edit-activity":
-
-                break;
+            handleResponse(response);
         }
     }
 

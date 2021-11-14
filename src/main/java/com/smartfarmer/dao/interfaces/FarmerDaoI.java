@@ -9,5 +9,5 @@ public interface FarmerDaoI extends DaoI<Farmer, Long>{
 
    List<Farmer> read() ;
    Farmer findUsername(Farmer farmer);
-
+   double getTotalFarmSize();
 }

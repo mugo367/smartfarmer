@@ -1,10 +1,12 @@
 package com.smartfarmer.ejb;
 
+import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.dao.interfaces.ProductionDaoI;
 import com.smartfarmer.ejb.interfaces.ProductionEjbI;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.Production;
 import com.smartfarmer.entities.enumFiles.Unit;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
@@ -23,9 +25,12 @@ public class ProductionEjb implements ProductionEjbI {
     @Inject
     ProductionDaoI productionDao;
 
+    @Inject
+    private FieldDetailDaoI fieldDetailDao;
+
 
     @Override
-    public Production add(Production production) throws Exception {
+    public Response add(Production production) throws Exception {
 
         if (production == null)
             throw new AppException("Invalid production details!!");
@@ -36,8 +41,10 @@ public class ProductionEjb implements ProductionEjbI {
         if (production.getFieldId() > 0)
             production.setField(entityManager.find(Field.class, production.getFieldId()));
 
-
-        return productionDao.save(production);
+        if(fieldDetailDao.checkFieldStatus(production.getFieldId()) !=null)
+            return new Response(true, "Successfully added",  productionDao.save(production));
+        else
+            return new Response(false, "Field is not under Production ",  production);
     }
 
     @Override

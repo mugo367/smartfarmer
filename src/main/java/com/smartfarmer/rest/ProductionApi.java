@@ -48,9 +48,9 @@ public class ProductionApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Production production){
         try {
-            Production pr = productionEjb.add(production);
+            productionEjb.add(production);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(pr)
+                    RestResponse.builder().message("Added Successfully").data(production)
             ).build();
 
         }catch (Exception ex){

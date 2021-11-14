@@ -1,7 +1,7 @@
 var fieldProductionComp = {
     url: "./view-fieldProduction",
     method: "GET",
-    tableTitle: 'Production',
+    tableTitle: 'Started Productions',
     renderTo: 'componentRender',
     class: 'btn btn-dark',
     id:'production',
@@ -19,14 +19,18 @@ var fieldProductionComp = {
         {
             header: "Crop Planted",
             dataIndex: "crop",
+        },
+        {
+            header: "Additional Information",
+            dataIndex: "description",
         }],
     buttons: [{
         label: 'Add',
-        id: 'start',
+        id: 'startProduction',
         class: 'btn btn-dark',
         handler: function(){
             AppComponents.htmlForm.render.call({
-                formTitle: 'Add New Task',
+                formTitle: 'Start New Production',
                 items: [
                     {
                         label: "Field Name",
@@ -56,6 +60,15 @@ var fieldProductionComp = {
                         divClass: "mb-3",
                         inputClass: "form-control",
                         labelClass: "form-label"
+                    },
+                    {
+                        label: "Additional Information",
+                        name: "description",
+                        id: "description",
+                        type: "text",
+                        divClass: "mb-3",
+                        inputClass: "form-control",
+                        labelClass: "form-label"
                     }],
                 buttons: [
                     {
@@ -71,7 +84,7 @@ var fieldProductionComp = {
                         url: "./add-fieldProduction",
                         method: "POST",
                         value: 'Save',
-                        id: 'addActivity',
+                        id: 'addProduction',
                         btnClass: "btn btn-success",
                         showMsg: 'showErrorMsg',
                         required: true,
@@ -88,12 +101,19 @@ var fieldProductionComp = {
         }
     }, {
         label: 'Delete',
-        id: 'deleteProduction',
+        id: 'deleteFieldProduction',
         url: './delete-fieldProduction',
         class:'btn btn-danger',
         method: 'DELETE',
         handler: function(){
             AppComponents.htmlTable.render.apply(fieldProductionComp);
         }
-    }]
+    },{
+        label: 'Refresh',
+        id: 'refresh',
+        class:'btn btn-primary',
+        handler: function(){
+            AppComponents.htmlTable.render.apply(fieldProductionComp);
+        }
+    },]
 };

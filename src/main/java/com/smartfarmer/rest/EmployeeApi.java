@@ -47,9 +47,9 @@ public class EmployeeApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Employee employee){
         try {
-            Employee emp = employeeEjb.add(employee);
+            employeeEjb.add(employee);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(emp)
+                    RestResponse.builder().message("Added Successfully").data(employee)
             ).build();
 
         }catch (Exception ex){

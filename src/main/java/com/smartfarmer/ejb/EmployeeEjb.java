@@ -1,13 +1,14 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.EmployeeDaoI;
 import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
 import com.smartfarmer.entities.Employee;
 import com.smartfarmer.entities.enumFiles.Designation;
 import com.smartfarmer.entities.enumFiles.EmpType;
 import com.smartfarmer.entities.enumFiles.Gender;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,7 +20,7 @@ public class EmployeeEjb implements EmployeeEjbI {
     EmployeeDaoI employeeDao;
 
     @Override
-    public Employee add(Employee employee) throws Exception {
+    public Response add(Employee employee) throws Exception {
 
         if (employee == null)
             throw new AppException("Invalid employee details!!");
@@ -36,7 +37,8 @@ public class EmployeeEjb implements EmployeeEjbI {
             employee.setEmployeeType(EmpType.valueOf(employee.getEmployeeTypeStr()));
         }
 
-      return employeeDao.save(employee);
+
+        return new Response(true, "Successfully added",  employeeDao.save(employee));
 
     }
 

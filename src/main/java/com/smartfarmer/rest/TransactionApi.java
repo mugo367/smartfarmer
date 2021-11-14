@@ -80,9 +80,9 @@ public class TransactionApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Transaction transaction){
         try {
-            Transaction trac = transactionEjb.add(transaction);
+             transactionEjb.add(transaction);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(trac)
+                    RestResponse.builder().message("Added Successfully").data(transaction)
             ).build();
 
         }catch (Exception ex){

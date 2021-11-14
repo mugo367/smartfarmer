@@ -142,5 +142,13 @@ var transactionComp ={
 
                 AppComponents.htmlTable.render.apply(transactionComp);
             }
+        },
+        {
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(salariesComp);
+            }
         }]
 };

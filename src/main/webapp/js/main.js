@@ -121,6 +121,8 @@ let AppComponents = {
                     swal("Welcome!", "Login is successfully", "success");
                 } else if (reqRes.success)
                     me.success();
+                else if (!reqRes.success)
+                    swal("Failed!", reqRes.message, "error");
                 else if (reqRes.failure)
                     me.failure();
             }
@@ -159,11 +161,6 @@ let AppComponents = {
             tableToRender += '<tbody>';
 
             function getData(reqRes){
-                if(reqRes.list.length<0){
-                    swal("Ooops! No Record to Display!", {
-                        icon: "info",
-                    });
-                }
                 reqRes.list.forEach(row=>{
                     tableToRender += '<tr>';
                     me.columns.forEach(col=>{
@@ -181,7 +178,7 @@ let AppComponents = {
                 if(btn.method === 'DELETE'){
 
                     document.getElementById(btn.id).addEventListener("click",  event=>{
-                        event.preventDefault();
+
                         let checkboxes = document.querySelectorAll('input[name="row-check"]:checked')
 
                         let checkedIds = [];
@@ -207,11 +204,10 @@ let AppComponents = {
                                     console.log(reqRes)
                                 }
                                 ajax(btn.method, btn.url,check, "ids="+checkedIds);
-                                swal("Done! Record has been deleted!", {
-                                    icon: "success",
-                                });
+
                             }
                         });
+                        btn.handler;
                     });
                 }
                 document.getElementById(btn.id).addEventListener("click", btn.handler);

@@ -49,9 +49,9 @@ public class ActivityApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Activity activity){
         try {
-            Activity ac = activityEjb.add(activity);
+            activityEjb.add(activity);
             return Response.ok().entity(
-                    RestResponse.builder().success(true).message("Added Successfully").data(ac).build()
+                    RestResponse.builder().success(true).message("Added Successfully").data(activity).build()
             ).build();
 
         }catch (Exception ex){

@@ -46,7 +46,7 @@ public class FieldApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Field field){
         try {
-            Field fi = fieldDetailEjb.add(field);
+            fieldDetailEjb.add(field);
             return Response.ok().entity(
                     RestResponse.builder().message("Added Successfully")
             ).build();

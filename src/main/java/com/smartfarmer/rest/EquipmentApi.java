@@ -47,9 +47,9 @@ public class EquipmentApi {
     @Produces(MediaType.APPLICATION_JSON)
     public Response save(Equipment equipment){
         try {
-            Equipment ac = equipmentEjb.add(equipment);
+            equipmentEjb.add(equipment);
             return Response.ok().entity(
-                    RestResponse.builder().message("Added Successfully").data(ac)
+                    RestResponse.builder().message("Added Successfully").data(equipment)
             ).build();
 
         }catch (Exception ex){

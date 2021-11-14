@@ -33,7 +33,7 @@ public class TransactionDao extends DaoImplementation<Transaction, Long> impleme
             Query q = entityManager.createQuery("SELECT SUM(t.transactionCost) FROM Transaction t WHERE t.transactionType=:transactionType");
             q.setParameter("transactionType", TransactionType.Income.name());
 
-            return (Double) q.getSingleResult();
+            return (double) q.getSingleResult();
         }
     return 0;
     }
@@ -46,7 +46,7 @@ public class TransactionDao extends DaoImplementation<Transaction, Long> impleme
             Query query = entityManager.createQuery("SELECT SUM(t.transactionCost) FROM Transaction t WHERE t.transactionType=:transactionType");
             query.setParameter("transactionType", TransactionType.Expense.name());
 
-            return (Double) query.getSingleResult();
+            return (double) query.getSingleResult();
         }
         return 0;
     }

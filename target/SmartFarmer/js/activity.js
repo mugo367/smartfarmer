@@ -91,5 +91,12 @@ var activitiesComp = {
         handler: function(){
             AppComponents.htmlTable.render.apply(activitiesComp);
         }
-    }]
+    },{
+        label: 'Refresh',
+        id: 'refresh',
+        class:'btn btn-primary',
+        handler: function(){
+            AppComponents.htmlTable.render.apply(activitiesComp);
+        }
+    },]
 };

@@ -43,16 +43,11 @@ public class EquipmentActions extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
-        switch (action) {
-            case "/add-equipment":
-                transform(equipment, request.getParameterMap());
-                equipmentEjb.add(equipment);
+        if ("/add-equipment".equals(action)) {
+            transform(equipment, request.getParameterMap());
+            equipmentEjb.add(equipment);
 
-                handleResponse(response);break;
-            case "/edit-equipment":
-
-                break;
-
+            handleResponse(response);
         }
 
     }

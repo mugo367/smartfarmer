@@ -1,11 +1,13 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.util.ModelListWrapper;
+import com.smartfarmer.dao.interfaces.FarmerDaoI;
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.enumFiles.FieldStatus;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,21 +18,28 @@ public class FieldDetailsEjb implements FieldDetailEjbI {
     @Inject
     FieldDetailDaoI fieldDetailDao;
 
+    @Inject
+    FarmerDaoI farmerDao;
+
     @Override
-    public Field add(Field field) throws Exception {
+    public Response add(Field field) throws Exception {
 
         if (field == null)
             throw new AppException("Invalid field details!!");
-        /**
-         * CHECK LOGIC
-         * get used field size // remaining land
-         * */
+
+        double remainingLand = farmerDao.getTotalFarmSize() - fieldDetailDao.getUsedFieldSize();
+
+        System.out.println(remainingLand);
 
         if(field.getFieldStatus() == null & field.getFieldStatusStr() != null){
             field.setFieldStatus(FieldStatus.valueOf(field.getFieldStatusStr()));
         }
 
-        return fieldDetailDao.save(field);
+        if(field.getFieldSize() > remainingLand)
+            return new Response(false, "Entered field size is greater than remaining " +
+                    "Remaining land size is "+ remainingLand,  field);
+        else
+            return new Response(true, "Successfully added",  fieldDetailDao.save(field));
     }
 
     @Override

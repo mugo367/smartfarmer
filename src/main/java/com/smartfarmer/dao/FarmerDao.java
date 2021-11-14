@@ -48,5 +48,11 @@ public class FarmerDao extends DaoImplementation<Farmer, Long> implements Farmer
 
     }
 
+    @Override
+    public double getTotalFarmSize() {
+        Query query = getEntityManager().createQuery("SELECT f.farmSize FROM Farmer f");
+        return (double) query.getSingleResult();
+    }
+
 
 }

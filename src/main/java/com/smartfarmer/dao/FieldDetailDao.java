@@ -6,6 +6,7 @@ import com.smartfarmer.entities.Field;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 
 public class FieldDetailDao extends DaoImplementation<Field, Long> implements FieldDetailDaoI {
@@ -22,12 +23,36 @@ public class FieldDetailDao extends DaoImplementation<Field, Long> implements Fi
         return entityManager;
     }
 
-    public Double getUsedFieldSize(int id){
-        String query = "SELECT SUM(fieldSize) FROM field WHERE uid = ?";
+    public double getUsedFieldSize(){
+        try {
+            Query query =  entityManager.createQuery("SELECT SUM(f.fieldSize) FROM Field f");
+            return (double) query.getSingleResult();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return 0;
+        }
 
-        Double fieldSize = null;
+    }
 
-        return fieldSize;
+    @Override
+    public void updateFieldStatus(long id) {
+
+        Query query = entityManager.createQuery("update Field f set f.fieldStatus='Planted' where f.id=:fId");
+        query.setParameter("fId", id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public Field checkFieldStatus(long id) {
+        try {
+            Query query = entityManager.createQuery("SELECT f FROM Field f WHERE f.fieldStatus='Planted' AND f.id=:fId");
+            query.setParameter("fId", id);
+
+            return (Field) query.getSingleResult();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }
 

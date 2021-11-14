@@ -1,5 +1,6 @@
 package com.smartfarmer.ejb;
 
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.EquipmentDaoI;
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;
@@ -17,7 +18,7 @@ public class EquipmentEJB implements EquipmentEjbI {
     EquipmentDaoI equipmentDao;
 
     @Override
-    public Equipment add(Equipment equipment) throws Exception {
+    public Response add(Equipment equipment) throws Exception {
 
         if (equipment == null)
             throw new AppException("Invalid equipment details!!");
@@ -25,7 +26,7 @@ public class EquipmentEJB implements EquipmentEjbI {
         if(equipment.getEquipmentCondition() == null && equipment.getEquipmentConditionStr() !=null)
             equipment.setEquipmentCondition(Condition.valueOf(equipment.getEquipmentConditionStr()));
 
-        return equipmentDao.save(equipment);
+        return new Response(true, "Successfully added",  equipmentDao.save(equipment));
     }
 
     @Override

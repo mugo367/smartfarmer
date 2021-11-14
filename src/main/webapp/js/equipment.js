@@ -127,8 +127,14 @@ var equipmentComp = {
             url: './delete-equipment',
             handler: function(){
 
-
                 AppComponents.htmlTable.render.apply(equipmentComp);
             }
-        }]
+        },{
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(equipmentComp);
+            }
+        },]
 };

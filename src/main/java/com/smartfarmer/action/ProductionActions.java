@@ -42,17 +42,9 @@ public class ProductionActions extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
 
-        switch (action){
-            case "/add-production":
-                transform(production, request.getParameterMap());
-                productionEjb.add(production);
-
-                handleResponse(response);
-                break;
-            case "/edit-production":
-
-                break;
-
+        if ("/add-production".equals(action)) {
+            transform(production, request.getParameterMap());
+            response.getWriter().print(jsonMapper.writeValueAsString(productionEjb.add(production)));
         }
     }
 

@@ -48,9 +48,6 @@ public class TransactionActions extends BaseController {
 
                 handleResponse(response);
                 break;
-            case "/edit-transaction":
-                System.out.println("===========================");
-                break;
         }
 
     }

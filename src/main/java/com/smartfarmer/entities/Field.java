@@ -29,7 +29,7 @@ public class Field  extends BaseEntity {
     private String fieldName;
 
     @Column(name = "field_size")
-    private Double fieldSize;
+    private double fieldSize;
 
     @Column(name = "field_status")
     @Enumerated(EnumType.STRING)

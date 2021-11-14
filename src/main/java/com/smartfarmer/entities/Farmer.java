@@ -49,7 +49,7 @@ public class Farmer implements Serializable {
     private String farmName;
 
     @Column(name = "full_size")
-    private Double farmSize;
+    private double farmSize;
 
     @Column(name = "unit")
     private String unit;

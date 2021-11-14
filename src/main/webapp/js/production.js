@@ -142,5 +142,13 @@ var productionComp = {
             handler: function(){
                 AppComponents.htmlTable.render.apply(productionComp);
             }
-        }]
+        },
+        {
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(productionComp);
+            }
+        },]
 };

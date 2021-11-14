@@ -1,11 +1,12 @@
 package com.smartfarmer.ejb.interfaces;
 
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.ModelListWrapper;
 
 import java.util.Optional;
 
 public interface EjbI<T> {
-    T add(T t) throws Exception;
+    Response add(T t) throws Exception;
     T edit(T t);
     ModelListWrapper<T> list(T filter, int start, int limit);
     void delete(Long id);

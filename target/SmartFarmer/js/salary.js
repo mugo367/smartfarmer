@@ -3,7 +3,7 @@ var salariesComp = {
     method: "GET",
     tableTitle: 'Salaries And Remunerations',
     renderTo: 'componentRender',
-    id:'activityTable',
+    id:'salariesTable',
     columns: [
         {
             id:true,
@@ -95,5 +95,13 @@ var salariesComp = {
         handler: function(){
             AppComponents.htmlTable.render.apply(salariesComp);
         }
-    }]
+    }, {
+        label: 'Refresh',
+        id: 'refresh',
+        class:'btn btn-primary',
+        handler: function(){
+            AppComponents.htmlTable.render.apply(salariesComp);
+        }
+    },
+    ]
 };

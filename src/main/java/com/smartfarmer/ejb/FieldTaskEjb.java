@@ -6,6 +6,7 @@ import com.smartfarmer.entities.Activity;
 import com.smartfarmer.entities.Employee;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.FieldTask;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
@@ -25,7 +26,7 @@ public class FieldTaskEjb implements FieldTaskEjbI {
     private FieldTaskDaoI fieldTaskDao;
 
     @Override
-    public FieldTask add(FieldTask fieldTask) throws Exception {
+    public Response add(FieldTask fieldTask) throws Exception {
 
         if (fieldTask == null)
             throw new AppException("Invalid FieldTask details!!");
@@ -39,7 +40,7 @@ public class FieldTaskEjb implements FieldTaskEjbI {
         if (fieldTask.getEmployeeId() > 0)
             fieldTask.setEmployee(entityManager.find(Employee.class, fieldTask.getEmployeeId()));
 
-        return  fieldTaskDao.save(fieldTask);
+        return new Response(true, "Successfully added",  fieldTaskDao.save(fieldTask));
     }
 
     @Override

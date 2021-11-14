@@ -135,5 +135,13 @@ var tasksComp = {
         handler: function(){
             AppComponents.htmlTable.render.apply(tasksComp);
         }
-    }]
+    },
+        {
+            label: 'Refresh',
+            id: 'refresh',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(activitiesComp);
+            }
+        },]
 };

@@ -1,7 +1,9 @@
 package com.smartfarmer.action;
 
 import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
+import com.smartfarmer.ejb.interfaces.SalaryRecordEjbI;
 import com.smartfarmer.entities.Employee;
+import com.smartfarmer.entities.SalaryRecord;
 import lombok.SneakyThrows;
 
 import javax.ejb.EJB;
@@ -16,22 +18,33 @@ import java.util.List;
 @WebServlet(
         name = "EmployeeController",
         urlPatterns = {
-                "/add-employee", "/delete-employee", "/edit-employee", "/view-employees"
+                "/add-employee", "/delete-employee", "/edit-employee", "/view-employees", "/view-salaries",
+                "/delete-salary", "/add-salary"
         }
 )
 public class EmployeeActions extends BaseController {
         @EJB
         EmployeeEjbI employeeEjb;
 
+        @EJB
+        SalaryRecordEjbI salaryRecordEjb;
+
         private Employee employee = new Employee();
+        private SalaryRecord salaryRecord = new SalaryRecord();
 
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
 
-                if ("/view-employees".equals(action)) {
-                        transform(employee, request.getParameterMap());
-                        handleResponse(response, employeeEjb.list(employee, 0, 0).getList());
+                switch (action) {
+                        case "/view-employees":
+                                transform(employee, request.getParameterMap());
+                                handleResponse(response, employeeEjb.list(employee, 0, 0).getList());
+                                break;
+                        case "/view-salaries":
+                                transform(salaryRecord, request.getParameterMap());
+                                handleResponse(response, salaryRecordEjb.list(salaryRecord, 0, 0).getList());
+                                break;
                 }
         }
 
@@ -46,6 +59,13 @@ public class EmployeeActions extends BaseController {
                                 employeeEjb.add(employee);
                                 handleResponse(response);
                                 break;
+
+                        case "/add-salary":
+                                transform(salaryRecord, request.getParameterMap());
+                                response.getWriter().print(jsonMapper.writeValueAsString(salaryRecordEjb.add(salaryRecord)));
+                                handleResponse(response);
+                                break;
+
                         case "/edit-employee":
 
                                 break;
@@ -56,11 +76,19 @@ public class EmployeeActions extends BaseController {
         protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 String action = request.getServletPath();
 
-                if ("/delete-employee".equals(action)) {
-                        List<String> ids = Arrays.asList(request.getParameter("ids"));
-                        for(String id : ids) {
-                                employeeEjb.delete(Long.valueOf(id));
-                        }
+                switch (action) {
+                        case "/delete-employee":
+                                List<String> ids = Arrays.asList(request.getParameter("ids"));
+                                for (String id : ids) {
+                                        employeeEjb.delete(Long.valueOf(id));
+                                }
+                                break;
+                        case "/delete-salary":
+                                List<String> idds = Arrays.asList(request.getParameter("ids"));
+                                for (String id : idds) {
+                                        salaryRecordEjb.delete(Long.valueOf(id));
+                                }
+                                break;
                 }
         }
 }

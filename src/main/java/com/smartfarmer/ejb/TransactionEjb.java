@@ -1,5 +1,6 @@
 package com.smartfarmer.ejb;
 
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.ejb.interfaces.TransactionEjbI;
@@ -18,17 +19,17 @@ public class TransactionEjb implements TransactionEjbI {
     TransactionDaoI transactionDao;
 
     @Override
-    public Transaction add(Transaction transaction) throws Exception {
+    public Response add(Transaction transaction) throws Exception {
         if (transaction == null)
             throw new AppException("Invalid transaction details!!");
 
         if (transaction.getTransactionType() == null && transaction.getTransactionTypeStr() != null)
-        transaction.setTransactionType(TransactionType.valueOf(transaction.getTransactionTypeStr()));
+            transaction.setTransactionType(TransactionType.valueOf(transaction.getTransactionTypeStr()));
 
         if (transaction.getCostPerUnit() != 0 && transaction.getUnits() != 0)
             transaction.setTransactionCost(transaction.getCostPerUnit()*transaction.getUnits());
 
-        return transactionDao.save(transaction);
+        return new Response(true, "Successfully added",  transactionDao.save(transaction));
     }
 
     @Override
