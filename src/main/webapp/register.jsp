@@ -78,9 +78,19 @@
                                     <label class="form-label" for="FarmName">Farm Name</label>
                                     <input type="text" id="FarmName" name="farmName" class="form-control" required/>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label" for="FarmSize">Farm Size</label>
-                                    <input type="number" min="1" id="FarmSize" name="farmSize" class="form-control" required/>
+
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="FarmSize" class="form-label">Farm Size</label>
+                                        <input type="number" min="1" id="FarmSize" name="farmSize" class="form-control" required/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="unit" class="form-label">Unit</label>
+                                        <select class="form-select" id="unit" name="unit" required>
+                                            <option selected value="Acres">Acres</option>
+                                            <option value="ha">ha</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="farmAdditionInfo">Additional Information</label>

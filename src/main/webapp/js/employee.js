@@ -220,7 +220,7 @@ var employeeComp = {
             id: 'salaries',
             class:'btn btn-primary',
             handler: function(){
-
+                AppComponents.htmlTable.render.apply(activitiesComp);
             }
         }
         ]

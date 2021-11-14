@@ -159,6 +159,11 @@ let AppComponents = {
             tableToRender += '<tbody>';
 
             function getData(reqRes){
+                if(reqRes.list.length<0){
+                    swal("Ooops! No Record to Display!", {
+                        icon: "info",
+                    });
+                }
                 reqRes.list.forEach(row=>{
                     tableToRender += '<tr>';
                     me.columns.forEach(col=>{

@@ -215,5 +215,13 @@ var employeeComp = {
             handler: function(){
                 AppComponents.htmlTable.render.apply(employeeComp);
             }
-        }]
+        },{
+            label: 'Salaries and Remunerations',
+            id: 'salaries',
+            class:'btn btn-primary',
+            handler: function(){
+                AppComponents.htmlTable.render.apply(activitiesComp);
+            }
+        }
+        ]
 };

@@ -51,6 +51,9 @@ public class Farmer implements Serializable {
     @Column(name = "full_size")
     private Double farmSize;
 
+    @Column(name = "unit")
+    private String unit;
+
     @Column(name = "additionalInfo")
     private String additionalInfo;
 

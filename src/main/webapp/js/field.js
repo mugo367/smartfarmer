@@ -125,7 +125,7 @@ var fieldComp = {
             class:'btn btn-primary',
             method: 'POST',
             handler: function(){
-
+                AppComponents.htmlTable.render.apply(fieldProductionComp);
             }
         }
     ]
