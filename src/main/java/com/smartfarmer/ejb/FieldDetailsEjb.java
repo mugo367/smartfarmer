@@ -3,6 +3,7 @@ package com.smartfarmer.ejb;
 import com.smartfarmer.dao.interfaces.FarmerDaoI;
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.ejb.interfaces.FieldDetailEjbI;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.enumFiles.FieldStatus;
 import com.smartfarmer.model.Response;
@@ -10,7 +11,9 @@ import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
@@ -20,6 +23,10 @@ public class FieldDetailsEjb implements FieldDetailEjbI {
 
     @Inject
     FarmerDaoI farmerDao;
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
+
 
     @Override
     public Response add(Field field) throws Exception {
@@ -55,6 +62,7 @@ public class FieldDetailsEjb implements FieldDetailEjbI {
     @Override
     public void delete(Long id) {
         fieldDetailDao.deleteById(id);
+        auditTrailEvent.fire(new AuditTrail("User deleted field " , new Date()));
     }
 
     @Override

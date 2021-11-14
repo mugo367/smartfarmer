@@ -1,21 +1,27 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.model.Response;
-import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.EquipmentDaoI;
 import com.smartfarmer.ejb.interfaces.EquipmentEjbI;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.entities.Equipment;
 import com.smartfarmer.entities.enumFiles.Condition;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
 public class EquipmentEJB implements EquipmentEjbI {
     @Inject
     EquipmentDaoI equipmentDao;
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
     @Override
     public Response add(Equipment equipment) throws Exception {
@@ -42,6 +48,7 @@ public class EquipmentEJB implements EquipmentEjbI {
     @Override
     public void delete(Long id) {
         equipmentDao.deleteById(id);
+        auditTrailEvent.fire(new AuditTrail("User deleted equipment " , new Date()));
     }
 
     @Override

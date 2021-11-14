@@ -1,15 +1,18 @@
 package com.smartfarmer.ejb;
 
-import com.smartfarmer.model.Response;
-import com.smartfarmer.util.ModelListWrapper;
 import com.smartfarmer.dao.interfaces.TransactionDaoI;
 import com.smartfarmer.ejb.interfaces.TransactionEjbI;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.entities.Transaction;
 import com.smartfarmer.entities.enumFiles.TransactionType;
+import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
+import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
@@ -17,6 +20,9 @@ public class TransactionEjb implements TransactionEjbI {
 
     @Inject
     TransactionDaoI transactionDao;
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
     @Override
     public Response add(Transaction transaction) throws Exception {
@@ -45,6 +51,7 @@ public class TransactionEjb implements TransactionEjbI {
     @Override
     public void delete(Long id) {
         transactionDao.deleteById(id);
+        auditTrailEvent.fire(new AuditTrail("User deleted transaction " , new Date()));
     }
 
     @Override

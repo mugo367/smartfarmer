@@ -3,15 +3,18 @@ package com.smartfarmer.ejb;
 import com.smartfarmer.dao.interfaces.FieldDetailDaoI;
 import com.smartfarmer.dao.interfaces.FieldProductionDaoI;
 import com.smartfarmer.ejb.interfaces.FieldProductionEjbI;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.entities.Field;
 import com.smartfarmer.entities.FieldProduction;
 import com.smartfarmer.model.Response;
 import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
@@ -22,8 +25,12 @@ public class FieldProductionEjb implements FieldProductionEjbI {
 
    @Inject
    private FieldProductionDaoI fieldProductionDao;
+
    @Inject
    private FieldDetailDaoI fieldDetailDao;
+
+   @Inject
+   private Event<AuditTrail> auditTrailEvent;
 
    @Override
    public Response add(FieldProduction fieldProduction) throws Exception {
@@ -49,6 +56,7 @@ public class FieldProductionEjb implements FieldProductionEjbI {
    @Override
    public void delete(Long id) {
       fieldProductionDao.deleteById(id);
+      auditTrailEvent.fire(new AuditTrail("User deleted production " , new Date()));
    }
 
    @Override

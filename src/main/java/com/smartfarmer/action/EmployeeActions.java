@@ -63,7 +63,6 @@ public class EmployeeActions extends BaseController {
                         case "/add-salary":
                                 transform(salaryRecord, request.getParameterMap());
                                 response.getWriter().print(jsonMapper.writeValueAsString(salaryRecordEjb.add(salaryRecord)));
-                                handleResponse(response);
                                 break;
 
                         case "/edit-employee":

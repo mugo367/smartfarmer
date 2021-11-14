@@ -2,6 +2,7 @@ package com.smartfarmer.ejb;
 
 import com.smartfarmer.dao.interfaces.EmployeeDaoI;
 import com.smartfarmer.ejb.interfaces.EmployeeEjbI;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.entities.Employee;
 import com.smartfarmer.entities.enumFiles.Designation;
 import com.smartfarmer.entities.enumFiles.EmpType;
@@ -11,11 +12,19 @@ import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
 public class EmployeeEjb implements EmployeeEjbI {
+
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
+
+
     @Inject
     EmployeeDaoI employeeDao;
 
@@ -55,6 +64,7 @@ public class EmployeeEjb implements EmployeeEjbI {
     @Override
     public void delete(Long id) {
         employeeDao.deleteById(id);
+        auditTrailEvent.fire(new AuditTrail("User deleted employee " , new Date()));
     }
 
     @Override

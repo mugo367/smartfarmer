@@ -3,16 +3,22 @@ package com.smartfarmer.ejb;
 import com.smartfarmer.dao.interfaces.ActivityDaoI;
 import com.smartfarmer.ejb.interfaces.ActivityEjbI;
 import com.smartfarmer.entities.Activity;
+import com.smartfarmer.entities.AuditTrail;
 import com.smartfarmer.model.Response;
 import com.smartfarmer.util.AppException;
 import com.smartfarmer.util.ModelListWrapper;
 
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
 public class ActivityEjb implements ActivityEjbI {
+
+    @Inject
+    private Event<AuditTrail> auditTrailEvent;
 
 
     @Inject
@@ -41,6 +47,7 @@ public class ActivityEjb implements ActivityEjbI {
     @Override
     public void delete(Long id) {
         activityDao.deleteById(id);
+        auditTrailEvent.fire(new AuditTrail("User deleted activity " , new Date()));
     }
 
     @Override
